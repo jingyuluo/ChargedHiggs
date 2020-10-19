@@ -18,7 +18,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler 
 
 parser = argparse.ArgumentParser(description='Multivariate analysis for charged Higgs search')
-parser.add_argument("-k", "--varListKey", default="BigComb", help="Input variable list")
+parser.add_argument("-k", "--varListKey", default="NewVar", help="Input variable list")
 parser.add_argument("-l", "--label", default="", help="label for output file")
 
 
@@ -30,7 +30,7 @@ weightList = [["pileupWeight", ""], ["lepIdSF", ""], ["EGammaGsfSF", ""], ["MCWe
 varListKey = args.varListKey
 varList = varsList.varList[varListKey]
 inputDir = varsList.inputDir
-infname = "ChargedHiggs_HplusTB_HplusToTB_M-500_13TeV_amcatnlo_pythia8_hadd.root"
+infname = "ChargedHiggs_HplusTB_HplusToTB_M-300_13TeV_amcatnlo_pythia8_hadd.root"
 
 print "Loading Signal Sample"
 
@@ -124,7 +124,7 @@ dtrain = xgb.DMatrix(X_train_val, label=Y_train_val, weight=weight_train_val, fe
 dtest = xgb.DMatrix(X_test, label=Y_test, weight=weight_test, feature_names=features)
 watchlist = [(dtrain, 'train'), (dtest, 'eval')]#[(dtest, 'eval'), (dtrain, 'train')]
 param = {
-    'max_depth': 4,  # the maximum depth of each tree
+    'max_depth': 3,  # the maximum depth of each tree
     'eta': 0.1,  # the training step for each iteration
     'silent': 0,  # logging mode - quiet
     'objective': 'binary:logistic',  # error evaluation for classification training
@@ -132,7 +132,7 @@ param = {
     'eval_metric': 'auc',
     'subsample': 0.8
     }  # the number of classes that exist in this datset
-num_round = 800  # the number of training iterations
+num_round = 500  # the number of training iterations
 
 bst = xgb.train(param, dtrain, num_round, watchlist, callbacks=[xgb.callback.print_evaluation()], early_stopping_rounds=10)
 #bst = xgb.train(param, dtrain, num_round, nfold=5, metrics={'auc'}, seed=10)
@@ -149,24 +149,6 @@ dfall_var.to_root("test_XGB_classification_"+str(args.varListKey)+"_"+args.label
 
 
 
-#df_sig = RDataFrame("ljmet", inputDir+infname) 
-#
-#data_sig = df_sig.AsNumpy(columns=(iVar[0] for iVar in varList)) 
-#
-#
-#print "Loading Background Samples"
-#bkgList = varsList.bkg
-#bkgfilelist = []
-#for ibkg in bkgList:
-#    print ibkg
-#    bkgfilelist.append(inputDir+ibkg)
-#
-#chain = r.TChain("ljmet")
-#for bkgfile in bkgfilelist:
-#    chain.Add(bkgfile)
-#
-#df_back = RDataFrame(chain)
-#data_bkg = df_back.AsNumpy(columns=(iVar[0] for iVar in varList))
 #
 #
 #x_sig = np.vstack([data_sig[iVar[0]] for iVar in varList]).T
