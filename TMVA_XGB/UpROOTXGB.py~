@@ -6,7 +6,6 @@ import ROOT as r
 import varsList
 import numpy as np
 import uproot 
-#import shap
 import pandas as pd
 import root_pandas
 import matplotlib.pyplot as plt
@@ -186,17 +185,9 @@ dfall_var.to_root("training_output/test_XGB_classification_"+str(varListKey)+"_M
 
 
 ### Plot Variable Importance Information
-# fig,ax = plt.subplots(figsize=(4,5))
-# bst.get_score(importance_type='gain')
-# xgb.plot_importance(bst, importance_type='gain', ax=ax,  max_num_features = 10, xlabel = 'Gain', ylabel = 'Var', title = 'XGB Training Output')
-# ax.grid(b = False)
-# plt.tight_layout()
-# plt.savefig('training_output/plots/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.png')
-
-# t0 = time.time()
-# print "Begining SHAP explainer"
-# explainer = shap.TreeExplainer(bst)
-# shap_values = explainer.shap_values(X)
-# t1 = time.time()
-# print t1-t0 + "Seconds?"
-# shap.summary_plot(shap_values, "placeholder", plot_type = "bar")
+fig,ax = plt.subplots(figsize=(4,5))
+bst.get_score(importance_type='gain')
+xgb.plot_importance(bst, importance_type='gain', ax=ax,  max_num_features = 10, xlabel = 'Gain', ylabel = 'Var', title = 'XGB Training Output')
+ax.grid(b = False)
+plt.tight_layout()
+plt.savefig('training_output/plots/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.png')
