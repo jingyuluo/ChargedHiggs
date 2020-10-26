@@ -78,4 +78,3 @@ sigdf_var.loc[:, "XGB"] = bst.predict(dX)
 print sigdf_var
 
 sigdf_var.to_root(args.output+".root", key="ljmet")
-

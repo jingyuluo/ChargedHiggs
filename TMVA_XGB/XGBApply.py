@@ -73,4 +73,3 @@ for chunk in sig_tree.iterate("*", entrysteps=1, namedecode="utf-8"):
 
 newfile.WriteTObject(newtree, "ljmet")
 newfile.Close()
-

@@ -6,8 +6,10 @@ import ROOT as r
 import varsList
 import numpy as np
 import uproot 
+#import shap
 import pandas as pd
 import root_pandas
+import matplotlib.pyplot as plt
 from root_pandas import to_root
 from ROOT import TMVA
 from ROOT import RDataFrame
@@ -17,29 +19,67 @@ import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler 
 
-parser = argparse.ArgumentParser(description='Multivariate analysis for charged Higgs search')
-parser.add_argument("-k", "--varListKey", default="NewVar", help="Input variable list")
-parser.add_argument("-l", "--label", default="", help="label for output file")
+#parser = argparse.ArgumentParser(description='Multivariate analysis for charged Higgs search')
+#parser.add_argument("-k", "--varListKey", default="NewVar", help="Input variable list")
+#parser.add_argument("-l", "--label", default="", help="label for output file")
+#args = parser.parse_args()
+
+DEFAULT_OUTFNAME = "XGB.root"
+DEFAULT_INFNAME  = "180"
+DEFAULT_TREESIG  = "TreeS"
+DEFAULT_TREEBKG  = "TreeB"
+DEFAULT_NITS   = "100"
+DEFAULT_MDEPTH   = "2"#str(len(varList))
+DEFAULT_VARLISTKEY = "BigComb"
+DEFAULT_SIGMASS = "M-1000"
 
 
-args = parser.parse_args()
+shortopts  = "f:n:d:s:l:t:o:vh?"
+longopts   = ["inputfile=", "nTrees=", "maxDepth=", "sigMass=", "varListKey=", "inputtrees=", "outputfile=", "verbose", "help", "usage"]
+opts, args = getopt.getopt( sys.argv[1:], shortopts, longopts )
+    
+infname     = DEFAULT_INFNAME
+treeNameSig = DEFAULT_TREESIG
+treeNameBkg = DEFAULT_TREEBKG
+outfname    = DEFAULT_OUTFNAME
+nIts        = DEFAULT_NITS
+mDepth      = DEFAULT_MDEPTH
+varListKey  = DEFAULT_VARLISTKEY
+sigMass     = DEFAULT_SIGMASS
+verbose     = True    
+
+for o, a in opts:
+    if o in ("-?", "-h", "--help", "--usage"):
+        usage()
+        sys.exit(0)
+    elif o in ("-d", "--maxDepth"):
+        mDepth = a
+    elif o in ("-l", "--varListKey"):
+        varListKey = a
+    elif o in ("-f", "--inputfile"):
+        infname = a
+    elif o in ("-n", "--nIts"):
+        nIts = a
+    elif o in ("-o", "--outputfile"):
+        outfname = a
+    elif o in ("-s", "--sigMass"):
+        sigMass = a
 
 
-selList = [["NJetsCSV_JetSubCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_MultiLepCalc", ""],  ["isElectron", ""], ["isMuon", ""]]
+
+
+selList = [["NJetsCSV_JetSubCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_MultiLepCalc", ""],  ["isElectron", ""], ["isMuon", ""],["DataPastTrigger",""],["MCPastTrigger"]]
 weightList = [["pileupWeight", ""], ["lepIdSF", ""], ["EGammaGsfSF", ""], ["MCWeight_MultiLepCalc", ""]] 
-varListKey = args.varListKey
 varList = varsList.varList[varListKey]
 inputDir = varsList.inputDir
-infname = "ChargedHiggs_HplusTB_HplusToTB_M-300_13TeV_amcatnlo_pythia8_hadd.root"
-
+infname = "ChargedHiggs_HplusTB_HplusToTB_"+sigMass+"_13TeV_amcatnlo_pythia8_hadd.root"
 print "Loading Signal Sample"
-
 sig_tree = uproot.open(inputDir+infname)["ljmet"]
 sig_df = sig_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList))
 
 #Event Selection
- 
-sig_selected = (sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True))) 
+print(sig_df[sig_df.index.duplicated()]) 
+sig_selected = (sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True)))&(sig_df["MCPastTrigger"]==1)&(sig_df["DataPastTrigger"]==1)&(sig_df["corr_met_MultiLepCalc"]>30)
 
 sig_df = sig_df[sig_selected]
 
@@ -47,12 +87,13 @@ print "Loading Background Samples"
 back_dfs = []
 
 bkgList = varsList.bkg
+print bkgList
 for ibkg in bkgList:
     print ibkg
     bkg_tree = uproot.open(inputDir+ibkg)["ljmet"]
     bkg_df = bkg_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList))
     print bkg_df
-    bkg_selected = (bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
+    bkg_selected = (bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))&(bkg_df["MCPastTrigger"]==1)&(bkg_df["DataPastTrigger"]==1)&(bkg_df["corr_met_MultiLepCalc"]>30)
     bkg_df = bkg_df[bkg_selected]
     print bkg_df
     back_dfs.append(bkg_df)
@@ -124,7 +165,7 @@ dtrain = xgb.DMatrix(X_train_val, label=Y_train_val, weight=weight_train_val, fe
 dtest = xgb.DMatrix(X_test, label=Y_test, weight=weight_test, feature_names=features)
 watchlist = [(dtrain, 'train'), (dtest, 'eval')]#[(dtest, 'eval'), (dtrain, 'train')]
 param = {
-    'max_depth': 3,  # the maximum depth of each tree
+    'max_depth': int(mDepth),  # the maximum depth of each tree
     'eta': 0.1,  # the training step for each iteration
     'silent': 0,  # logging mode - quiet
     'objective': 'binary:logistic',  # error evaluation for classification training
@@ -132,62 +173,30 @@ param = {
     'eval_metric': 'auc',
     'subsample': 0.8
     }  # the number of classes that exist in this datset
-num_round = 500  # the number of training iterations
+num_round = int(nIts)  # the number of training iterations
 
 bst = xgb.train(param, dtrain, num_round, watchlist, callbacks=[xgb.callback.print_evaluation()], early_stopping_rounds=10)
 #bst = xgb.train(param, dtrain, num_round, nfold=5, metrics={'auc'}, seed=10)
-print bst
 dfall_var.loc[:, 'XGB'] = bst.predict(dall)
-bst.dump_model('dump.raw'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(args.varListKey)+'_'+args.label+'.txt')
-bst.save_model('XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(args.varListKey)+'_'+args.label+'.model')
+bst.dump_model('training_output/dump.raw'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.txt')
+bst.save_model('training_output/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.model')
 #print dfall_var
 
-dfall_var.to_root("test_XGB_classification_"+str(args.varListKey)+"_"+args.label+".root", key="XGB_Tree")
+dfall_var.to_root("training_output/test_XGB_classification_"+str(varListKey)+"_M-"+sigMass+".root", key="XGB_Tree")
 
 
+### Plot Variable Importance Information
+# fig,ax = plt.subplots(figsize=(4,5))
+# bst.get_score(importance_type='gain')
+# xgb.plot_importance(bst, importance_type='gain', ax=ax,  max_num_features = 10, xlabel = 'Gain', ylabel = 'Var', title = 'XGB Training Output')
+# ax.grid(b = False)
+# plt.tight_layout()
+# plt.savefig('training_output/plots/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.png')
 
-
-
-
-#
-#
-#x_sig = np.vstack([data_sig[iVar[0]] for iVar in varList]).T
-#
-#x_bkg = np.vstack([data_bkg[iVar[0]] for iVar in varList]).T
-#
-#x = np.vstack([x_sig, x_bkg])
-#
-#num_sig = x_sig.shape[0]
-#num_bkg = x_bkg.shape[0]
-#
-#y = np.hstack([np.ones(num_sig), np.zeros(num_bkg)])
-#
-#print "Prepare Training"
-#num_all = num_sig + num_bkg
-#
-#w = np.hstack([np.ones(num_sig) * num_all / num_sig, np.ones(num_bkg) * num_all / num_bkg])
-#
-#x_train, x_test, y_train, y_test, w_train, w_test = train_test_split(x, y, w, test_size=0.3, random_state=7)
-#
-#dall = xgb.DMatrix(x, label=y, weight=w)
-#dtrain = xgb.DMatrix(x_train, label=y_train, weight=w_train)
-#dtest = xgb.DMatrix(x_test, label=y_test, weight=w_test)
-#watchlist = [(dtest, 'eval'), (dtrain, 'train')]
-#
-#param = { 
-#    'max_depth': 3,  # the maximum depth of each tree
-#    'eta': 0.1,  # the training step for each iteration
-#    'silent': 0,  # logging mode - quiet
-#    'objective': 'binary:logistic',  # error evaluation for multiclass training
-#    #'scale_pos_weight': 1/weight,
-#    'eval_metric': 'auc',
-#    'subsample': 0.6 
-#    }  # the number of classes that exist in this datset
-#num_round = 600  # the number of training iterations
-#bst = xgb.train(param, dtrain, num_round, watchlist, callbacks=[xgb.callback.print_evaluation()], early_stopping_rounds=30)
-
-
-#bdt = XGBClassifier(max_depth=3, n_estimators=500, verbosity=2)
-#print "Start Training"
-#bdt.fit(x, y, w)
-#TMVA.Experimental.SaveXGBoost(bdt, "myBDT", "tmva101.root")
+# t0 = time.time()
+# print "Begining SHAP explainer"
+# explainer = shap.TreeExplainer(bst)
+# shap_values = explainer.shap_values(X)
+# t1 = time.time()
+# print t1-t0 + "Seconds?"
+# shap.summary_plot(shap_values, "placeholder", plot_type = "bar")
