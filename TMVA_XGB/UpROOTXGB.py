@@ -6,9 +6,13 @@ import ROOT as r
 import varsList
 import numpy as np
 import uproot 
+from sklearn import metrics
 #import shap
+import pickle
 import pandas as pd
 import root_pandas
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from root_pandas import to_root
 from ROOT import TMVA
@@ -24,28 +28,27 @@ from sklearn.preprocessing import StandardScaler
 #parser.add_argument("-l", "--label", default="", help="label for output file")
 #args = parser.parse_args()
 
-DEFAULT_OUTFNAME = "XGB.root"
 DEFAULT_INFNAME  = "180"
 DEFAULT_TREESIG  = "TreeS"
 DEFAULT_TREEBKG  = "TreeB"
-DEFAULT_NITS   = "100"
-DEFAULT_MDEPTH   = "2"#str(len(varList))
-DEFAULT_VARLISTKEY = "BigComb"
-DEFAULT_SIGMASS = "M-1000"
+DEFAULT_NITS   = "10"
+DEFAULT_MDEPTH   = "3"#str(len(varList))
+DEFAULT_VARLISTKEY = "NewVar"
+DEFAULT_SIGMASS = "M-3000"
+DEFAULT_INTERACTIVE = True
 
-
-shortopts  = "f:n:d:s:l:t:o:vh?"
-longopts   = ["inputfile=", "nTrees=", "maxDepth=", "sigMass=", "varListKey=", "inputtrees=", "outputfile=", "verbose", "help", "usage"]
+shortopts  = "f:n:d:s:l:t:o:i:vh?"
+longopts   = ["inputfile=", "nTrees=", "maxDepth=", "sigMass=", "varListKey=", "inputtrees=", "outputfile=","interactive=", "verbose", "help", "usage"]
 opts, args = getopt.getopt( sys.argv[1:], shortopts, longopts )
     
 infname     = DEFAULT_INFNAME
 treeNameSig = DEFAULT_TREESIG
 treeNameBkg = DEFAULT_TREEBKG
-outfname    = DEFAULT_OUTFNAME
 nIts        = DEFAULT_NITS
 mDepth      = DEFAULT_MDEPTH
 varListKey  = DEFAULT_VARLISTKEY
 sigMass     = DEFAULT_SIGMASS
+interactive = DEFAULT_INTERACTIVE
 verbose     = True    
 
 for o, a in opts:
@@ -60,13 +63,34 @@ for o, a in opts:
         infname = a
     elif o in ("-n", "--nIts"):
         nIts = a
-    elif o in ("-o", "--outputfile"):
-        outfname = a
+    elif o in ("-o", "--outDir"):
+        outDir = a
     elif o in ("-s", "--sigMass"):
         sigMass = a
+    elif o in ("-i" , "--interactive"):
+        interactive = a
 
 
 
+def getFscore(model):
+    fig,ax = plt.subplots()
+    bst.get_score(importance_type='gain')
+    xgb.plot_importance(bst, importance_type='gain', ax=ax,  max_num_features = 10, xlabel = 'Gain', ylabel = 'Var', title = 'XGB Training Output')
+    plt.savefig('FScore_'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depth_'+str(varListKey)+'_'+sigMass+'.png')
+
+def buildROC(target_test,test_preds):
+    print target_test
+    fpr, tpr, threshold = metrics.roc_curve(target_test, test_preds)
+    roc_auc = metrics.auc(fpr, tpr)
+    plt.title('Receiver Operating Characteristic')
+    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
+    plt.legend(loc = 'lower right')
+    plt.plot([0, 1], [0, 1],'r--')
+    plt.ylabel('True Positive Rate')
+    plt.yscale('log')
+    plt.grid(1)
+    plt.xlabel('False Positive Rate')
+    plt.gcf().savefig('ROC_'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depth_'+str(varListKey)+'_'+sigMass+'.png')
 
 selList = [["NJetsCSV_JetSubCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_MultiLepCalc", ""],  ["isElectron", ""], ["isMuon", ""],["DataPastTrigger",""],["MCPastTrigger"]]
 weightList = [["pileupWeight", ""], ["lepIdSF", ""], ["EGammaGsfSF", ""], ["MCWeight_MultiLepCalc", ""]] 
@@ -79,7 +103,7 @@ sig_df = sig_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weight
 
 #Event Selection
 print(sig_df[sig_df.index.duplicated()]) 
-sig_selected = (sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True)))&(sig_df["MCPastTrigger"]==1)&(sig_df["DataPastTrigger"]==1)&(sig_df["corr_met_MultiLepCalc"]>30)
+sig_selected = (sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True)))&(sig_df["MCPastTrigger"]==1)&(sig_df["DataPastTrigger"]==1)&(sig_df["corr_met"]>30)
 
 sig_df = sig_df[sig_selected]
 
@@ -93,7 +117,7 @@ for ibkg in bkgList:
     bkg_tree = uproot.open(inputDir+ibkg)["ljmet"]
     bkg_df = bkg_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList))
     print bkg_df
-    bkg_selected = (bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))&(bkg_df["MCPastTrigger"]==1)&(bkg_df["DataPastTrigger"]==1)&(bkg_df["corr_met_MultiLepCalc"]>30)
+    bkg_selected = (bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))&(bkg_df["MCPastTrigger"]==1)&(bkg_df["DataPastTrigger"]==1)&(bkg_df["corr_met"]>30)
     bkg_df = bkg_df[bkg_selected]
     print bkg_df
     back_dfs.append(bkg_df)
@@ -168,6 +192,7 @@ param = {
     'max_depth': int(mDepth),  # the maximum depth of each tree
     'eta': 0.1,  # the training step for each iteration
     'silent': 0,  # logging mode - quiet
+    'TREE_METHOD': 'gpu_hist', ## Comment this out to run on non-gpu nodes
     'objective': 'binary:logistic',  # error evaluation for classification training
     'scale_pos_weight': scale,
     'eval_metric': 'auc',
@@ -178,20 +203,29 @@ num_round = int(nIts)  # the number of training iterations
 bst = xgb.train(param, dtrain, num_round, watchlist, callbacks=[xgb.callback.print_evaluation()], early_stopping_rounds=10)
 #bst = xgb.train(param, dtrain, num_round, nfold=5, metrics={'auc'}, seed=10)
 dfall_var.loc[:, 'XGB'] = bst.predict(dall)
-bst.dump_model('training_output/dump.raw'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.txt')
-bst.save_model('training_output/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.model')
+pickle.dump(bst,open(str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.dat','wb'))
+bst.dump_model('dump.raw'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.txt')
+bst.save_model('XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.model')
 #print dfall_var
 
-dfall_var.to_root("training_output/test_XGB_classification_"+str(varListKey)+"_M-"+sigMass+".root", key="XGB_Tree")
+dfall_var.to_root("XGB_classification_"+str(varListKey)+"_"+sigMass+".root", key="XGB_Tree")
 
 
+if interactive:
+    predictions = bst.predict(dtest)
+    buildROC(Y_test,predictions)
+    getFscore(bst)
+else:
+    predictions = bst.predict(dtest)
+    buildROC(Y_test,predictions)
+    
 ### Plot Variable Importance Information
 # fig,ax = plt.subplots(figsize=(4,5))
 # bst.get_score(importance_type='gain')
 # xgb.plot_importance(bst, importance_type='gain', ax=ax,  max_num_features = 10, xlabel = 'Gain', ylabel = 'Var', title = 'XGB Training Output')
 # ax.grid(b = False)
 # plt.tight_layout()
-# plt.savefig('training_output/plots/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.png')
+# plt.savefig('/plots/XGB'+str(num_round)+'iterations'+"_"+str(param['max_depth'])+'depths_signal_region_'+str(varListKey)+'_'+sigMass+'.png')
 
 # t0 = time.time()
 # print "Begining SHAP explainer"
@@ -200,3 +234,4 @@ dfall_var.to_root("training_output/test_XGB_classification_"+str(varListKey)+"_M
 # t1 = time.time()
 # print t1-t0 + "Seconds?"
 # shap.summary_plot(shap_values, "placeholder", plot_type = "bar")
+

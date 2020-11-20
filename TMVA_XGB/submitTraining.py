@@ -5,7 +5,6 @@ from ROOT import *
 from XRootD import client
 
 ###############################################
-
 runDir = os.getcwd()
 start_time = time.time()
 
