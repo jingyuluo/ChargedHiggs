@@ -1,12 +1,18 @@
 #!/usr/bin/python
-
 import os,sys,time,math,datetime,pickle,itertools,fnmatch
+import argparse
 from ROOT import gROOT,TFile,TH1F
 parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
 from weights import *
 from modSyst import *
 from utils import *
+
+
+parser = argparse.ArgumentParser(description="template building for the charged Higgs analysis")
+parser.add_argument("-d", "--directory", help="the directory to be processed")
+parser.add_argument("-c", "--Categorized", default=False, action="store_true", help="Categorize or not")
+args = parser.parse_args()
 
 gROOT.SetBatch(1)
 start_time = time.time()
@@ -17,15 +23,15 @@ massPt=''
 if len(sys.argv)>1: massPt=str(sys.argv[1])
 region = 'CR' #PS,SR
 
-isCategorized=False#True#False#False
+isCategorized=args.Categorized#False#False
 doTempEachCategory = False
 cutString=''#MET30_1jet40_2jet40'#'lep35_MET30_DR0_1jet40_2jet40'
 
-pfix = 'kinematics_CR_M500'#'kinematics_CR_M500'
+pfix = args.directory#'templates_M500_2020_11_23_topPtRW_NC_allweights_DJ'#'kinematics_CR_M500_2020_11_23_topPtRW_NC_allweights_DJ' 
 #if not isCategorized: pfix='/kinematics_'+region+'_M1000'
 #if not isCategorized: pfix='v113/withSys/kinematics_'+region+'_M'
 
-pfix+=massPt+'_2020_11_18_topPtRW_NC'
+#pfix+=massPt+'_2020_11_23_topPtRW_NC_allweights'
 outDir = os.getcwd()+'/'+pfix+'/'+cutString
 
 scaleSignalXsecTo1pb = True # this has to be "True" if you are making templates for limit calculation!!!!!!!!
