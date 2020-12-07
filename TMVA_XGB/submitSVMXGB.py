@@ -28,7 +28,7 @@ eosindir = "root://cmseos.fnal.gov/"+eosindir
 eosoutdir = outputDir[outputDir.find("/store"):]
 eosoutdir = "root://cmseos.fnal.gov/"+eosoutdir
 
-Masses = [300, 500, 800, 1000, 1500]
+Masses = [300, 500, 800, 1000, 1500, 3000]
 
 for mass in Masses:
     #if not 'TTToSemiLeptonic' in file: continue

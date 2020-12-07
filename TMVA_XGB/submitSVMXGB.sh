@@ -32,5 +32,6 @@ python SVMXGB.py   -m ${mass}
 xrdcp -f *model $outputDir/
 xrdcp -f *txt $outputDir/
 
-rm *dat
+rm *model
+rm *txt
 rm *cache*
