@@ -40,7 +40,7 @@ saveKey = ''#'_50GeV_100GeVnB2'
 # if len(sys.argv)>1: iPlot=str(sys.argv[1])
 cutString = ''#'lep30_MET150_NJets4_DR1_1jet450_2jet150'
 lumiStr = str(targetlumi/1000).replace('.','p')+'fb' # 1/fb
-templateDir = 'templates_M500_2020_11_17_topPtRW_NC'#os.getcwd()+'/templates_'+year+'_'+sys.argv[3]+'/'+cutString
+templateDir = 'templates_M500_2020_11_23_topPtRW_NC_allweights'#os.getcwd()+'/templates_'+year+'_'+sys.argv[3]+'/'+cutString
 combinefile = 'templates_'+iPlot+'_'+lumiStr+'_wNegBinsCorrec_.root'
 
 quiet = True #if you don't want to see the warnings that are mostly from the stat. shape algorithm!
@@ -77,7 +77,7 @@ xMax = 1e9
 if iPlot.startswith('HT') and stat<1.: 
 	minNbins=2 #(assuming initial hists are 25 GeV bins) min 50GeV bin width (_nB2_ categories are set to min 100GeV bin width below)
 	xMin = 0
-	if iPlot=='HT': xMin = 500
+	if iPlot=='HT': xMin = 200
 	xMax = 3000
 if iPlot=='maxJJJpt' and stat<1.: 
 	minNbins=2 #(assuming initial hists are 15 GeV bins) min 30GeV bin width
@@ -224,12 +224,16 @@ for chn in xbinsListTemp.keys():
 	#if (iPlot.startswith('HT') or iPlot=='maxJJJpt' or iPlot=='ST') and stat<1.: xMax = xbinsList[chn][-2]+(500-xbinsList[chn][-2]%500)
 	if xMin>xbinsList[chn][0]: xbinsList[chn][0] = xMin
 	if xMax<xbinsList[chn][-1] and xMin!=xMax: xbinsList[chn][-1] = xMax
-	for ibin in range(1,len(xbinsList[chn])-1):
+        ibin=1
+        while ibin<(len(xbinsList[chn])-1):
+		if xbinsList[chn][ibin]<=xbinsList[chn][0] or xbinsList[chn][ibin]>=xbinsList[chn][-1]: del xbinsList[chn][ibin]
+		else: ibin+=1
+	#for ibin in range(1,len(xbinsList[chn])-1):
                 #print ibin
                 #print xbinsList[chn][ibin]
                 #print xbinsList[chn][0]
 		#print xbinsList[chn][-1]
-		if xbinsList[chn][ibin]<=xbinsList[chn][0] or xbinsList[chn][ibin]>=xbinsList[chn][-1]: del xbinsList[chn][ibin]
+		#if xbinsList[chn][ibin]<=xbinsList[chn][0] or xbinsList[chn][ibin]>=xbinsList[chn][-1]: del xbinsList[chn][ibin]
 	print chn,"=",xbinsList[chn]
 print "//"*40
 print "==> Total number of bins =",totNbins
