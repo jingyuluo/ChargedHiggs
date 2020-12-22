@@ -77,18 +77,27 @@ wgthist->Write();
 // MAIN EVENT LOOP
 // ----------------------------------------------------------------------------
 
-void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationForLJMet* calib = NULL)
+void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationForLJMet* calib = NULL, const BTagCalibrationForLJMet* calib_dj = NULL)
 {
   // btagCalibration initialization -csv reshaping
   if (calib == NULL)
   {
-    std::string btagcsvfile("DeepCSV_94XSF_V5_B_F.csv");
+    std::string btagcsvfile("DeepCSV_106XUL17SF.csv");
     if (Year== 2018) {
       btagcsvfile = "DeepCSV_102XSF_V2.csv"; 
     }
     cout << "CSV reshaping file " << btagcsvfile << endl;
     calib = new const BTagCalibrationForLJMet("DeepCSV", btagcsvfile); 
   }
+
+  if (calib_dj == NULL)
+  {
+    std::string btagdjcsvfile("DeepJet_106XUL17SF.csv");
+    cout<< "DeepJet reshaping file: "<<btagdjcsvfile<<endl;
+    calib_dj = new const BTagCalibrationForLJMet("DeepJet", btagdjcsvfile);
+  }
+
+
   BTagCalibrationForLJMetReader reader(BTagEntryForLJMet::OP_RESHAPING,  // operating point
 			       "central",             // central sys type
 			       {"up_jes", "down_jes", "up_lf", "down_lf", "up_hfstats1", "down_hfstats1",
@@ -101,6 +110,19 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
 	      "iterativefit");       // measurement type
   reader.load(*calib, BTagEntryForLJMet::FLAV_C, "iterativefit");     // for FLAV_C
   reader.load(*calib, BTagEntryForLJMet::FLAV_UDSG, "iterativefit");     // for FLAV_UDSG
+
+  BTagCalibrationForLJMetReader reader_dj(BTagEntryForLJMet::OP_RESHAPING,  // operating point
+			       "central",             // central sys type
+			       {"up_jes", "down_jes", "up_lf", "down_lf", "up_hfstats1", "down_hfstats1",
+				   "up_hfstats2", "down_hfstats2", "up_cferr1", "down_cferr1", "up_cferr2",
+				   "down_cferr2", "up_hf", "down_hf", "up_lfstats1", "down_lfstats1",
+				   "up_lfstats2", "down_lfstats2"});      // other sys types
+  
+  reader_dj.load(*calib_dj,                 // calibration instance
+	      BTagEntryForLJMet::FLAV_B,     // btag flavour
+	      "iterativefit");       // measurement type
+  reader_dj.load(*calib_dj, BTagEntryForLJMet::FLAV_C, "iterativefit");     // for FLAV_C
+  reader_dj.load(*calib_dj, BTagEntryForLJMet::FLAV_UDSG, "iterativefit");     // for FLAV_UDSG
 
 
   HardcodedConditions hardcodedConditions;
@@ -230,6 +252,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    inputTree->SetBranchStatus("AK4JetDeepCSVbb_MultiLepCalc",1);
    inputTree->SetBranchStatus("AK4JetDeepCSVc_MultiLepCalc",1);
    inputTree->SetBranchStatus("AK4JetDeepCSVudsg_MultiLepCalc",1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavb_MultiLepCalc", 1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavbb_MultiLepCalc", 1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavc_MultiLepCalc", 1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavg_MultiLepCalc", 1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavlepb_MultiLepCalc", 1);
+   inputTree->SetBranchStatus("AK4JetDeepFlavuds_MultiLepCalc", 1);
+
    inputTree->SetBranchStatus("AK4JetBTag_MultiLepCalc",1);
    inputTree->SetBranchStatus("AK4JetBTag_bSFdn_MultiLepCalc",1);
    inputTree->SetBranchStatus("AK4JetBTag_bSFup_MultiLepCalc",1);
@@ -398,6 +427,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("btagCSVWeight_HFdn",&btagCSVWeight_HFdn,"btagCSVWeight_HFdn/F");
    outputTree->Branch("btagCSVWeight_LFup",&btagCSVWeight_LFup,"btagCSVWeight_LFup/F");
    outputTree->Branch("btagCSVWeight_LFdn",&btagCSVWeight_LFdn,"btagCSVWeight_LFdn/F");
+
+   outputTree->Branch("btagDeepJetWeight", &btagDeepJetWeight, "btagDeepJetWeight/F");
+   outputTree->Branch("btagDeepJetWeight_HFup", &btagDeepJetWeight_HFup, "btagDeepJetWeight_HFup/F");
+   outputTree->Branch("btagDeepJetWeight_HFdn", &btagDeepJetWeight_HFdn, "btagDeepJetWeight_HFdn/F");
+   outputTree->Branch("btagDeepJetWeight_LFup", &btagDeepJetWeight_HFup, "btagDeepJetWeight_LFup/F");
+   outputTree->Branch("btagDeepJetWeight_LFdn", &btagDeepJetWeight_HFdn, "btagDeepJetWeight_LFdn/F");
+
    outputTree->Branch("njetsWeight",&njetsWeight,"njetsWeight/F");
    outputTree->Branch("njetsWeightUp",&njetsWeightUp,"njetsWeightUp/F");
    outputTree->Branch("njetsWeightDown",&njetsWeightDown,"njetsWeightDown/F");
@@ -439,7 +475,7 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("elMother_id_MultiLepCalc",&elMother_id_MultiLepCalc);
    outputTree->Branch("elNumberOfMothers_MultiLepCalc",&elNumberOfMothers_MultiLepCalc);
    outputTree->Branch("muMother_id_MultiLepCalc",&muMother_id_MultiLepCalc);
-   outputTree->Branch("muNumberOfMothers_MultiLepCalc",&theJetPt_JetSubCalc_PtOrdered);   
+   outputTree->Branch("muNumberOfMothers_MultiLepCalc",&muNumberOfMothers_MultiLepCalc);
    outputTree->Branch("MT_lepMet",&MT_lepMet,"MT_lepMet/F");
    outputTree->Branch("MT_lepMetmod",&MT_lepMetmod,"MT_lepMetmod/F");
    outputTree->Branch("minDPhi_MetJet",&minDPhi_MetJet,"minDPhi_MetJet/F");
@@ -455,6 +491,8 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("theJetEta_JetSubCalc",&theJetEta_JetSubCalc);
    outputTree->Branch("theJetPhi_JetSubCalc",&theJetPhi_JetSubCalc);
    outputTree->Branch("theJetEnergy_JetSubCalc",&theJetEnergy_JetSubCalc);
+   outputTree->Branch("theJetDeepFlavB_JetSubCalc", &theJetDeepFlavB_JetSubCalc);
+   outputTree->Branch("theJetIndex_JetSubCalc_PtOrdered", &theJetIndex_JetSubCalc_PtOrdered);
    outputTree->Branch("theJetPt_JetSubCalc_PtOrdered",&theJetPt_JetSubCalc_PtOrdered);
    outputTree->Branch("theJetEta_JetSubCalc_PtOrdered",&theJetEta_JetSubCalc_PtOrdered);
    outputTree->Branch("theJetPhi_JetSubCalc_PtOrdered",&theJetPhi_JetSubCalc_PtOrdered);
@@ -469,6 +507,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("AK4JetDeepCSVbb_MultiLepCalc",&AK4JetDeepCSVbb_MultiLepCalc);
    outputTree->Branch("AK4JetDeepCSVc_MultiLepCalc",&AK4JetDeepCSVc_MultiLepCalc);
    outputTree->Branch("AK4JetDeepCSVudsg_MultiLepCalc",&AK4JetDeepCSVudsg_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavb_MultiLepCalc", &AK4JetDeepFlavb_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavbb_MultiLepCalc", &AK4JetDeepFlavbb_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavc_MultiLepCalc", &AK4JetDeepFlavc_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavg_MultiLepCalc", &AK4JetDeepFlavg_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavlepb_MultiLepCalc", &AK4JetDeepFlavlepb_MultiLepCalc);
+   outputTree->Branch("AK4JetDeepFlavuds_MultiLepCalc", &AK4JetDeepFlavuds_MultiLepCalc);
+  
    outputTree->Branch("theJetHFlav_JetSubCalc_PtOrdered",&theJetHFlav_JetSubCalc_PtOrdered);
    outputTree->Branch("theJetPFlav_JetSubCalc_PtOrdered",&theJetPFlav_JetSubCalc_PtOrdered);
    outputTree->Branch("theJetBTag_JetSubCalc_PtOrdered",&theJetBTag_JetSubCalc_PtOrdered);
@@ -637,11 +682,11 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    float htCut=0;
    int   nAK8jetsCut=0;
    float lepPtCut=25.0;
-   float elEtaCut=2.1;
-   float muEtaCut=2.1;
+   float elEtaCut=2.4;
+   float muEtaCut=2.4;
    int   njetsCut=4;
    int   nbjetsCut=1; // events with # of b-tags <nbjetsCut (incl. btag shifts) are removed!
-   float jetPtCut=30;
+   float jetPtCut=40;
    float jetEtaCut=2.4;
    float ak8EtaCut=2.4;
    float ak8PtCut=200;
@@ -697,8 +742,8 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    poly2D->SetParameter(5, 7.51924e-18); 
    poly2D->SetParameter(6,0.351156);
    
-   float btagWPdjet = 0.3033; // 2017 WP
-   float btagWPdcsv = 0.4941; // 2017 WP
+   float btagWPdjet = 0.3040; // 2017 WP
+   float btagWPdcsv = 0.4506; // 2017 WP
    if(Year==2016){
    	btagWPdjet = 0.3093; // 2016 WP
    	btagWPdcsv = 0.6321; // 2016 WP
@@ -916,6 +961,12 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       btagCSVWeight_HFdn = 1.0;
       btagCSVWeight_LFup = 1.0;
       btagCSVWeight_LFdn = 1.0;
+   
+      btagDeepJetWeight = 1.0;
+      btagDeepJetWeight_HFup = 1.0;
+      btagDeepJetWeight_HFdn = 1.0;
+      btagDeepJetWeight_LFup = 1.0;
+      btagDeepJetWeight_LFdn = 1.0;
 
       for(unsigned int ijet=0; ijet < theJetPt_JetSubCalc->size(); ijet++){
 	// ----------------------------------------------------------------------------
@@ -985,17 +1036,26 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
 		}
 	// csv reshaping
 	double csv = AK4JetDeepCSVb_MultiLepCalc->at(ijet) + AK4JetDeepCSVbb_MultiLepCalc->at(ijet);
+        double deepjet = AK4JetDeepFlavb_MultiLepCalc->at(ijet)+AK4JetDeepFlavbb_MultiLepCalc->at(ijet)+AK4JetDeepFlavlepb_MultiLepCalc->at(ijet);
 	double jptForBtag(ijetPt>1000. ? 999. : ijetPt), jetaForBtag(fabs(ijetEta));
 	float csvWgt(1.0), csvWgt_hfup(1.0), csvWgt_hfdn(1.0), csvWgt_lfup(1.0), csvWgt_lfdn(1.0);
+        float djetWgt(1.0), djetWgt_hfup(1.0), djetWgt_hfdn(1.0), djetWgt_lfup(1.0), djetWgt_lfdn(1.0);
 	if (abs(ijetHFlv) ==5) { 
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
 	    csvWgt_hfup = reader.eval_auto_bounds("up_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
             csvWgt_hfdn = reader.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
             csvWgt_lfup = reader.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
-            csvWgt_lfdn = reader.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);            
+            csvWgt_lfdn = reader.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);           
+
+            djetWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfup = reader_dj.eval_auto_bounds("up_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfdn = reader_dj.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfup = reader_dj.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfdn = reader_dj.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
 	}
 	else if (abs(ijetHFlv) ==4) {
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, csv);
+            csvWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
 	}
 	else {
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, csv);
@@ -1003,6 +1063,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
             csvWgt_hfdn = reader.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, csv);
             csvWgt_lfup = reader.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, csv);
             csvWgt_lfdn = reader.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, csv);
+
+            djetWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_hfup = reader_dj.eval_auto_bounds("up_hf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_hfdn = reader_dj.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_lfup = reader_dj.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_lfdn = reader_dj.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+
 	}	 
 
 	if (csvWgt != 0) btagCSVWeight *= csvWgt;
@@ -1010,6 +1077,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
 	if (csvWgt_hfdn != 0) btagCSVWeight_HFdn *= csvWgt_hfdn;
         if (csvWgt_lfup != 0) btagCSVWeight_LFup *= csvWgt_lfup;
         if (csvWgt_lfdn != 0) btagCSVWeight_LFdn *= csvWgt_lfdn;
+  
+        if (djetWgt !=0) btagDeepJetWeight *= djetWgt;
+        if (djetWgt_hfup != 0) btagDeepJetWeight_HFup *= djetWgt_hfup;
+        if (djetWgt_hfdn != 0) btagDeepJetWeight_HFdn *= djetWgt_hfdn;
+        if (djetWgt_lfup != 0) btagDeepJetWeight_LFup *= djetWgt_lfup;
+        if (djetWgt_lfdn != 0) btagDeepJetWeight_LFdn *= djetWgt_lfdn;
+        
 	}
 
 	else{
@@ -1330,6 +1404,7 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       // ----------------------------------------------------------------------------
 
       std::sort(jetptindpair.begin(), jetptindpair.end(), comparepair);
+      theJetIndex_JetSubCalc_PtOrdered.clear();
       theJetPt_JetSubCalc_PtOrdered.clear();
       theJetEta_JetSubCalc_PtOrdered.clear();
       theJetPhi_JetSubCalc_PtOrdered.clear();
@@ -1339,6 +1414,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       AK4JetDeepCSVbb_MultiLepCalc_PtOrdered.clear();
       AK4JetDeepCSVc_MultiLepCalc_PtOrdered.clear();
       AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavb_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavbb_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavc_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavg_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered.clear();
+      AK4JetDeepFlavuds_MultiLepCalc_PtOrdered.clear();
+
       theJetHFlav_JetSubCalc_PtOrdered.clear();
       theJetPFlav_JetSubCalc_PtOrdered.clear();
       theJetBTag_JetSubCalc_PtOrdered.clear();
@@ -1352,6 +1434,7 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       AK4JetBTag_lSFup_MultiLepCalc_PtOrdered.clear();
       AK4JetBTag_lSFdn_MultiLepCalc_PtOrdered.clear();
       for(unsigned int ijet=0; ijet < jetptindpair.size(); ijet++){
+        theJetIndex_JetSubCalc_PtOrdered.push_back(jetptindpair[ijet].second);
       	theJetPt_JetSubCalc_PtOrdered.push_back(theJetPt_JetSubCalc->at(jetptindpair[ijet].second));
       	theJetEta_JetSubCalc_PtOrdered.push_back(theJetEta_JetSubCalc->at(jetptindpair[ijet].second));
       	theJetPhi_JetSubCalc_PtOrdered.push_back(theJetPhi_JetSubCalc->at(jetptindpair[ijet].second));
@@ -1361,6 +1444,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
 		AK4JetDeepCSVbb_MultiLepCalc_PtOrdered.push_back(AK4JetDeepCSVbb_MultiLepCalc->at(jetptindpair[ijet].second));
 		AK4JetDeepCSVc_MultiLepCalc_PtOrdered.push_back(AK4JetDeepCSVc_MultiLepCalc->at(jetptindpair[ijet].second));
 		AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered.push_back(AK4JetDeepCSVudsg_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavb_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavb_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavbb_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavbb_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavc_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavc_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavg_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavg_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavlepb_MultiLepCalc->at(jetptindpair[ijet].second));
+        AK4JetDeepFlavuds_MultiLepCalc_PtOrdered.push_back(AK4JetDeepFlavuds_MultiLepCalc->at(jetptindpair[ijet].second));
+
       	theJetHFlav_JetSubCalc_PtOrdered.push_back(theJetHFlav_JetSubCalc->at(jetptindpair[ijet].second));
       	theJetPFlav_JetSubCalc_PtOrdered.push_back(theJetPFlav_JetSubCalc->at(jetptindpair[ijet].second));
 		theJetBTag_JetSubCalc_PtOrdered.push_back(theJetBTag_JetSubCalc->at(jetptindpair[ijet].second));

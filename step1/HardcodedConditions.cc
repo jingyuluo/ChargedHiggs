@@ -147,29 +147,29 @@ void HardcodedConditions::GetBtaggingSF2017(double pt, double eta, double *btags
 {
 	double pt_ = pt;
 	if(pt > 1000.) pt_ = 1000.;
-    if(tagger == "DeepCSVMEDIUM"){ // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepCSV_94XSF_WP_V4_B_F.csv
-      *btagsf = 2.22144*((1.+(0.540134*pt_))/(1.+(1.30246*pt_)));
-      if(pt < 30)        *btagsfunc = 0.038731977343559265;
-      else if(pt < 50)   *btagsfunc = 0.015137125737965107;
-      else if(pt < 70)   *btagsfunc = 0.013977443799376488;
-      else if(pt < 100)  *btagsfunc = 0.012607076205313206;
-      else if(pt < 140)  *btagsfunc = 0.013979751616716385;
-      else if(pt < 200)  *btagsfunc = 0.015011214651167393;
-      else if(pt < 300)  *btagsfunc = 0.034551065415143967;
-      else if(pt < 600)  *btagsfunc = 0.040168888866901398;
-      else               *btagsfunc = 0.054684814065694809;
+    if(tagger == "DeepCSVMEDIUM"){ //DeepCSV_106XUL17SF_WPonly.csv 
+      *btagsf = 0.934639+(5.3539e-06*(log(pt_+19)*(log(pt_+18)*(3-(-(45.0991*log(pt_+18)))))));//2.22144*((1.+(0.540134*pt_))/(1.+(1.30246*pt_)));
+      if(pt < 30)        *btagsfunc = 0.036777336150407791;//0.038731977343559265;
+      else if(pt < 50)   *btagsfunc = 0.011289253830909729;//0.015137125737965107;
+      else if(pt < 70)   *btagsfunc = 0.014985882677137852;//0.013977443799376488;
+      else if(pt < 100)  *btagsfunc = 0.011643307283520699;//0.012607076205313206;
+      else if(pt < 140)  *btagsfunc = 0.010223580524325371;//0.013979751616716385;
+      else if(pt < 200)  *btagsfunc = 0.011323201470077038;//0.015011214651167393;
+      else if(pt < 300)  *btagsfunc = 0.026883697137236595;//0.034551065415143967;
+      else if(pt < 600)  *btagsfunc = 0.069629497826099396;//0.040168888866901398;
+      else               *btagsfunc = 0.088828794658184052;//0.054684814065694809;
     }
-    else if( tagger == "DeepJetMEDIUM") { // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepFlavour_94XSF_WP_V3_B_F.csv
-      *btagsf = 0.991757*((1.+(0.0209615*pt_))/(1.+(0.0234962*pt_)));
-      if(pt < 30)        *btagsfunc = 0.076275914907455444;
-      else if(pt < 50)   *btagsfunc = 0.026398291811347008;
-      else if(pt < 70)   *btagsfunc = 0.02534114383161068;
-      else if(pt < 100)  *btagsfunc = 0.02437339723110199;
-      else if(pt < 140)  *btagsfunc = 0.026176376268267632;
-      else if(pt < 200)  *btagsfunc = 0.02870459109544754;
-      else if(pt < 300)  *btagsfunc = 0.037160992622375488;
-      else if(pt < 600)  *btagsfunc = 0.036622315645217896;
-      else               *btagsfunc = 0.04215230792760849;
+    else if( tagger == "DeepJetMEDIUM") { //DeepJet_106XUL17SF_WPonly 
+      *btagsf = 0.938414+(1.64274e-05*(log(pt_+19)*(log(pt_+18)*(3-(-(13.223*log(pt_+18)))))));//0.991757*((1.+(0.0209615*pt_))/(1.+(0.0234962*pt_)));
+      if(pt < 30)        *btagsfunc = 0.032288491725921631;//0.076275914907455444;
+      else if(pt < 50)   *btagsfunc = 0.0099225323647260666;//0.026398291811347008;
+      else if(pt < 70)   *btagsfunc = 0.014409177005290985;//0.02534114383161068;
+      else if(pt < 100)  *btagsfunc = 0.011234057135879993;//0.02437339723110199;
+      else if(pt < 140)  *btagsfunc = 0.0091218706220388412;//0.026176376268267632;
+      else if(pt < 200)  *btagsfunc = 0.0090840766206383705;//0.02870459109544754;
+      else if(pt < 300)  *btagsfunc = 0.018635481595993042;//0.037160992622375488;
+      else if(pt < 600)  *btagsfunc = 0.061456717550754547;//0.036622315645217896;
+      else               *btagsfunc = 0.079311750829219818;//0.04215230792760849;
     }else{ std::cerr << "Tagger " << tagger << " not coded into HardcodedConditions::GetBtaggingSF2017! Aborting ..." << std::endl; std::abort();}
 
     if(pt > 1000){*btagsfunc *= 2.0;}
@@ -181,29 +181,29 @@ void HardcodedConditions::GetCtaggingSF2017(double pt, double eta, double *btags
 {
 	double pt_ = pt;
 	if(pt > 1000.) pt_ = 1000.;
-    if(tagger == "DeepCSVMEDIUM"){ // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepCSV_94XSF_WP_V4_B_F.csv
-      *btagsf = 2.22144*((1.+(0.540134*pt_))/(1.+(1.30246*pt_)));
-      if(pt < 30)        *btagsfunc = 0.1161959320306778;
-      else if(pt < 50)   *btagsfunc = 0.045411378145217896;
-      else if(pt < 70)   *btagsfunc = 0.041932329535484314;
-      else if(pt < 100)  *btagsfunc = 0.037821229547262192;
-      else if(pt < 140)  *btagsfunc = 0.041939254850149155;
-      else if(pt < 200)  *btagsfunc = 0.045033644884824753;
-      else if(pt < 300)  *btagsfunc = 0.1036531925201416;
-      else if(pt < 600)  *btagsfunc = 0.12050666660070419;
-      else               *btagsfunc = 0.16405443847179413;
+    if(tagger == "DeepCSVMEDIUM"){ //DeepCSV_106XUL17SF_WPonly.csv  
+      *btagsf = 0.934639+(5.3539e-06*(log(pt_+19)*(log(pt_+18)*(3-(-(45.0991*log(pt_+18)))))));//2.22144*((1.+(0.540134*pt_))/(1.+(1.30246*pt_)));
+      if(pt < 30)        *btagsfunc = 0.11033201217651367;//0.1161959320306778;
+      else if(pt < 50)   *btagsfunc = 0.033867761492729187;//0.045411378145217896;
+      else if(pt < 70)   *btagsfunc = 0.04495764896273613;//0.041932329535484314;
+      else if(pt < 100)  *btagsfunc = 0.034929923713207245;//0.037821229547262192;
+      else if(pt < 140)  *btagsfunc = 0.030670741572976112;//0.041939254850149155;
+      else if(pt < 200)  *btagsfunc = 0.033969603478908539;//0.045033644884824753;
+      else if(pt < 300)  *btagsfunc = 0.080651089549064636;//0.1036531925201416;
+      else if(pt < 600)  *btagsfunc = 0.20888850092887878;//0.12050666660070419;
+      else               *btagsfunc = 0.26648637652397156;//0.16405443847179413;
     }
-    else if( tagger == "DeepJetMEDIUM") { // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepFlavour_94XSF_WP_V3_B_F.csv
-      *btagsf = 0.991757*((1.+(0.0209615*pt_))/(1.+(0.0234962*pt_)));
-      if(pt < 30)        *btagsfunc = 0.22882774472236633;
-      else if(pt < 50)   *btagsfunc = 0.079194873571395874;
-      else if(pt < 70)   *btagsfunc = 0.07602342963218689;
-      else if(pt < 100)  *btagsfunc = 0.073120191693305969;
-      else if(pt < 140)  *btagsfunc = 0.078529126942157745;
-      else if(pt < 200)  *btagsfunc = 0.086113773286342621;
-      else if(pt < 300)  *btagsfunc = 0.11148297786712646;
-      else if(pt < 600)  *btagsfunc = 0.10986694693565369;
-      else               *btagsfunc = 0.12645691633224487;
+    else if( tagger == "DeepJetMEDIUM") { //DeepJet_106XUL17SF_WPonly  
+      *btagsf = 0.938414+(1.64274e-05*(log(pt_+19)*(log(pt_+18)*(3-(-(13.223*log(pt_+18))))))); 
+      if(pt < 30)        *btagsfunc = 0.096865475177764893;//0.22882774472236633;
+      else if(pt < 50)   *btagsfunc = 0.0297675970941782;//0.079194873571395874;
+      else if(pt < 70)   *btagsfunc = 0.043227531015872955;//0.07602342963218689;
+      else if(pt < 100)  *btagsfunc = 0.033702172338962555;//0.073120191693305969;
+      else if(pt < 140)  *btagsfunc = 0.027365611866116524;//0.078529126942157745;
+      else if(pt < 200)  *btagsfunc = 0.027252230793237686;//0.086113773286342621;
+      else if(pt < 300)  *btagsfunc = 0.055906444787979126;//0.11148297786712646;
+      else if(pt < 600)  *btagsfunc = 0.18437016010284424;//0.10986694693565369;
+      else               *btagsfunc = 0.23793524503707886;//0.12645691633224487;
     }else{ std::cerr << "Tagger " << tagger << " not coded into HardcodedConditions::GetCtaggingSF2017! Aborting ..." << std::endl; std::abort();}
 
     if(pt > 1000){*btagsfunc *= 2.0;}
@@ -215,13 +215,13 @@ void HardcodedConditions::GetLtaggingSF2017(double pt, double eta, double *btags
 {
 	double pt_ = pt;
 	if(pt > 1000.) pt_ = 1000.;
-    if(tagger == "DeepCSVMEDIUM"){ // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepCSV_94XSF_WP_V4_B_F.csv
-      *btagsf = 0.972902+0.000201811*pt_+3.96396e-08*pt_*pt_+-4.53965e-10*pt_*pt_*pt_;
-      *btagsfunc = 0.101236+0.000212696*pt_+-1.71672e-07*pt_*pt_;
+    if(tagger == "DeepCSVMEDIUM"){  //DeepCSV_106XUL17SF_WPonly.csv
+      *btagsf = 1.09411+-0.000277731*pt_+2.47948e-07*pt_*pt_+-0.65943/pt_;//0.972902+0.000201811*pt_+3.96396e-08*pt_*pt_+-4.53965e-10*pt_*pt_*pt_;
+      *btagsfunc = 1-(0.079916+0.000250233*pt_+-2.41117e-07*pt_*pt_);//0.101236+0.000212696*pt_+-1.71672e-07*pt_*pt_;
     }
-    else if( tagger == "DeepJetMEDIUM") { // https://twiki.cern.ch/twiki/pub/CMS/BtagRecommendation94X/DeepFlavour_94XSF_WP_V3_B_F.csv
-      *btagsf = 1.40779+-0.00094558*pt_+8.74982e-07*pt_*pt_+-4.67814/pt_;
-      *btagsfunc = 0.100661+0.000294578*pt_+-3.2739e-07*pt_*pt_;
+    else if( tagger == "DeepJetMEDIUM") { //DeepJet_106XUL17SF_WPonly 
+      *btagsf = 1.35875+-0.000916722*pt_+6.33425e-07*pt_*pt_+-2.07301/pt_;//1.40779+-0.00094558*pt_+8.74982e-07*pt_*pt_+-4.67814/pt_;
+      *btagsfunc = 1-(0.117907+0.000250773*pt_+-3.04922e-07*pt_*pt_);//0.100661+0.000294578*pt_+-3.2739e-07*pt_*pt_;
     }else{ std::cerr << "Tagger " << tagger << " not coded into HardcodedConditions::GetLtaggingSF2017! Aborting ..." << std::endl; std::abort();}
 
     if(pt > 1000){*btagsfunc *= 2.0;}
