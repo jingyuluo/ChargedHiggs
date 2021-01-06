@@ -502,6 +502,13 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("AK4JetDeepCSVbb_MultiLepCalc_PtOrdered",&AK4JetDeepCSVbb_MultiLepCalc_PtOrdered);
    outputTree->Branch("AK4JetDeepCSVc_MultiLepCalc_PtOrdered",&AK4JetDeepCSVc_MultiLepCalc_PtOrdered);
    outputTree->Branch("AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered",&AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered);
+   outputTree->Branch("AK4JetDeepFlavb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavb_MultiLepCalc_PtOrdered);
+   outputTree->Branch("AK4JetDeepFlavbb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavbb_MultiLepCalc_PtOrdered);
+   outputTree->Branch("AK4JetDeepFlavc_MultiLepCalc_PtOrdered", &AK4JetDeepFlavc_MultiLepCalc_PtOrdered);
+   outputTree->Branch("AK4JetDeepFlavg_MultiLepCalc_PtOrdered", &AK4JetDeepFlavg_MultiLepCalc_PtOrdered);
+   outputTree->Branch("AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered); 
+   outputTree->Branch("AK4JetDeepFlavuds_MultiLepCalc_PtOrdered", &AK4JetDeepFlavuds_MultiLepCalc_PtOrdered);
+
    outputTree->Branch("AK4JetBTag_MultiLepCalc_PtOrdered",&AK4JetBTag_MultiLepCalc_PtOrdered);
    outputTree->Branch("AK4JetDeepCSVb_MultiLepCalc",&AK4JetDeepCSVb_MultiLepCalc);
    outputTree->Branch("AK4JetDeepCSVbb_MultiLepCalc",&AK4JetDeepCSVbb_MultiLepCalc);
