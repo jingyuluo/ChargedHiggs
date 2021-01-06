@@ -20,7 +20,7 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step3_newvar_updated_Pt40_Eta2p4_NC'#FWLJMET102X_1lep2017_Oct2019_4t_080420_step1hadds_new/nominal' 
+step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2'
 
 """
 Note: 
@@ -33,12 +33,15 @@ where <shape> is for example "JECUp". hadder.py can be used to prepare input fil
 """	
 
 bkgList = [
-		  'DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500',
-		  'QCDht200','QCDht300','QCDht500','QCDht700','QCDht1000','QCDht1500','QCDht2000',
-		  'Tt','Tbt','Ts','Tbs','TtW','TbtW',
-		  'WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800',
-		  'WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5',
-		  'WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5', 'WJetsMG2500_6',
+		  'DYMG', #'DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500',
+		  'QCDht200','QCDht300',
+                  'QCDht500',
+                  'QCDht700','QCDht1000','QCDht1500','QCDht2000',
+		  'Tt','Tbt','Ts','TtW','TbtW',
+                  'WJetsMG',
+		  #'WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800',
+		  #'WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5',
+		  #'WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5', 'WJetsMG2500_6',
 
 	 	  #'TTJets2L2nu0','TTJets2L2nu700','TTJets2L2nu1000',		  
 		  #'TTJetsHad0','TTJetsHad700','TTJetsHad1000',		 
@@ -47,9 +50,9 @@ bkgList = [
 		  #'TTJetsSemiLep1','TTJetsSemiLep2','TTJetsSemiLep3','TTJetsSemiLep4','TTJetsSemiLep5','TTJetsSemiLep6',		  
 		  #'TTJets700mtt','TTJets1000mtt',
 		  'TTWl',#'TTWq',
-                  'TTZl','TTTT',
+                  'TTZl',#'TTTT',
           'WW','WZ','ZZ',
-		  'TTHB','TTHnoB',
+		  #'TTHB','TTHnoB',
 		  ]
 		  
 ttFlvs = ['_tt2b','_ttbb','_tt1b','_ttcc','_ttjj']
