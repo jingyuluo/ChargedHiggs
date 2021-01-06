@@ -287,15 +287,18 @@ public :
    vector<double>  *theJetEta_JetSubCalc;
    vector<double>  *theJetPhi_JetSubCalc;
    vector<double>  *theJetEnergy_JetSubCalc;
+   vector<double>  *theJetDeepFlavB_JetSubCalc;
    vector<int>     *AK4JetBTag_MultiLepCalc_PtOrdered;
    vector<double>  *AK4JetDeepCSVb_MultiLepCalc;
    vector<double>  *AK4JetDeepCSVbb_MultiLepCalc;
    vector<double>  *AK4JetDeepCSVc_MultiLepCalc;
    vector<double>  *AK4JetDeepCSVudsg_MultiLepCalc;
+   vector<int>     *theJetIndex_JetSubCalc_PtOrdered;
    vector<double>  *theJetPt_JetSubCalc_PtOrdered;
    vector<double>  *theJetEta_JetSubCalc_PtOrdered;
    vector<double>  *theJetPhi_JetSubCalc_PtOrdered;
    vector<double>  *theJetEnergy_JetSubCalc_PtOrdered;
+   vector<double>  *theJetDeepFlavB_JetSubCalc_PtOrdered;
 //   vector<double>  *theJetDeepCSVb_JetSubCalc_PtOrdered;
 //   vector<double>  *theJetDeepCSVbb_JetSubCalc_PtOrdered;
 //   vector<double>  *theJetDeepCSVc_JetSubCalc_PtOrdered;
@@ -304,6 +307,13 @@ public :
    vector<double>  *AK4JetDeepCSVbb_MultiLepCalc_PtOrdered;
    vector<double>  *AK4JetDeepCSVc_MultiLepCalc_PtOrdered;
    vector<double>  *AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavb_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavbb_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavc_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavg_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered;
+   vector<double>  *AK4JetDeepFlavuds_MultiLepCalc_PtOrdered;
+
    vector<int>     *theJetHFlav_JetSubCalc_PtOrdered;
    vector<int>     *theJetPFlav_JetSubCalc_PtOrdered;
    vector<int>     *theJetBTag_JetSubCalc_PtOrdered;
@@ -431,7 +441,7 @@ public :
    vector<double>  *renormPSWeights;
    vector<double>  *topMass_TTbarMassCalc;
    vector<int>     *topID_TTbarMassCalc;
-   vector<double>  *theJetDeepFlavB_JetSubCalc_PtOrdered;
+   //vector<double>  *theJetDeepFlavB_JetSubCalc_PtOrdered;
    Int_t           NresolvedTops1pFakeNoSF;
    Int_t           NresolvedTops2pFakeNoSF;
    Int_t           NresolvedTops5pFakeNoSF;
@@ -517,10 +527,12 @@ public :
    TBranch        *b_MT_lepMet;   //!
    TBranch        *b_MT_lepMetmod;   //!
    TBranch        *b_minDPhi_MetJet;   //!
+   TBranch        *b_theJetIndex_JetSubCalc_PtOrdered;
    TBranch        *b_theJetPt_JetSubCalc_PtOrdered;   //!
    TBranch        *b_theJetEta_JetSubCalc_PtOrdered;   //!
    TBranch        *b_theJetPhi_JetSubCalc_PtOrdered;   //!
    TBranch        *b_theJetEnergy_JetSubCalc_PtOrdered;   //!
+   TBranch        *b_theJetDeepFlavB_JetSubCalc_PtOrdered; 
 //   TBranch        *b_theJetDeepCSVb_JetSubCalc_PtOrdered;   //!
 //   TBranch        *b_theJetDeepCSVbb_JetSubCalc_PtOrdered;   //!
 //   TBranch        *b_theJetDeepCSVc_JetSubCalc_PtOrdered;   //!
@@ -529,6 +541,12 @@ public :
    TBranch        *b_AK4JetDeepCSVbb_MultiLepCalc_PtOrdered;  //!
    TBranch        *b_AK4JetDeepCSVc_MultiLepCalc_PtOrdered;   //!
    TBranch        *b_AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered;  //!
+   TBranch        *b_AK4JetDeepFlavb_MultiLepCalc_PtOrdered;
+   TBranch        *b_AK4JetDeepFlavbb_MultiLepCalc_PtOrdered;
+   TBranch        *b_AK4JetDeepFlavc_MultiLepCalc_PtOrdered;
+   TBranch        *b_AK4JetDeepFlavg_MultiLepCalc_PtOrdered;
+   TBranch        *b_AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered;
+   TBranch        *b_AK4JetDeepFlavuds_MultiLepCalc_PtOrdered;
    TBranch        *b_theJetHFlav_JetSubCalc_PtOrdered;   //!
    TBranch        *b_theJetPFlav_JetSubCalc_PtOrdered;   //!
    TBranch        *b_theJetBTag_JetSubCalc_PtOrdered;   //!
@@ -670,7 +688,7 @@ public :
    TBranch        *b_elNumberOfMothers_MultiLepCalc;   //!
    TBranch        *b_muMother_id_MultiLepCalc;   //!
    TBranch        *b_muNumberOfMothers_MultiLepCalc;   //!
-   TBranch        *b_theJetDeepFlavB_JetSubCalc_PtOrdered;   //!
+   //TBranch        *b_theJetDeepFlavB_JetSubCalc_PtOrdered;   //!
    TBranch        *b_NresolvedTops1pFakeNoSF;   //!
    TBranch        *b_NresolvedTops2pFakeNoSF;   //!
    TBranch        *b_NresolvedTops5pFakeNoSF;   //!
@@ -700,6 +718,7 @@ public :
    TBranch        *b_theJetEta_JetSubCalc;   //!
    TBranch        *b_theJetPhi_JetSubCalc;   //!
    TBranch        *b_theJetEnergy_JetSubCalc;   //!
+   TBranch        *b_theJetDeepFlavB_JetSubCalc;
    TBranch        *b_AK4JetBTag_MultiLepCalc_PtOrdered;   //!
    TBranch        *b_AK4JetDeepCSVb_MultiLepCalc;   //!
    TBranch        *b_AK4JetDeepCSVbb_MultiLepCalc;   //!
@@ -852,10 +871,12 @@ void step2::Init(TTree *tree)
    renormWeights = 0;
    pdfWeights = 0;
    pdfNewWeights = 0;
+   theJetIndex_JetSubCalc_PtOrdered = 0;
    theJetPt_JetSubCalc_PtOrdered = 0;
    theJetEta_JetSubCalc_PtOrdered = 0;
    theJetPhi_JetSubCalc_PtOrdered = 0;
    theJetEnergy_JetSubCalc_PtOrdered = 0;
+   theJetDeepFlavB_JetSubCalc_PtOrdered = 0;
 //   theJetDeepCSVb_JetSubCalc_PtOrdered = 0;
 //   theJetDeepCSVbb_JetSubCalc_PtOrdered = 0;
 //   theJetDeepCSVc_JetSubCalc_PtOrdered = 0;
@@ -864,6 +885,13 @@ void step2::Init(TTree *tree)
    AK4JetDeepCSVbb_MultiLepCalc_PtOrdered = 0;
    AK4JetDeepCSVc_MultiLepCalc_PtOrdered = 0;
    AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavb_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavbb_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavc_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavg_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered = 0;
+   AK4JetDeepFlavuds_MultiLepCalc_PtOrdered = 0;
+  
    theJetHFlav_JetSubCalc_PtOrdered = 0;
    theJetPFlav_JetSubCalc_PtOrdered = 0;
    theJetBTag_JetSubCalc_PtOrdered = 0;
@@ -961,7 +989,6 @@ void step2::Init(TTree *tree)
    elNumberOfMothers_MultiLepCalc = 0;
    muMother_id_MultiLepCalc = 0;
    muNumberOfMothers_MultiLepCalc = 0;
-   theJetDeepFlavB_JetSubCalc_PtOrdered = 0;
    NresolvedTops1pFake_shifts = 0;
    NresolvedTops2pFake_shifts = 0;
    NresolvedTops5pFake_shifts = 0;
@@ -978,10 +1005,12 @@ void step2::Init(TTree *tree)
    recLeptonicTopMass = 0;
    recLeptonicTopJetIdx = 0;
 
+
    theJetPt_JetSubCalc = 0;
    theJetEta_JetSubCalc = 0;
    theJetPhi_JetSubCalc = 0;
    theJetEnergy_JetSubCalc = 0;
+   theJetDeepFlavB_JetSubCalc = 0;
    AK4JetBTag_MultiLepCalc_PtOrdered = 0;
    AK4JetDeepCSVb_MultiLepCalc = 0;
    AK4JetDeepCSVbb_MultiLepCalc = 0;
@@ -1039,10 +1068,12 @@ void step2::Init(TTree *tree)
    inputTree->SetBranchAddress("MT_lepMet", &MT_lepMet, &b_MT_lepMet);
    inputTree->SetBranchAddress("MT_lepMetmod", &MT_lepMetmod, &b_MT_lepMetmod);
    inputTree->SetBranchAddress("minDPhi_MetJet", &minDPhi_MetJet, &b_minDPhi_MetJet);
+   inputTree->SetBranchAddress("theJetIndex_JetSubCalc_PtOrdered", &theJetIndex_JetSubCalc_PtOrdered, &b_theJetIndex_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetPt_JetSubCalc_PtOrdered", &theJetPt_JetSubCalc_PtOrdered, &b_theJetPt_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetEta_JetSubCalc_PtOrdered", &theJetEta_JetSubCalc_PtOrdered, &b_theJetEta_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetPhi_JetSubCalc_PtOrdered", &theJetPhi_JetSubCalc_PtOrdered, &b_theJetPhi_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetEnergy_JetSubCalc_PtOrdered", &theJetEnergy_JetSubCalc_PtOrdered, &b_theJetEnergy_JetSubCalc_PtOrdered);
+   inputTree->SetBranchAddress("theJetDeepFlavB_JetSubCalc_PtOrdered", &theJetDeepFlavB_JetSubCalc_PtOrdered, &b_theJetDeepFlavB_JetSubCalc_PtOrdered);
 //   inputTree->SetBranchAddress("theJetDeepCSVb_JetSubCalc_PtOrdered", &theJetDeepCSVb_JetSubCalc_PtOrdered, &b_theJetDeepCSVb_JetSubCalc_PtOrdered);
 //   inputTree->SetBranchAddress("theJetDeepCSVbb_JetSubCalc_PtOrdered", &theJetDeepCSVbb_JetSubCalc_PtOrdered, &b_theJetDeepCSVbb_JetSubCalc_PtOrdered);
 //   inputTree->SetBranchAddress("theJetDeepCSVc_JetSubCalc_PtOrdered", &theJetDeepCSVc_JetSubCalc_PtOrdered, &b_theJetDeepCSVc_JetSubCalc_PtOrdered);
@@ -1051,6 +1082,12 @@ void step2::Init(TTree *tree)
    inputTree->SetBranchAddress("AK4JetDeepCSVbb_MultiLepCalc_PtOrdered", &AK4JetDeepCSVbb_MultiLepCalc_PtOrdered, &b_AK4JetDeepCSVbb_MultiLepCalc_PtOrdered);
    inputTree->SetBranchAddress("AK4JetDeepCSVc_MultiLepCalc_PtOrdered", &AK4JetDeepCSVc_MultiLepCalc_PtOrdered, &b_AK4JetDeepCSVc_MultiLepCalc_PtOrdered);
    inputTree->SetBranchAddress("AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered", &AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered, &b_AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavb_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavb_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavbb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavbb_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavbb_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavc_MultiLepCalc_PtOrdered", &AK4JetDeepFlavc_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavc_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavg_MultiLepCalc_PtOrdered", &AK4JetDeepFlavg_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavg_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered", &AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered);
+   inputTree->SetBranchAddress("AK4JetDeepFlavuds_MultiLepCalc_PtOrdered", &AK4JetDeepFlavuds_MultiLepCalc_PtOrdered, &b_AK4JetDeepFlavuds_MultiLepCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetHFlav_JetSubCalc_PtOrdered", &theJetHFlav_JetSubCalc_PtOrdered, &b_theJetHFlav_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetPFlav_JetSubCalc_PtOrdered", &theJetPFlav_JetSubCalc_PtOrdered, &b_theJetPFlav_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("theJetBTag_JetSubCalc_PtOrdered", &theJetBTag_JetSubCalc_PtOrdered, &b_theJetBTag_JetSubCalc_PtOrdered);
@@ -1192,7 +1229,6 @@ void step2::Init(TTree *tree)
    inputTree->SetBranchAddress("elNumberOfMothers_MultiLepCalc", &elNumberOfMothers_MultiLepCalc, &b_elNumberOfMothers_MultiLepCalc);
    inputTree->SetBranchAddress("muMother_id_MultiLepCalc", &muMother_id_MultiLepCalc, &b_muMother_id_MultiLepCalc);
    inputTree->SetBranchAddress("muNumberOfMothers_MultiLepCalc", &muNumberOfMothers_MultiLepCalc, &b_muNumberOfMothers_MultiLepCalc);
-   inputTree->SetBranchAddress("theJetDeepFlavB_JetSubCalc_PtOrdered", &theJetDeepFlavB_JetSubCalc_PtOrdered, &b_theJetDeepFlavB_JetSubCalc_PtOrdered);
    inputTree->SetBranchAddress("NresolvedTops1pFakeNoSF", &NresolvedTops1pFakeNoSF, &b_NresolvedTops1pFakeNoSF);
    inputTree->SetBranchAddress("NresolvedTops2pFakeNoSF", &NresolvedTops2pFakeNoSF, &b_NresolvedTops2pFakeNoSF);
    inputTree->SetBranchAddress("NresolvedTops5pFakeNoSF", &NresolvedTops5pFakeNoSF, &b_NresolvedTops5pFakeNoSF);
@@ -1220,6 +1256,7 @@ void step2::Init(TTree *tree)
    inputTree->SetBranchAddress("theJetEta_JetSubCalc", &theJetEta_JetSubCalc, &b_theJetEta_JetSubCalc);
    inputTree->SetBranchAddress("theJetPhi_JetSubCalc", &theJetPhi_JetSubCalc, &b_theJetPhi_JetSubCalc);
    inputTree->SetBranchAddress("theJetEnergy_JetSubCalc", &theJetEnergy_JetSubCalc, &b_theJetEnergy_JetSubCalc);
+   inputTree->SetBranchAddress("theJetDeepFlavB_JetSubCalc", &theJetDeepFlavB_JetSubCalc, &b_theJetDeepFlavB_JetSubCalc);
    inputTree->SetBranchAddress("AK4JetBTag_MultiLepCalc_PtOrdered", &AK4JetBTag_MultiLepCalc_PtOrdered, &b_AK4JetBTag_MultiLepCalc_PtOrdered);
    inputTree->SetBranchAddress("AK4JetDeepCSVb_MultiLepCalc", &AK4JetDeepCSVb_MultiLepCalc, &b_AK4JetDeepCSVb_MultiLepCalc);
    inputTree->SetBranchAddress("AK4JetDeepCSVbb_MultiLepCalc", &AK4JetDeepCSVbb_MultiLepCalc, &b_AK4JetDeepCSVbb_MultiLepCalc);
