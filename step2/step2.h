@@ -17,6 +17,7 @@
 #include "vector"
 #include "TLorentzVector.h"
 #include "Davismt2.h"
+#include "S2HardcodedConditions.h"
 
 class step2 {
 public :
@@ -25,12 +26,31 @@ public :
    TFile          *inputFile, *outputFile;
    Int_t           fCurrent; //!current Tree number in a TChain
 
+   //Load Scale Factors
+   S2HardcodedConditions hardcodedConditions;
+  
 // Fixed size dimensions of array or collections stored in the TTree if any.
    Int_t           isTraining;
    Bool_t          isTTbar;
    Bool_t          isTTTT;   
    Float_t         xsecEff; //this is the weight actually!! so (Lumi * xsec)/nEvents, but keeping the naming the same to be consistent with TMVA setup
 
+   Bool_t          isST = false;
+   Bool_t          isSTs = false;
+   Bool_t          isSTt = false;
+   Bool_t          isSTtw = false; 
+   Bool_t          isTTBB = false;
+   Bool_t          isTT2B = false; 
+   Bool_t          isTT1B = false; 
+   Bool_t          isTTCC = false; 
+   Bool_t          isTTLF = false; 
+   Bool_t          isWJets = false; 
+   TString         sample_ = "";
+   std::string     sample = "";
+  
+   Float_t         btagDeepJet2DWeight;
+   Float_t         btagDeepJet2DWeight_Pt120; 
+   Float_t         btagDeepJet2DWeight_HTnj;
    Float_t         tmp_minMleppBjet;
    vector<double>  GD_DR_Tridijet;
    vector<double>  BD_DR_Tridijet;   
@@ -771,6 +791,9 @@ step2::step2(TString inputFileName, TString outputFileName)// : inputTree(0), in
 
    // TT bkg divided into TTToSemiLep, TTToHadronic, TT high mass appear below
 
+
+   //Initialize SFs
+   hardcodedConditions = S2HardcodedConditions();
    //TTToSemiLep
    if (inputFileName.Contains("TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700")) xsecEff = 0.137784841012;
    else if (inputFileName.Contains("TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt1000toInf")) xsecEff = 0.0309363357165;
@@ -808,7 +831,29 @@ step2::step2(TString inputFileName, TString outputFileName)// : inputTree(0), in
    isTTTT = false;
    if (inputFileName.Contains("TT_")) isTTbar = true;      
    else if (inputFileName.Contains("TTTo")) isTTbar = true;      
-   else if (inputFileName.Contains("TTTT")) isTTTT = true;         
+   else if (inputFileName.Contains("TTTT")) isTTTT = true;        
+
+   isST = (inputFileName.Contains("ST_t-channel") || inputFileName.Contains("ST_tW") || inputFileName.Contains("ST_s-channel"));
+   isSTs = inputFileName.Contains("ST_s-channel");
+   isSTt = inputFileName.Contains("ST_t-channel");
+   isSTtw = inputFileName.Contains("ST_tW");
+   isTTBB = inputFileName.Contains("_ttbb");
+   isTT2B = inputFileName.Contains("_tt2b");
+   isTT1B = inputFileName.Contains("_tt1b");
+   isTTCC = inputFileName.Contains("_ttcc");
+   isTTLF = inputFileName.Contains("_ttjj");
+   //isWJets = inputFileName.BeginsWith("WJetsToLNu");
+
+  sample_ = inputFileName;
+  Int_t slash = sample_.Last('/');
+  sample_.Remove(0,slash+1);
+  Int_t uscore = sample_.Last('_');
+  Int_t thelength = sample_.Length();
+  sample_.Remove(uscore,thelength);
+  isWJets = sample_.BeginsWith("WJetsToLNu");
+  sample = (std::string)sample_;   
+
+    
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 //    if (tree == 0) {
@@ -866,6 +911,7 @@ void step2::Init(TTree *tree)
    // code, but the routine can be extended by the user if needed.
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
+
 
    // Set object pointer
    renormWeights = 0;
