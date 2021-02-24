@@ -182,6 +182,7 @@ public :
    vector<int>     NJetsCSVwithSF_JetSubCalc_shifts;
    vector<int>     NJetsCSVnotH_JetSubCalc_shifts;
    vector<int>     NJetsCSVnotPH_JetSubCalc_shifts;
+   vector<int>     theJetIndex_JetSubCalc_PtOrdered;
    vector<double>  theJetPt_JetSubCalc_PtOrdered;
    vector<double>  theJetEta_JetSubCalc_PtOrdered;
    vector<double>  theJetPhi_JetSubCalc_PtOrdered;
@@ -191,6 +192,12 @@ public :
    vector<double>  AK4JetDeepCSVbb_MultiLepCalc_PtOrdered;
    vector<double>  AK4JetDeepCSVc_MultiLepCalc_PtOrdered;
    vector<double>  AK4JetDeepCSVudsg_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavb_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavbb_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavc_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavg_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered;
+   vector<double>  AK4JetDeepFlavuds_MultiLepCalc_PtOrdered;
    vector<int>     AK4JetBTag_MultiLepCalc_PtOrdered;
    vector<int>     AK4JetBTag_bSFup_MultiLepCalc_PtOrdered;
    vector<int>     AK4JetBTag_bSFdn_MultiLepCalc_PtOrdered;
@@ -348,6 +355,12 @@ public :
    float           btagCSVWeight_HFdn;
    float           btagCSVWeight_LFup;
    float           btagCSVWeight_LFdn;
+
+   float           btagDeepJetWeight;
+   float           btagDeepJetWeight_HFup;
+   float           btagDeepJetWeight_HFdn;
+   float           btagDeepJetWeight_LFup;
+   float           btagDeepJetWeight_LFdn;
 
    // Declaration of leaf types
    Bool_t          flagBadMu_MultiLepCalc;
@@ -1263,7 +1276,7 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop(TString inTreeName, TString outTreeName, const BTagCalibrationForLJMet* calib);
+   virtual void     Loop(TString inTreeName, TString outTreeName, const BTagCalibrationForLJMet* calib, const BTagCalibrationForLJMet* calib_DJ);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    virtual void     saveHistograms();
@@ -1316,7 +1329,7 @@ step1::step1(TString inputFileName, TString outputFileName, Int_t Year_) : input
 
   isMadgraphBkg = (inputFileName.Contains("QCD") || inputFileName.Contains("madgraphMLM"));
   isTOP = (inputFileName.Contains("Mtt") || inputFileName.Contains("ST") || inputFileName.Contains("ttZ") || inputFileName.Contains("ttW") || inputFileName.Contains("ttH") || inputFileName.Contains("TTTo"));
-  isTT = (inputFileName.Contains("TT_Tune") || inputFileName.Contains("Mtt") || inputFileName.Contains("TTTo"));
+  isTT = (inputFileName.Contains("TT_Tune") || inputFileName.Contains("Mtt") || inputFileName.Contains("TTTo") || inputFileName.Contains("TTJets"));
   if(isSig) isTT = false;
   isTTToSemiLeptonHT500Njet9 = inputFileName.Contains("TTToSemiLepton_HT500Njet9_Tune");
   isST = (inputFileName.Contains("ST_t-channel") || inputFileName.Contains("ST_tW") || inputFileName.Contains("ST_s-channel"));

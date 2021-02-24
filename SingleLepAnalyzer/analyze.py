@@ -253,7 +253,7 @@ ltiLepCalc)) * btagCSVWeight *'+str(weight[process])
 	if isEM=='E': isEMCut+=' && isElectron==1'
 	elif isEM=='M': isEMCut+=' && isMuon==1'
 
-	nbtagLJMETname = 'NJetsCSV_MultiLepCalc'#+ljmetCalc
+	nbtagLJMETname = 'NJetsCSV_'+ljmetCalc
 	njetsLJMETname = 'NJets_'+ljmetCalc
 	nttagCut = ''
 	nWtagCut = ''

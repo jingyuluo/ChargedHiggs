@@ -18,6 +18,7 @@
 #include <TVectorT.h>
 #include "TROOT.h"
 #include "Davismt2.h"
+#include "S2HardcodedConditions.h"
 #include <bits/stdc++.h> 
 
 using namespace std;
@@ -279,6 +280,9 @@ void step2::Loop()
     TTree *outputTree = inputTree->CloneTree(); //Copy of Input Tree
 //    TTree *outputTree = new TTree("ljmet","ljmet"); //No Copy of Input Tree   
 
+   TBranch *b_btagDeepJet2DWeight   = outputTree->Branch("btagDeepJet2DWeight", &btagDeepJet2DWeight, "btagDeepJet2DWeight/F");
+   TBranch *b_btagDeepJet2DWeight_Pt120 = outputTree->Branch("btagDeepJet2DWeight_Pt120", &btagDeepJet2DWeight_Pt120, "btagDeepJet2DWeight_Pt120/F");
+   TBranch *b_btagDeepJet2DWeight_HTnj   = outputTree->Branch("btagDeepJet2DWeight_HTnj", &btagDeepJet2DWeight_HTnj, "btagDeepJet2DWeight_HTnj/F");
    TBranch *b_isTraining            = outputTree->Branch("isTraining",&isTraining,"isTraining/I");
    TBranch *b_xsecEff               = outputTree->Branch("xsecEff",&xsecEff,"xsecEff/F");
    TBranch *b_deltaR_minBB          = outputTree->Branch("deltaR_minBB",&deltaR_minBB,"deltaR_minBB/F");
@@ -487,7 +491,22 @@ void step2::Loop()
    int allLeptonicWcount = 0;
    int allMatchingCount = 0;   
    float topdiscriminator = 0.95;
-             
+   
+
+
+   std::string sampleType = "";
+   if(isTTBB) sampleType = "ttbb";
+   if(isTT2B) sampleType = "tt2b";
+   if(isTT1B) sampleType = "tt1b";
+   if(isTTCC) sampleType = "ttcc";
+   if(isTTLF) sampleType = "ttjj";
+   if(isSTs) sampleType = "STs";
+   if(isSTt) sampleType = "STt";
+   if(isSTtw) sampleType = "STtw";
+   if(isWJets) sampleType = "WJets";
+
+   std::cout<<sampleType<<std::endl;
+         
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
      Long64_t ientry = LoadTree(jentry);
      if (ientry < 0) break;
@@ -581,6 +600,25 @@ void step2::Loop()
      int num_GD_trijet = 0;
      int num_BD_trijet = 0;    
 
+
+    int nljets = 0; 
+    int nhjets = 0;
+    int nljets_pt120 = 0; 
+    int nhjets_pt120 = 0;
+    
+    for(unsigned int ijet = 0; ijet<theJetPt_JetSubCalc_PtOrdered->size(); ijet++){
+        if(theJetPt_JetSubCalc_PtOrdered->at(ijet)>40 && theJetPt_JetSubCalc_PtOrdered->at(ijet)<100) nljets+=1;
+        if(theJetPt_JetSubCalc_PtOrdered->at(ijet)>=100) nhjets+=1;
+
+        if(theJetPt_JetSubCalc_PtOrdered->at(ijet)>40 && theJetPt_JetSubCalc_PtOrdered->at(ijet)<120) nljets_pt120+=1;
+        if(theJetPt_JetSubCalc_PtOrdered->at(ijet)>=120) nhjets_pt120+=1;
+    } 
+    
+      
+    btagDeepJet2DWeight = hardcodedConditions.GetDeepJetRenorm2DSF(nljets, nhjets, sampleType);   
+    btagDeepJet2DWeight_Pt120 = hardcodedConditions.GetDeepJetRenorm2DSF_Pt120(nljets_pt120, nhjets_pt120, sampleType);  
+    btagDeepJet2DWeight_HTnj = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType); 
+   // std::cout<<nljets<<","<<nhjets<<","<<btagDeepJet2DWeight_Pt120<<std::endl; 
 //////////////////////////////////////////////////////////////////
 // build BB PAIR variables, aveCSVpt, HT_bjets, HT_ratio, HT_2m //
 //////////////////////////////////////////////////////////////////
@@ -696,24 +734,29 @@ void step2::Loop()
      for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){
         if( theJetPt_JetSubCalc_PtOrdered->at(ijet)>40) HT_pt40+=theJetPt_JetSubCalc_PtOrdered->at(ijet);
 //	cout << " event # " << jentry << " ijet " << ijet << endl;
-	if (  (AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet)==1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet)==5)  ) // for study of csv related values -wz, 2020 May
+        if ( (theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet)==5)  ) 
+	//if (  (theJetBTag_JetSubCalc_PtOrdered->at(ijet)==1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet)==5)  ) // for study of csv related values -wz, 2020 May
 	   jettype = 1;
-	else if (  (AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet)==1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) )
+         else if ( (theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) )
+	//else if (  (theJetBTag_JetSubCalc_PtOrdered->at(ijet)==1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) )
 	   jettype = 2;
-	else if (  (AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet)!=1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) ==5) ) 
+        else if ( (theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)<0.3040) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) ==5) ) 
+	//else if (  (theJetBTag_JetSubCalc_PtOrdered->at(ijet)!=1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) ==5) ) 
 	   jettype = 3;
-        else if (  (AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet)!=1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) ) 
+        else if ( (theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)<0.3040)  && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) ) 
+        //else if (  (theJetBTag_JetSubCalc_PtOrdered->at(ijet)!=1) && (theJetHFlav_JetSubCalc_PtOrdered->at(ijet) !=5) ) 
            jettype = 4;
 
 //		if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941){
- 	if(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) {
+        if(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040){
+ 	//if(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) {
 	   //changed to > in line above because we want jets that pass the csv cut 
 	   njetscsv+=1;
 	   totalPtCSV += theJetPt_JetSubCalc_PtOrdered->at(ijet);
 //	   aveCSV += theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet); 
 //	   aveCSVpt += (theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet))*theJetPt_JetSubCalc_PtOrdered->at(ijet);
-	   aveCSV += AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+ AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet);
-	   aveCSVpt += (AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+ AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet))*theJetPt_JetSubCalc_PtOrdered->at(ijet);
+	   aveCSV += AK4JetDeepFlavb_MultiLepCalc_PtOrdered->at(ijet)+ AK4JetDeepFlavbb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered->at(ijet);
+	   aveCSVpt += (AK4JetDeepFlavb_MultiLepCalc_PtOrdered->at(ijet)+ AK4JetDeepFlavbb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepFlavlepb_MultiLepCalc_PtOrdered->at(ijet))*theJetPt_JetSubCalc_PtOrdered->at(ijet);
 
 //	   aveCSVpt += theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)*theJetPt_JetSubCalc_PtOrdered->at(ijet);
 	}
@@ -730,7 +773,7 @@ void step2::Loop()
         TLorentzVector jetTmp, bjetTmp;   		
 	jetTmp.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet));	
 //        v_pair_jet_CSV.push_back(make_pair(jetTmp, theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet)));
-        v_pair_jet_CSV.push_back(make_pair(jetTmp, AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+ AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet)) );
+        v_pair_jet_CSV.push_back(make_pair(jetTmp, theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)) );
 //	v_pair_jet_CSV.push_back(make_pair(jetTmp, theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet) ));       
  
         if((lep + jetTmp).M() < minMleppJet) {
@@ -738,8 +781,9 @@ void step2::Loop()
           deltaR_lepJetInMinMljet  = jetTmp.DeltaR(lep);
           deltaPhi_lepJetInMinMljet = jetTmp.DeltaPhi(lep);
         }		
-//		if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941){        
-	if(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) {
+//		if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941){       
+        if(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040){ 
+	//if(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) {
           if((lep + jetTmp).M() < tmp_minMleppBjet) {
             tmp_minMleppBjet = fabs((lep + jetTmp).M() );
             deltaR_lepbJetInMinMlb = jetTmp.DeltaR(lep);
@@ -753,7 +797,8 @@ void step2::Loop()
           bjetTmp.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(tmpJetInd),theJetEta_JetSubCalc_PtOrdered->at(tmpJetInd),theJetPhi_JetSubCalc_PtOrdered->at(tmpJetInd),theJetEnergy_JetSubCalc_PtOrdered->at(tmpJetInd)); 
           for(unsigned int ijet = 1; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){        
 //          if((theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941) && stop == 0 ){
-	    if((AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){
+            if((theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) && stop ==0){
+	    //if((theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){
               stop = 1;
               bjetTmp.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet)); 
               deltaR_lepbJetNotInMinMlb = bjetTmp.DeltaR(lep);        
@@ -764,7 +809,8 @@ void step2::Loop()
           stop = 0;
           for(unsigned int ijet = 0; ijet < tmpJetInd; ijet++){        
 //                if((theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941) && stop == 0 ){
-            if((AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){
+            if((theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) && stop ==0){
+           // if((theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){
               stop = 1;
               bjetTmp.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet)); 
               deltaR_lepbJetNotInMinMlb = bjetTmp.DeltaR(lep);        
@@ -773,7 +819,8 @@ void step2::Loop()
           if (stop == 0){
             for(unsigned int ijet = tmpJetInd+1; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){        
 //                    if((theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941) && stop == 0 ){
-	      if((AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){	
+             if((theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) && stop ==0){
+	   //   if((theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) && stop == 0 ){	
                 stop = 1;
                 bjetTmp.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet)); 
                 deltaR_lepbJetNotInMinMlb = bjetTmp.DeltaR(lep);        
@@ -789,19 +836,19 @@ void step2::Loop()
 //	    csvJet3 = theJetDeepCSVb_JetSubCalc_PtOrdered->at(2)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(2);
 //	    csvJet4 = theJetDeepCSVb_JetSubCalc_PtOrdered->at(3)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(3);	    
 
-	v_DCSV_allJets.push_back(AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet));
+	v_DCSV_allJets.push_back(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet));
 //	v_DCSV_jettype_allJets.push_back(make_pair(AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet), jettype) );	
 	if (ijet==0) {
-	    csvJet1 = AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet);
+	    csvJet1 = theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet); 
 	}
 	else if (ijet==1) {
-            csvJet2 = AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet);
+            csvJet2 = theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet); 
 	}
 	else if (ijet==2) {
-            csvJet3 = AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet);
+            csvJet3 = theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet); 
 	}
 	else if (ijet==3) {
-            csvJet4 = AK4JetDeepCSVb_MultiLepCalc_PtOrdered->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc_PtOrdered->at(ijet);
+            csvJet4 = theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet); 
 	}
 
 
@@ -819,7 +866,8 @@ void step2::Loop()
 	if(abs(deltaPhifromMET_)>TMath::Pi()/2){hemiout+=theJetPt_JetSubCalc_PtOrdered->at(ijet);}				
 	
 //		if(!(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941)) continue; //without b-tag SFs
-	if(!(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) ) continue;
+        if(!(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040)) continue;
+	//if(!(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) ) continue;
 	
 	bjet1.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet));	
 	HT_bjets+=theJetPt_JetSubCalc_PtOrdered->at(ijet);
@@ -846,8 +894,9 @@ void step2::Loop()
 		        
 	for(unsigned int jjet = ijet + 1; jjet < theJetPt_JetSubCalc_PtOrdered->size(); jjet++){
 	  if(jjet >= theJetPt_JetSubCalc_PtOrdered->size()) continue;
-//		  if(!(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941)) continue; //without b-tag SFs	  
-	  if(!(AK4JetBTag_MultiLepCalc_PtOrdered->at(jjet) == 1) ) continue;
+//		  if(!(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941)) continue; //without b-tag SFs	 
+          if(!(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) ) continue; 
+	//  if(!(theJetBTag_JetSubCalc_PtOrdered->at(jjet) == 1) ) continue;
 	  bjet2.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(jjet),theJetEta_JetSubCalc_PtOrdered->at(jjet),theJetPhi_JetSubCalc_PtOrdered->at(jjet),theJetEnergy_JetSubCalc_PtOrdered->at(jjet));		  
           MT2bb = mt2(bjet1,bjet2,met);
           deltaR_lepBJets1 = (bjet2).DeltaR(lep);		  
@@ -918,7 +967,7 @@ void step2::Loop()
      bool WnotFromTop = false;
      if (isElectron==1 && elNumberOfMothers_MultiLepCalc->size()>0 ){
 //        for(int ind = 0; ind < elNumberOfMothers_MultiLepCalc->at(0); ind++){
-	for(int ind = 0; ind < elMother_id_MultiLepCalc->size(); ind++) {	
+	for(unsigned int ind = 0; ind < elMother_id_MultiLepCalc->size(); ind++) {	
             if(abs(elMother_id_MultiLepCalc->at(ind))==24) {mom_W=true;}
             if(abs(elMother_id_MultiLepCalc->at(ind))==6 && mom_W) {WfromTop=true;}            
         }
@@ -926,7 +975,7 @@ void step2::Loop()
 
      if (isMuon==1 && muNumberOfMothers_MultiLepCalc->size()>0 ){
   //      for(int ind = 0; ind < muNumberOfMothers_MultiLepCalc->at(0); ind++){
-	for(int ind = 0; ind < muMother_id_MultiLepCalc->size(); ind++) {
+	for(unsigned int ind = 0; ind < muMother_id_MultiLepCalc->size(); ind++) {
             if(abs(muMother_id_MultiLepCalc->at(ind))==24) {mom_W=true;}
             if(abs(muMother_id_MultiLepCalc->at(ind))==6 && mom_W) {WfromTop=true;}            
         }
@@ -1218,13 +1267,15 @@ void step2::Loop()
       // FIND LIGHT PAIRS
 	  for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){
 //		if((theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941)) continue; //without b-tag SFs
-		if(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1 ) continue;
+                if(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) continue;
+		//if(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1 ) continue;
 		jet1.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(ijet),theJetEta_JetSubCalc_PtOrdered->at(ijet),theJetPhi_JetSubCalc_PtOrdered->at(ijet),theJetEnergy_JetSubCalc_PtOrdered->at(ijet));
 
 		for(unsigned int jjet = ijet + 1; jjet < theJetPt_JetSubCalc_PtOrdered->size(); jjet++){
 		  if(jjet >= theJetPt_JetSubCalc_PtOrdered->size()) continue;
 //		  if((theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941)) continue; //without b-tag SFs
-	          if(AK4JetBTag_MultiLepCalc_PtOrdered->at(jjet) == 1 ) continue; 
+                  if(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) continue;
+	          //if(theJetBTag_JetSubCalc_PtOrdered->at(jjet) == 1 ) continue; 
 		  jet2.SetPtEtaPhiE(theJetPt_JetSubCalc_PtOrdered->at(jjet),theJetEta_JetSubCalc_PtOrdered->at(jjet),theJetPhi_JetSubCalc_PtOrdered->at(jjet),theJetEnergy_JetSubCalc_PtOrdered->at(jjet));
 
 		  double pairdr = (jet1).DeltaR(jet2);
@@ -1304,8 +1355,9 @@ void step2::Loop()
       PtFifthJet = -1;
       int fifthJetInd = 0;
       for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){
-//		    if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941){        
-		    if(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1 ) {
+//		    if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) > 0.4941){     
+                    if(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) { 
+		    //if(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1 ) {
       		fifthJetInd+=1;
       		if(fifthJetInd==5){PtFifthJet=theJetPt_JetSubCalc_PtOrdered->at(ijet);}
       		if(fifthJetInd>=5) break;
@@ -1313,8 +1365,9 @@ void step2::Loop()
       }
       if(fifthJetInd<5){
 		for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc_PtOrdered->size(); ijet++){
-//	    	if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) < 0.4941){        
-		if(!(AK4JetBTag_MultiLepCalc_PtOrdered->at(ijet) == 1) ) {
+//	    	if(theJetDeepCSVb_JetSubCalc_PtOrdered->at(ijet)+theJetDeepCSVbb_JetSubCalc_PtOrdered->at(ijet) < 0.4941){       
+                if(!(theJetDeepFlavB_JetSubCalc_PtOrdered->at(ijet)>0.3040) ){ 
+		//if(!(theJetBTag_JetSubCalc_PtOrdered->at(ijet) == 1) ) {
 			fifthJetInd+=1;
 			if(fifthJetInd==5){PtFifthJet=theJetPt_JetSubCalc_PtOrdered->at(ijet);}
 			}
@@ -1484,17 +1537,17 @@ void step2::Loop()
        if(idx_minDR_jetCombo==0){
            dijet = resolvedTopD1+resolvedTopD2;
            jetnotdijet = resolvedTopD3;
-           csvJetnotdijet = AK4JetDeepCSVb_MultiLepCalc->at(idjet3)+AK4JetDeepCSVbb_MultiLepCalc->at(idjet3);
+           csvJetnotdijet = theJetDeepFlavB_JetSubCalc->at(idjet3); 
        }
        else if (idx_minDR_jetCombo==1){                                     
            dijet = resolvedTopD1+resolvedTopD3;
            jetnotdijet = resolvedTopD2;
-           csvJetnotdijet = AK4JetDeepCSVb_MultiLepCalc->at(idjet2)+AK4JetDeepCSVbb_MultiLepCalc->at(idjet2);
+           csvJetnotdijet = theJetDeepFlavB_JetSubCalc->at(idjet2); 
        }
        else if (idx_minDR_jetCombo==2){
            dijet = resolvedTopD2+resolvedTopD3;     
            jetnotdijet = resolvedTopD1;
-           csvJetnotdijet = AK4JetDeepCSVb_MultiLepCalc->at(idjet1)+AK4JetDeepCSVbb_MultiLepCalc->at(idjet1);
+           csvJetnotdijet = theJetDeepFlavB_JetSubCalc->at(idjet1); 
        } 
        trijetmass = (resolvedTopD1+resolvedTopD2+resolvedTopD3).M();
        dijetmass = dijet.M();
@@ -1582,14 +1635,14 @@ void step2::Loop()
     ///////////////////////Find the jets with the highest CSVs while not belonging to the tops////////////////////////////
     //
     unsigned int lepTopJetIdx = (unsigned int)(recLeptonicTopJetIdx);
-    recLeptonicTopJetCSV = float(AK4JetDeepCSVb_MultiLepCalc->at(lepTopJetIdx)+AK4JetDeepCSVbb_MultiLepCalc->at(lepTopJetIdx));
+    recLeptonicTopJetCSV = float(theJetDeepFlavB_JetSubCalc->at(lepTopJetIdx));
     recLeptonicTopJetPt  = theJetPt_JetSubCalc->at(lepTopJetIdx);
     
     for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc->size(); ijet++){
     int int_idx = int(ijet);
 
     if( (int_idx==recLeptonicTopJetIdx)||(int_idx==BestTop_jet1idx)||(int_idx==BestTop_jet2idx)||(int_idx==BestTop_jet3idx)) continue;
-        float curr_CSV = float(AK4JetDeepCSVb_MultiLepCalc->at(ijet)+AK4JetDeepCSVbb_MultiLepCalc->at(ijet));
+        float curr_CSV = float(theJetDeepFlavB_JetSubCalc->at(ijet));
         if(curr_CSV > NoTop_Jet1_CSV){
 
             if(NoTop_Jet1_CSV!=-10){
@@ -1627,7 +1680,9 @@ void step2::Loop()
 
 /////////////////////////////////////////////////////////////////////////////////
 
-	  
+      b_btagDeepJet2DWeight->Fill();	 
+      b_btagDeepJet2DWeight_Pt120->Fill();
+      b_btagDeepJet2DWeight_HTnj->Fill(); 
       b_isTraining->Fill();
       b_xsecEff->Fill();
       b_deltaR_minBB->Fill();
