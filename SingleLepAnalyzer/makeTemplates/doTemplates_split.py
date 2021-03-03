@@ -8,6 +8,20 @@ from weights import *
 from modSyst import *
 from utils import *
 
+#choose XGB according to the category
+def SplitSR(cat):
+    if "nB2_nJ5" in cat: 
+        return "_SR1"
+    elif "nB2_nJ6p" in cat:
+        return "_SR1"
+    elif "nB3p_nJ4" in cat:
+        return "_SR2"
+    elif "nB3p_nJ5" in cat:
+        return "_SR2"
+    elif "nB3p_nJ6p" in cat:
+        return "_SR3"
+    else:
+        return ""
 
 parser = argparse.ArgumentParser(description="template building for the charged Higgs analysis")
 parser.add_argument("-d", "--directory", help="the directory to be processed")
@@ -128,7 +142,7 @@ bkgProcs['ttbar_q2up'] = ['TTJetsPHQ2U']#,'TtWQ2U','TbtWQ2U']
 bkgProcs['ttbar_q2dn'] = ['TTJetsPHQ2D']#,'TtWQ2D','TbtWQ2D']
 
 whichSignal = 'Hptb' #Hptb,HTB, TTM, BBM, or X53X53M
-massList = [200, 220, 250, 300, 400,  500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
+massList = [200, 220, 250, 300, 350, 400,  500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
 #if massPt not in massList:    MICHAEL COMMENTED OUT THESE TWO LINES
 #	massList.append(massPt)
 sigList = [whichSignal+str(mass) for mass in massList]
@@ -203,27 +217,31 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 # 			print "              processing cat: "+cat
 		histoPrefix=discriminant+'_'+lumiStr+'fb_'+cat
 		i=cat
+                SR_postfix = ""
+                if "XGB" in discriminant:
+                    SR_postfix = SplitSR(cat)
+                histoPrefixSR = discriminant+SR_postfix+'_'+lumiStr+'fb_'+cat 
 		#Group data processes
-		hists['data'+i] = datahists[histoPrefix+'_'+dataList[0]].Clone(histoPrefix+'__DATA')
+		hists['data'+i] = datahists[histoPrefixSR+'_'+dataList[0]].Clone(histoPrefix+'__DATA')
 		for dat in dataList:
-			if dat!=dataList[0]: hists['data'+i].Add(datahists[histoPrefix+'_'+dat])
+			if dat!=dataList[0]: hists['data'+i].Add(datahists[histoPrefixSR+'_'+dat])
 		
 		#Group processes
 		for proc in bkgProcList+bkgGrupList:
 			print proc
-                        hists[proc+i] = bkghists[histoPrefix+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc)
+                        hists[proc+i] = bkghists[histoPrefixSR+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc)
 			for bkg in bkgProcs[proc]:
-				if bkg!=bkgProcs[proc][0]: hists[proc+i].Add(bkghists[histoPrefix+'_'+bkg])
+				if bkg!=bkgProcs[proc][0]: hists[proc+i].Add(bkghists[histoPrefixSR+'_'+bkg])
 
         #get signal
  			for signal in sigList:
  				print "histoPrefix ", histoPrefix
  				print "signal+decays[0]", signal+decays[0]
  				print sighists
-                                hists[signal+i] = sighists[histoPrefix+'_'+signal+decays[0]].Clone(histoPrefix+'__sig')
+                                hists[signal+i] = sighists[histoPrefixSR+'_'+signal+decays[0]].Clone(histoPrefix+'__sig')
  				for decay in decays:
  					if decay!=decays[0]:
- 						htemp = sighists[histoPrefix+'_'+signal+decay].Clone()
+ 						htemp = sighists[histoPrefixSR+'_'+signal+decay].Clone()
  						hists[signal+i].Add(htemp)
 
         #systematics
@@ -234,40 +252,40 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 						if syst=='toppt' and proc not in topptProcs: continue
 						if syst=='ht' and proc not in htProcs: continue
 #  							print "proc+i+syst+ud : ", proc+i+syst+ud
-						hists[proc+i+syst+ud] = bkghists[histoPrefix.replace(discriminant,discriminant+syst+ud)+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
+						hists[proc+i+syst+ud] = bkghists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
 						for bkg in bkgProcs[proc]:
-							if bkg!=bkgProcs[proc][0]: hists[proc+i+syst+ud].Add(bkghists[histoPrefix.replace(discriminant,discriminant+syst+ud)+'_'+bkg])
+							if bkg!=bkgProcs[proc][0]: hists[proc+i+syst+ud].Add(bkghists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+bkg])
 					if syst=='toppt' or syst=='ht': continue
 					for signal in sigList:
-						hists[signal+i+syst+ud] = sighists[histoPrefix.replace(discriminant,discriminant+syst+ud)+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
+						hists[signal+i+syst+ud] = sighists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
 						if doBRScan: hists[signal+i+syst+ud].Scale(BRs[decays[0][:2]][BRind]*BRs[decays[0][2:]][BRind]/(BR[decays[0][:2]]*BR[decays[0][2:]]))
 						for decay in decays:
-							htemp = sighists[histoPrefix.replace(discriminant,discriminant+syst+ud)+'_'+signal+decay].Clone()
+							htemp = sighists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+signal+decay].Clone()
 							if doBRScan: htemp.Scale(BRs[decay[:2]][BRind]*BRs[decay[2:]][BRind]/(BR[decay[:2]]*BR[decay[2:]]))
 							if decay!=decays[0]: hists[signal+i+syst+ud].Add(htemp)
 		if doPDFsys:
 			for pdfInd in range(100):
 				for proc in bkgProcList+bkgGrupList:
-					hists[proc+i+'pdf'+str(pdfInd)] = bkghists[histoPrefix.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__pdf'+str(pdfInd))
+					hists[proc+i+'pdf'+str(pdfInd)] = bkghists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__pdf'+str(pdfInd))
 					for bkg in bkgProcs[proc]:
-						if bkg!=bkgProcs[proc][0]: hists[proc+i+'pdf'+str(pdfInd)].Add(bkghists[histoPrefix.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkg])
+						if bkg!=bkgProcs[proc][0]: hists[proc+i+'pdf'+str(pdfInd)].Add(bkghists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkg])
 				for signal in sigList:
-					hists[signal+i+'pdf'+str(pdfInd)] = sighists[histoPrefix.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__pdf'+str(pdfInd))
+					hists[signal+i+'pdf'+str(pdfInd)] = sighists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__pdf'+str(pdfInd))
 					if doBRScan: hists[signal+i+'pdf'+str(pdfInd)].Scale(BRs[decays[0][:2]][BRind]*BRs[decays[0][2:]][BRind]/(BR[decays[0][:2]]*BR[decays[0][2:]]))
 					for decay in decays:
-						htemp = sighists[histoPrefix.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decay].Clone()
+						htemp = sighists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decay].Clone()
 						if doBRScan: htemp.Scale(BRs[decay[:2]][BRind]*BRs[decay[2:]][BRind]/(BR[decay[:2]]*BR[decay[2:]]))
 						if decay!=decays[0]:hists[signal+i+'pdf'+str(pdfInd)].Add(htemp)
                                         
 		if doQ2sys:
 			for proc in bkgProcList+bkgGrupList:
 				if proc+'_q2up' not in bkgProcs.keys(): continue
-				hists[proc+i+'q2Up'] = bkghists[histoPrefix+'_'+bkgProcs[proc+'_q2up'][0]].Clone(histoPrefix+'__'+proc+'__q2__plus')
-				hists[proc+i+'q2Down'] = bkghists[histoPrefix+'_'+bkgProcs[proc+'_q2dn'][0]].Clone(histoPrefix+'__'+proc+'__q2__minus')
+				hists[proc+i+'q2Up'] = bkghists[histoPrefixSR+'_'+bkgProcs[proc+'_q2up'][0]].Clone(histoPrefix+'__'+proc+'__q2__plus')
+				hists[proc+i+'q2Down'] = bkghists[histoPrefixSR+'_'+bkgProcs[proc+'_q2dn'][0]].Clone(histoPrefix+'__'+proc+'__q2__minus')
 				for bkg in bkgProcs[proc+'_q2up']:
-					if bkg!=bkgProcs[proc+'_q2up'][0]: hists[proc+i+'q2Up'].Add(bkghists[histoPrefix+'_'+bkg])
+					if bkg!=bkgProcs[proc+'_q2up'][0]: hists[proc+i+'q2Up'].Add(bkghists[histoPrefixSR+'_'+bkg])
 				for bkg in bkgProcs[proc+'_q2dn']:
-					if bkg!=bkgProcs[proc+'_q2dn'][0]: hists[proc+i+'q2Down'].Add(bkghists[histoPrefix+'_'+bkg])
+					if bkg!=bkgProcs[proc+'_q2dn'][0]: hists[proc+i+'q2Down'].Add(bkghists[histoPrefixSR+'_'+bkg])
     
         #+/- 1sigma variations of shape systematics
 		if doAllSys:
@@ -759,12 +777,12 @@ def rundoTemp(category):
                 #'HT_2m',
                 #'Sphericity',
                 #'Aplanarity',
-                'BestTop_Disc',
-                'BestTop_Pt', 
-                #'NoTop_Jet1_CSV', 
-                'NoTop_Jet1_Pt', 
-                'NoTop_Jet2_CSV',
-                'NoTop_Jet2_Pt',
+                #'BestTop_Disc',
+                #'BestTop_Pt', 
+                ##'NoTop_Jet1_CSV', 
+                #'NoTop_Jet1_Pt', 
+                #'NoTop_Jet2_CSV',
+                #'NoTop_Jet2_Pt',
 
                 'XGB200', 
                 'XGB220', 
@@ -784,60 +802,60 @@ def rundoTemp(category):
                 'XGB2500',
                 'XGB3000',
                 
-                'XGB200_SR1', 
-                'XGB220_SR1', 
-                'XGB250_SR1', 
-                'XGB300_SR1', 
-                'XGB350_SR1', 
-                'XGB400_SR1', 
-                'XGB500_SR1', 
-                'XGB600_SR1', 
-                'XGB700_SR1', 
-                'XGB800_SR1', 
-                'XGB1000_SR1', 
-                'XGB1250_SR1',
-                'XGB1500_SR1',
-                'XGB1750_SR1',
-                'XGB2000_SR1',
-                'XGB2500_SR1',
-                'XGB3000_SR1',
-                
-                'XGB200_SR2', 
-                'XGB220_SR2', 
-                'XGB250_SR2', 
-                'XGB300_SR2', 
-                'XGB350_SR2', 
-                'XGB400_SR2', 
-                'XGB500_SR2', 
-                'XGB600_SR2', 
-                'XGB700_SR2', 
-                'XGB800_SR2', 
-                'XGB1000_SR2', 
-                'XGB1250_SR2',
-                'XGB1500_SR2',
-                'XGB1750_SR2',
-                'XGB2000_SR2',
-                'XGB2500_SR2',
-                'XGB3000_SR2',
-                
-                
-                'XGB200_SR3', 
-                'XGB220_SR3', 
-                'XGB250_SR3', 
-                'XGB300_SR3', 
-                'XGB350_SR3', 
-                'XGB400_SR3', 
-                'XGB500_SR3', 
-                'XGB600_SR3', 
-                'XGB700_SR3', 
-                'XGB800_SR3', 
-                'XGB1000_SR3', 
-                'XGB1250_SR3',
-                'XGB1500_SR3',
-                'XGB1750_SR3',
-                'XGB2000_SR3',
-                'XGB2500_SR3',
-                'XGB3000_SR3',
+                #'XGB200_SR1', 
+                #'XGB220_SR1', 
+                #'XGB250_SR1', 
+                #'XGB300_SR1', 
+                #'XGB350_SR1', 
+                #'XGB400_SR1', 
+                #'XGB500_SR1', 
+                #'XGB600_SR1', 
+                #'XGB700_SR1', 
+                #'XGB800_SR1', 
+                #'XGB1000_SR1', 
+                #'XGB1250_SR1',
+                #'XGB1500_SR1',
+                #'XGB1750_SR1',
+                #'XGB2000_SR1',
+                #'XGB2500_SR1',
+                #'XGB3000_SR1',
+                #
+                #'XGB200_SR2', 
+                #'XGB220_SR2', 
+                #'XGB250_SR2', 
+                #'XGB300_SR2', 
+                #'XGB350_SR2', 
+                #'XGB400_SR2', 
+                #'XGB500_SR2', 
+                #'XGB600_SR2', 
+                #'XGB700_SR2', 
+                #'XGB800_SR2', 
+                #'XGB1000_SR2', 
+                #'XGB1250_SR2',
+                #'XGB1500_SR2',
+                #'XGB1750_SR2',
+                #'XGB2000_SR2',
+                #'XGB2500_SR2',
+                #'XGB3000_SR2',
+                #
+                #
+                #'XGB200_SR3', 
+                #'XGB220_SR3', 
+                #'XGB250_SR3', 
+                #'XGB300_SR3', 
+                #'XGB350_SR3', 
+                #'XGB400_SR3', 
+                #'XGB500_SR3', 
+                #'XGB600_SR3', 
+                #'XGB700_SR3', 
+                #'XGB800_SR3', 
+                #'XGB1000_SR3', 
+                #'XGB1250_SR3',
+                #'XGB1500_SR3',
+                #'XGB1750_SR3',
+                #'XGB2000_SR3',
+                #'XGB2500_SR3',
+                #'XGB3000_SR3',
 
 
 
@@ -883,9 +901,15 @@ def rundoTemp(category):
 		sighists  = {}
 		print "LOADING DISTRIBUTION: "+iPlot
 		for cat in catList:
-			datahists.update(pickle.load(open(outDir+'/'+cat[2:]+'/datahists_'+iPlot+'.p','rb')))
-			bkghists.update(pickle.load(open(outDir+'/'+cat[2:]+'/bkghists_'+iPlot+'.p','rb')))
-                        sighists.update(pickle.load(open(outDir+'/'+cat[2:]+'/sighists_'+iPlot+'.p','rb')))
+			if "XGB" in iPlot:
+				iPlot_SR = iPlot+SplitSR(cat)
+				datahists.update(pickle.load(open(outDir+'/'+cat[2:]+'/datahists_'+iPlot_SR+'.p','rb')))
+                        	bkghists.update(pickle.load(open(outDir+'/'+cat[2:]+'/bkghists_'+iPlot_SR+'.p','rb')))
+                        	sighists.update(pickle.load(open(outDir+'/'+cat[2:]+'/sighists_'+iPlot_SR+'.p','rb')))
+			else:
+				datahists.update(pickle.load(open(outDir+'/'+cat[2:]+'/datahists_'+iPlot+'.p','rb')))
+				bkghists.update(pickle.load(open(outDir+'/'+cat[2:]+'/bkghists_'+iPlot+'.p','rb')))
+                        	sighists.update(pickle.load(open(outDir+'/'+cat[2:]+'/sighists_'+iPlot+'.p','rb')))
 
 		if iPlot=='BDTdontscale':
 			for key in bkghists.keys(): 

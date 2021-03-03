@@ -20,7 +20,7 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2'
+step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_splited'
 
 """
 Note: 
@@ -59,7 +59,7 @@ ttFlvs = ['_tt2b','_ttbb','_tt1b','_ttcc','_ttjj']
 dataList = ['DataE','DataM']
 
 whichSignal = 'Hptb' #Hptb,HTB, TTM, BBM, or X53X53M
-massList = [300, 500, 800, 1000, 1500]#[1000]#[250,500,1000]
+massList = [200, 220, 250, 300, 350, 400, 500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]#[1000]#[250,500,1000]
 
 sigList = [whichSignal+str(mass) for mass in massList]
 #sigList = []
@@ -264,36 +264,109 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
         'NoTop_Jet2_CSV': ('NoTop_Jet2_CSV', linspace(-2.2, 1, 30).tolist(),'; No-Top 2ndDeepCSVJet, CSV'),
         'NoTop_Jet2_Pt': ('NoTop_Jet2_Pt', linspace(0, 1000, 100).tolist(),'; No-Top 2ndDeepCSVJet, p_{T} [GeV]'),
 
-        'XGB300': ('XGB300', linspace(0, 1, 80).tolist(), '; XGB (300 GeV)'),
-        'XGB300_RS': ('XGB300_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (300 GeV)'),
+        'XGB200' : ( 'XGB200', linspace(0, 1, 80).tolist(), '; XGB (200 GeV)'),
+        'XGB220' : ( 'XGB220', linspace(0, 1, 80).tolist(), '; XGB (220 GeV)'),
+        'XGB250' : ( 'XGB250', linspace(0, 1, 80).tolist(), '; XGB (250 GeV)'),
+        'XGB300' : ( 'XGB300', linspace(0, 1, 80).tolist(), '; XGB (300 GeV)'),
+        'XGB350' : ( 'XGB350', linspace(0, 1, 80).tolist(), '; XGB (350 GeV)'),
+        'XGB400' : ( 'XGB400', linspace(0, 1, 80).tolist(), '; XGB (400 GeV)'),
+        'XGB500' : ( 'XGB500', linspace(0, 1, 80).tolist(), '; XGB (500 GeV)'),
+        'XGB600' : ( 'XGB600', linspace(0, 1, 80).tolist(), '; XGB (600 GeV)'),
+        'XGB700' : ( 'XGB700', linspace(0, 1, 80).tolist(), '; XGB (700 GeV)'),
+        'XGB800' : ( 'XGB800', linspace(0, 1, 80).tolist(), '; XGB (800 GeV)'),
+        'XGB1000': ( 'XGB1000', linspace(0, 1, 80).tolist(), ';XGB (1000 GeV)'),
+        'XGB1250': ( 'XGB1250', linspace(0, 1, 80).tolist(), ';XGB (1250 GeV)'),
+        'XGB1500': ( 'XGB1500', linspace(0, 1, 80).tolist(), ';XGB (1500 GeV)'),
+        'XGB1750': ( 'XGB1750', linspace(0, 1, 80).tolist(), ';XGB (1750 GeV)'),
+        'XGB2000': ( 'XGB2000', linspace(0, 1, 80).tolist(), ';XGB (2000 GeV)'),
+        'XGB2500': ( 'XGB2500', linspace(0, 1, 80).tolist(), ';XGB (2500 GeV)'),
+        'XGB3000': ( 'XGB3000', linspace(0, 1, 80).tolist(), ';XGB (3000 GeV)'),
 
-        'XGB300_3b6j': ('XGB300_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (300 GeV)'), 
-        'XGB300_3b6j_RS': ('XGB300_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (300 GeV)'),
+        
+        'XGB200_SR1' : ( 'XGB200_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (200 GeV)'),
+        'XGB220_SR1' : ( 'XGB220_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (220 GeV)'),
+        'XGB250_SR1' : ( 'XGB250_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (250 GeV)'),
+        'XGB300_SR1' : ( 'XGB300_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (300 GeV)'),
+        'XGB350_SR1' : ( 'XGB350_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (350 GeV)'),
+        'XGB400_SR1' : ( 'XGB400_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (400 GeV)'),
+        'XGB500_SR1' : ( 'XGB500_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (500 GeV)'),
+        'XGB600_SR1' : ( 'XGB600_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (600 GeV)'),
+        'XGB700_SR1' : ( 'XGB700_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (700 GeV)'),
+        'XGB800_SR1' : ( 'XGB800_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (800 GeV)'),
+        'XGB1000_SR1': ( 'XGB1000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1000 GeV)'),
+        'XGB1250_SR1': ( 'XGB1250_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1250 GeV)'),
+        'XGB1500_SR1': ( 'XGB1500_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1500 GeV)'),
+        'XGB1750_SR1': ( 'XGB1750_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1750 GeV)'),
+        'XGB2000_SR1': ( 'XGB2000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (2000 GeV)'),
+        'XGB2500_SR1': ( 'XGB2500_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (2500 GeV)'),
+        'XGB3000_SR1': ( 'XGB3000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (3000 GeV)'),
+
+        'XGB200_SR2' : ( 'XGB200_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (200 GeV)'),
+        'XGB220_SR2' : ( 'XGB220_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (220 GeV)'),
+        'XGB250_SR2' : ( 'XGB250_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (250 GeV)'),
+        'XGB300_SR2' : ( 'XGB300_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (300 GeV)'),
+        'XGB350_SR2' : ( 'XGB350_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (350 GeV)'),
+        'XGB400_SR2' : ( 'XGB400_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (400 GeV)'),
+        'XGB500_SR2' : ( 'XGB500_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (500 GeV)'),
+        'XGB600_SR2' : ( 'XGB600_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (600 GeV)'),
+        'XGB700_SR2' : ( 'XGB700_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (700 GeV)'),
+        'XGB800_SR2' : ( 'XGB800_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (800 GeV)'),
+        'XGB1000_SR2': ( 'XGB1000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1000 GeV)'),
+        'XGB1250_SR2': ( 'XGB1250_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1250 GeV)'),
+        'XGB1500_SR2': ( 'XGB1500_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1500 GeV)'),
+        'XGB1750_SR2': ( 'XGB1750_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1750 GeV)'),
+        'XGB2000_SR2': ( 'XGB2000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (2000 GeV)'),
+        'XGB2500_SR2': ( 'XGB2500_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (2500 GeV)'),
+        'XGB3000_SR2': ( 'XGB3000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (3000 GeV)'),
+
+        'XGB200_SR3' : ( 'XGB200_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (200 GeV)'),
+        'XGB220_SR3' : ( 'XGB220_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (220 GeV)'),
+        'XGB250_SR3' : ( 'XGB250_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (250 GeV)'),
+        'XGB300_SR3' : ( 'XGB300_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (300 GeV)'),
+        'XGB350_SR3' : ( 'XGB350_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (350 GeV)'),
+        'XGB400_SR3' : ( 'XGB400_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (400 GeV)'),
+        'XGB500_SR3' : ( 'XGB500_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (500 GeV)'),
+        'XGB600_SR3' : ( 'XGB600_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (600 GeV)'),
+        'XGB700_SR3' : ( 'XGB700_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (700 GeV)'),
+        'XGB800_SR3' : ( 'XGB800_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (800 GeV)'),
+        'XGB1000_SR3': ( 'XGB1000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1000 GeV)'),
+        'XGB1250_SR3': ( 'XGB1250_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1250 GeV)'),
+        'XGB1500_SR3': ( 'XGB1500_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1500 GeV)'),
+        'XGB1750_SR3': ( 'XGB1750_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1750 GeV)'),
+        'XGB2000_SR3': ( 'XGB2000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (2000 GeV)'),
+        'XGB2500_SR3': ( 'XGB2500_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (2500 GeV)'),
+        'XGB3000_SR3': ( 'XGB3000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (3000 GeV)'),
+
+
+        #'XGB300_RS': ('XGB300_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (300 GeV)'),
+
+        #'XGB300_3b6j': ('XGB300_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (300 GeV)'), 
+        ##'XGB300_3b6j_RS': ('XGB300_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (300 GeV)'),
    
-        'XGB500': ('XGB500', linspace(0, 1, 80).tolist(), '; XGB (500 GeV)'),
-        'XGB500_RS': ('XGB500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (500 GeV)'),
+        #'XGB500': ('XGB500', linspace(0, 1, 80).tolist(), '; XGB (500 GeV)'),
+        ##'XGB500_RS': ('XGB500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (500 GeV)'),
 
-        'XGB500_3b6j': ('XGB500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (500 GeV)'),
-        'XGB500_3b6j_RS': ('XGB500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (500 GeV)'),
+        #'XGB500_3b6j': ('XGB500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (500 GeV)'),
+        ##'XGB500_3b6j_RS': ('XGB500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (500 GeV)'),
    
-        'XGB800': ('XGB800', linspace(0, 1, 80).tolist(), '; XGB (800 GeV)'),
-        'XGB800_RS': ('XGB800_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (800 GeV)'),
+        #'XGB800': ('XGB800', linspace(0, 1, 80).tolist(), '; XGB (800 GeV)'),
+        ##'XGB800_RS': ('XGB800_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (800 GeV)'),
 
-        'XGB800_3b6j': ('XGB800_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (800 GeV)'),
-        'XGB800_3b6j_RS': ('XGB800_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (800 GeV)'),
+        #'XGB800_3b6j': ('XGB800_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (800 GeV)'),
+        ##'XGB800_3b6j_RS': ('XGB800_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (800 GeV)'),
    
-        'XGB1000': ('XGB1000', linspace(0, 1, 80).tolist(), '; XGB (1000 GeV)'),
-        'XGB1000_RS': ('XGB1000_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1000 GeV)'),
+        #'XGB1000': ('XGB1000', linspace(0, 1, 80).tolist(), '; XGB (1000 GeV)'),
+        ##'XGB1000_RS': ('XGB1000_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1000 GeV)'),
 
-        'XGB1000_3b6j': ('XGB1000_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1000 GeV)'),
-        'XGB1000_3b6j_RS': ('XGB1000_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1000 GeV)'),
+        #'XGB1000_3b6j': ('XGB1000_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1000 GeV)'),
+        ##'XGB1000_3b6j_RS': ('XGB1000_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1000 GeV)'),
    
        
-        'XGB1500': ('XGB1500', linspace(0, 1, 80).tolist(), '; XGB (1500 GeV)'),
-        'XGB1500_RS': ('XGB1500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1500 GeV)'),
+        #'XGB1500': ('XGB1500', linspace(0, 1, 80).tolist(), '; XGB (1500 GeV)'),
+        ##'XGB1500_RS': ('XGB1500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1500 GeV)'),
 
-        'XGB1500_3b6j': ('XGB1500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1500 GeV)'),
-        'XGB1500_3b6j_RS': ('XGB1500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1500 GeV)'),
+        #'XGB1500_3b6j': ('XGB1500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1500 GeV)'),
+        ##'XGB1500_3b6j_RS': ('XGB1500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1500 GeV)'),
    
 
         
