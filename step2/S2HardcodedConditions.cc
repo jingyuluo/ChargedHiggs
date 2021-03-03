@@ -33,6 +33,23 @@ S2HardcodedConditions::S2HardcodedConditions() {
   hscale_STtw    = (TH2F*)tfile_HTNJ_SF->Get("hscale_STtw")->Clone();
   hscale_STt     = (TH2F*)tfile_HTNJ_SF->Get("hscale_STt")->Clone();
   hscale_WJets   = (TH2F*)tfile_HTNJ_SF->Get("hscale_WJets")->Clone();
+  hscale_CHM200   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM200")->Clone(); 
+  hscale_CHM220   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM220")->Clone();
+  hscale_CHM250   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM250")->Clone();
+  hscale_CHM300   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM300")->Clone();
+  hscale_CHM350   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM350")->Clone();
+  hscale_CHM400   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM400")->Clone();
+  hscale_CHM500   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM500")->Clone();
+  hscale_CHM600   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM600")->Clone();
+  hscale_CHM700   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM700")->Clone();
+  hscale_CHM800   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM800")->Clone();
+  hscale_CHM1000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1000")->Clone(); 
+  hscale_CHM1250  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1250")->Clone();
+  hscale_CHM1500  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1500")->Clone();
+  hscale_CHM1750  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1750")->Clone();
+  hscale_CHM2000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM2000")->Clone();
+  hscale_CHM2500  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM2500")->Clone();
+  hscale_CHM3000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM3000")->Clone();
 }
 
 S2HardcodedConditions::~S2HardcodedConditions() {
@@ -488,6 +505,75 @@ float S2HardcodedConditions::GetDeepJetRenorm2DSF_HTnj(float HT, int njets, std:
   if (sampleType == "WJets"){
       return hscale_WJets->GetBinContent(hscale_WJets->FindBin(tmp_njets, HT));  
   }
+  
+  if (sampleType == "CHM200"){
+      return hscale_CHM200->GetBinContent(hscale_CHM200->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM220"){
+      return hscale_CHM220->GetBinContent(hscale_CHM220->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM250"){
+      return hscale_CHM250->GetBinContent(hscale_CHM250->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM300"){
+      return hscale_CHM300->GetBinContent(hscale_CHM300->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM350"){
+      return hscale_CHM350->GetBinContent(hscale_CHM350->FindBin(tmp_njets, HT));
+  }  
+
+
+  if (sampleType == "CHM400"){
+      return hscale_CHM400->GetBinContent(hscale_CHM400->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM500"){
+      return hscale_CHM500->GetBinContent(hscale_CHM500->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM600"){
+      return hscale_CHM600->GetBinContent(hscale_CHM600->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM700"){
+      return hscale_CHM700->GetBinContent(hscale_CHM700->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM800"){
+      return hscale_CHM800->GetBinContent(hscale_CHM800->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM1000"){
+      return hscale_CHM1000->GetBinContent(hscale_CHM1000->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM1250"){
+      return hscale_CHM1250->GetBinContent(hscale_CHM1250->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM1500"){
+      return hscale_CHM1500->GetBinContent(hscale_CHM1500->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM1750"){
+      return hscale_CHM1750->GetBinContent(hscale_CHM1750->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM2000"){
+      return hscale_CHM2000->GetBinContent(hscale_CHM2000->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM2500"){
+      return hscale_CHM2500->GetBinContent(hscale_CHM2500->FindBin(tmp_njets, HT));
+  }  
+
+  if (sampleType == "CHM3000"){
+      return hscale_CHM3000->GetBinContent(hscale_CHM3000->FindBin(tmp_njets, HT));
+  }  
 
   return 1.0;
 }
