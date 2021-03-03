@@ -34,4 +34,5 @@ xrdcp -f *txt $outputDir/
 
 rm *model
 rm *txt
+rm *dat
 rm *cache*

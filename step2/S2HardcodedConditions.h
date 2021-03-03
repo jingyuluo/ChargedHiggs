@@ -48,7 +48,26 @@ public:
     TH2F* hscale_STs;
     TH2F* hscale_STt;
     TH2F* hscale_STtw;
-    TH2F* hscale_WJets;    
+    TH2F* hscale_WJets;   
+    TH2F* hscale_CHM200; 
+    TH2F* hscale_CHM220; 
+    TH2F* hscale_CHM250; 
+    TH2F* hscale_CHM300; 
+    TH2F* hscale_CHM350; 
+    TH2F* hscale_CHM400; 
+    TH2F* hscale_CHM500; 
+    TH2F* hscale_CHM600; 
+    TH2F* hscale_CHM700; 
+    TH2F* hscale_CHM800; 
+    TH2F* hscale_CHM1000; 
+    TH2F* hscale_CHM1250;
+    TH2F* hscale_CHM1500;
+    TH2F* hscale_CHM1750;
+    TH2F* hscale_CHM2000;
+    TH2F* hscale_CHM2500;
+    TH2F* hscale_CHM3000;
+
+
     //void GetBtaggingSF(double pt, double eta, double *btagsf, double *btagsfunc, std::string tagger="CSVM", int jetHFlav = 5, int year = 2017);
     //void GetBtaggingEff(double pt, double *eff, std::string tagger="CSVM", int jetHFlav = 5, int year = 2017);
     //void GetHOTtaggingSF(double pt, int njet, double *hotsf, double *hotstatunc, double *hotcspurunc, double *hotclosureunc, int year = 2017, bool isGenMatched=true, std::string workingpoint = "1pfake");

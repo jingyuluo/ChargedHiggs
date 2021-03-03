@@ -198,7 +198,7 @@ if __name__ == '__main__':
 	if era=='R18': lumiStr = '59p97fb'
 	tag = '_wNegBinsCorrec_'#'_50GeV_100GeVnB2'
 	saveKey = '_'+iPlot#'_Njet50pct_centValSF'
-	fileDir = '/uscms_data/d3/jluo/work/CMSSW_dir/CMSSW_10_2_10/src/NewCHiggs/SingleLepAnalyzer/makeTemplates/'#'/home/eusai/4t/singleLepAnalyzer/makeTemplates/'
+	fileDir = '/uscms_data/d3/jluo/work/CMSSW_dir/CMSSW_10_2_10/src/NewCHiggs_UL/SingleLepAnalyzer/makeTemplates/'
 	#template = 'M500_2020_11_23_topPtRW_NC_allweights_DJ'#era+'_'+sys.argv[3]#nonjetsf_lepPt20_2020_9_3'
 	if not os.path.exists('./limits_'+signal+'_'+template+saveKey): os.system('mkdir ./limits_'+signal+'_'+template+saveKey)
 	os.system('cp '+fileDir+'templates_'+template+'/templates_'+iPlot+'_'+lumiStr+tag+'_rebinned_stat0p2.root ./limits_'+signal+'_'+template+saveKey+'/')

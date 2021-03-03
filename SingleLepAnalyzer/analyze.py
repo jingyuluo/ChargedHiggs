@@ -61,7 +61,7 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	cut += ' && (theJetPt_'+ljmetCalc+'_PtOrdered[1] > '+str(cutList['jet2PtCut'])+')'
 # 	cut += ' && (isTau_singleLepCalc == 0)'
 
-	cut += ' && (MCWeight_MultiLepCalc>0)'
+	#cut += ' && (MCWeight_MultiLepCalc>0)'
 
 	if isEM=='E' and isCR(njets,nbtag): cut += ' && (minDPhi_MetJet>0.05)'
 
@@ -95,10 +95,10 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 # 		weightStr = '3/2'
 # 		weightStrBase = '3/2'
 ############################  BDT FLIP BINNING BUILDING############## ############## ############## 
-# 	if ('BDT' in plotTreeName) and (process.startswith('Hptb')): #Add "or 'TTJetsPH' in process" here
-# 		cut += ' && (isTraining == 3)'
-# 		weightStr = '3'
-# 		weightStrBase = '3'
+ 	if ('XGB' in plotTreeName) and (process.startswith('Hptb') or ('TTToSemiLeptonic' in process) ): #Add "or 'TTJetsPH' in process" here
+ 		cut += ' && (isTraining == 3)'
+ 		weightStr = '3'
+ 		weightStrBase = '3'
 # 	elif not 'Hptb' in process and not 'TTJets' in process and not 'Data' in process:
 # 		cut += ' && (isTraining == 3)'
 # 		weightStr = '3'
@@ -118,7 +118,7 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 		HTweightStr   = 'HTSF_Pol'
 		HTweightStrUp = 'HTSF_PolUp'
 		HTweightStrDn = 'HTSF_PolDown'
-
+#
 # 		HTweightStr = str(genHTweight[process])
 # 		HTweightStr   = 'HTSF_Pol'
 # 		HTweightStrUp = 'HTSF_PolUp'
@@ -131,9 +131,10 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	if 'TTTo' in process: topPt13TeVstr = 'topPtWeight13TeV'
 # 	topPt13TeVstr = '1'
 	if 'Data' not in process:
-		weightStr          += ' * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+' * pileupWeight * lepIdSF * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
-ltiLepCalc)) * btagCSVWeight *'+str(weight[process])
-
+		#weightStr          += ' * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF * btagDeepJetWeight * btagDeepJet2DWeight_Pt120 * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
+#ltiLepCalc))  *'+str(weight[process])
+                weightStr          += ' * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF * btagDeepJetWeight * btagDeepJet2DWeight_HTnj * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
+ltiLepCalc))  *'+str(weight[process]) 
                 Weighttrigeffupstr  = weightStr.replace(TrigEff,'('+TrigEff+'+'+TrigEff+'Uncert)')
                 weightTrigEffDownStr= weightStr.replace(TrigEff,'('+TrigEff+'-'+TrigEff+'Uncert)')
                 weightPileupUpStr   = weightStr.replace('pileupWeight','pileupWeightUp')

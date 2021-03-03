@@ -27,12 +27,12 @@ parser.add_argument("-m", "--mass", default="500", help="The signal mass point")
 args = parser.parse_args()
 
 
-selList = [["NJetsCSV_MultiLepCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_MultiLepCalc", ""],  ["isElectron", ""], ["isMuon", ""]]
+selList = [["NJetsCSV_JetSubCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_MultiLepCalc", ""],  ["isElectron", ""], ["isMuon", ""], ["isTraining", ""]]
 weightList = [["pileupWeight", ""], ["lepIdSF", ""], ["EGammaGsfSF", ""], ["MCWeight_MultiLepCalc", ""]] 
 varListKey = args.varListKey
 varList = varsList.varList[varListKey]
 inputDir = varsList.inputDir
-infname = "ChargedHiggs_HplusTB_HplusToTB_M-"+str(args.mass)+"_13TeV_amcatnlo_pythia8_hadd.root"
+infname = "ChargedHiggs_HplusTB_HplusToTB_M-"+str(args.mass)+"_TuneCP5_13TeV_amcatnlo_pythia8_hadd.root"
 
 print "Loading Signal Sample"
 
@@ -41,7 +41,7 @@ sig_df = sig_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weight
 
 #Event Selection
  
-sig_selected = (sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_MultiLepCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True))) 
+sig_selected = ((sig_df["isTraining"]==1)|(sig_df["isTraining"]==2))&(sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True))) 
 
 sig_df = sig_df[sig_selected]
 
@@ -54,7 +54,7 @@ for ibkg in bkgList:
     bkg_tree = uproot.open(inputDir+ibkg)["ljmet"]
     bkg_df = bkg_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList))
     print bkg_df
-    bkg_selected = (bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_MultiLepCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
+    bkg_selected = ((bkg_df["isTraining"]==1)|(bkg_df["isTraining"]==2))&(bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
     bkg_df = bkg_df[bkg_selected]
     print bkg_df
     back_dfs.append(bkg_df)
@@ -93,6 +93,7 @@ weightall = np.append(weightSig, weightBkg)
 
 
 train_var = []
+varList.sort()
 for ivar in varList:
     train_var.append(ivar[0])
 train_var.append("isSignal")
@@ -104,6 +105,7 @@ dfall_train = dfall_var[isTrain]
 dfall_test = dfall_var[isTrain==False]
 
 print "Columns:", dfall.columns
+print "dfall_var cloumns:", dfall_var.columns
 d_train = dfall_train[np.setdiff1d(dfall_var.columns, ['idx', 'isSignal'])]
 labels_train = dfall_train['isSignal']
 

@@ -40,7 +40,7 @@ saveKey = ''#'_50GeV_100GeVnB2'
 # if len(sys.argv)>1: iPlot=str(sys.argv[1])
 cutString = ''#'lep30_MET150_NJets4_DR1_1jet450_2jet150'
 lumiStr = str(targetlumi/1000).replace('.','p')+'fb' # 1/fb
-templateDir = 'templates_M500_2020_11_23_topPtRW_NC_allweights'#os.getcwd()+'/templates_'+year+'_'+sys.argv[3]+'/'+cutString
+templateDir = 'templates_M500_2021_3_2_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_split' 
 combinefile = 'templates_'+iPlot+'_'+lumiStr+'_wNegBinsCorrec_.root'
 
 quiet = True #if you don't want to see the warnings that are mostly from the stat. shape algorithm!
@@ -53,7 +53,7 @@ normalizeTheorySystSig = True #normalize renorm/fact, PDF and ISR/FSR systematic
 normalizeTheorySystBkg = False #normalize renorm/fact, PDF and ISR/FSR systematics to nominal templates for backgrounds
 #tttt, X53, TT, BB, HTB, etc --> this is used to identify signal histograms for combine templates when normalizing the pdf and muRF shapes to nominal!!!!
 sigName = 'Hptb' #MAKE SURE THIS WORKS FOR YOUR ANALYSIS PROPERLY!!!!!!!!!!!
-massList = [300,500,800,1000,1500]
+massList = [200, 220, 300, 350, 400, 500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]#[300,500,800,1000,1500]
 sigProcList = [sigName+str(mass) for mass in massList]
 if sigName=='tttt': sigProcList = [sigName]
 if sigName=='X53': 

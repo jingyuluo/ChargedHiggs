@@ -10,7 +10,7 @@ runDir = os.getcwd()
 start_time = time.time()
 
 #inputDir='/eos/uscms/store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step2_newvar_updated_Pt40_Eta2p4'
-outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step3_newvar_updated_Pt40_Eta2p4_SVM' # or 2018
+outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_SVM_splited/'
 condorDir= runDir+'/condor_logs_SVM/'
 
 print 'Starting submission'
@@ -25,7 +25,7 @@ os.system('mkdir -p '+condorDir)
 eosoutdir = outputDir[outputDir.find("/store"):]
 eosoutdir = "root://cmseos.fnal.gov/"+eosoutdir
 
-Masses = [300, 500, 800, 1000, 1500, 3000]
+Masses = [200, 220, 250, 300, 350, 400, 500, 600, 700,  800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
 
 for mass in Masses:
     count+=1
@@ -44,7 +44,7 @@ Output = M%(MASS)s.out
 Error = M%(MASS)s.err
 Log = M%(MASS)s.log
 Notification = Never
-Arguments =  %(OUTPUTDIR)s  %(MASS)s  NewVar_nc    
+Arguments =  %(OUTPUTDIR)s  %(MASS)s  NewVar 
 
 Queue 1"""%dict)
     jdf.close()

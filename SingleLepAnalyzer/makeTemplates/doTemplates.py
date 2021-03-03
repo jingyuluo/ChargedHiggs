@@ -55,33 +55,38 @@ splitTTbar = True
 splitST = False
 if splitTTbar:  
 	bkgTTBarList = ['ttnobb','ttbb']
+        #bkgGrupList = bkgTTBarList + ['top','ewk','qcd','WJets', 'ZJets', 'TTToHadronic', 'TTTo2L2Nu', 'TTToSemiLeptonic']
         bkgGrupList = bkgTTBarList + ['top','ewk','qcd']
 	bkgProcList = ['tt2b','ttbb','tt1b','ttcc','ttjj','T','TTV','WJets','ZJets','qcd']#,'VV'
         #bkgProcList = ['TT2B','TTBB','TTB','TTCC','TTLF','T','WJets','ZJets','qcd']#,'VV'
 	if splitST:
-		bkgGrupList = ['tt2b','ttbb','ttb','ttcc','ttlf','T','TTV','OtherT','ewk','qcd']
-		bkgProcList = ['TT2B','TTBB','TTB','TTCC','TTLF','T','TTV','OtherT','WJets','ZJets','qcd']#,'VV'	
+		bkgGrupList = ['tt2b','ttbb','ttb','ttcc','ttlf','T','TTV','ewk','qcd']
+		bkgProcList = ['TT2B','TTBB','TTB','TTCC','TTLF','T','TTV','WJets','ZJets','qcd']#,'VV'	
                 #bkgGrupList = ['tt2b','ttbb','ttb','ttcc','ttlf','T','OtherT','ewk','qcd']
                 #bkgProcList = ['TT2B','TTBB','TTB','TTCC','TTLF','T','OtherT','WJets','ZJets','qcd']#,'VV'
 
 else:
-	bkgGrupList = ['ttbar','top','ewk','qcd']
+	bkgGrupList = ['ttbar','top','ewk','qcd', 'WJets']
+	#bkgGrupList = ['ttbar','top','ewk','qcd']
 	bkgProcList = ['TTJets','T','WJets','ZJets','VV','qcd'] #TTV
 bkgProcs = {}
-bkgProcs['WJets']  = ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800']
-bkgProcs['WJets'] += ['WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5']
-bkgProcs['WJets'] += ['WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5']#,'WJetsMG2500_6']
+bkgProcs['WJets']  = ['WJetsMG']#['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800']
+#bkgProcs['WJets'] += ['WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5']
+#bkgProcs['WJets'] += ['WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5']#,'WJetsMG2500_6']
 
-bkgProcs['ZJets'] = ['DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500']
+bkgProcs['ZJets'] = ['DYMG']#['DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500']
 
 bkgProcs['VV']    = ['WW','WZ','ZZ']
 
-bkgProcs['T']     = ['Tt','Tbt','Ts','Tbs','TtW','TbtW',]
+bkgProcs['T']     = ['Tt','Tbt','Ts','TtW','TbtW',]
 #bkgProcs['TTV'] = []
 #bkgProcs['TTV']   = ['TTWl','TTWq','TTZl']
 bkgProcs['TTV']   = ['TTWl','TTZl']
-bkgProcs['OtherT']= ['TTHB','TTHnoB', 'TTTT']
+#bkgProcs['OtherT']= ['TTHB','TTHnoB', 'TTTT']
 
+#bkgProcs['TTTo2L2Nu'] = ['TTTo2L2Nu_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
+#bkgProcs['TTToHadronic'] = ['TTToHadronic_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
+#bkgProcs['TTToSemiLeptonic'] = ['TTToSemiLeptonic_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
 bkgProcs['TTJets'] = []
 bkgProcs['TTJets'] += ['TTTo2L2Nu']#['TTJets2L2nu0','TTJets2L2nu700','TTJets2L2nu1000']
 bkgProcs['TTJets'] += ['TTToHadronic']
@@ -100,7 +105,7 @@ bkgProcs['ttjj']  = [tt+'_ttjj' for tt in bkgProcs['TTJets']]
 bkgProcs['ttnobb']  = bkgProcs['ttjj'] + bkgProcs['ttcc'] + bkgProcs['tt1b'] + bkgProcs['tt2b']
 
 bkgProcs['qcd']   = ['QCDht200','QCDht300','QCDht500','QCDht700','QCDht1000','QCDht1500','QCDht2000']
-bkgProcs['top']   = bkgProcs['TTV']+bkgProcs['T']+bkgProcs['OtherT']
+bkgProcs['top']   = bkgProcs['TTV']+bkgProcs['T']#+bkgProcs['OtherT']
 bkgProcs['ewk']   = bkgProcs['WJets']+bkgProcs['ZJets']+bkgProcs['VV']
 #bkgProcs['ttbb']  = bkgProcs['TTBB']
 #bkgProcs['ttcc']  = bkgProcs['TTCC']
@@ -123,7 +128,7 @@ bkgProcs['ttbar_q2up'] = ['TTJetsPHQ2U']#,'TtWQ2U','TbtWQ2U']
 bkgProcs['ttbar_q2dn'] = ['TTJetsPHQ2D']#,'TtWQ2D','TbtWQ2D']
 
 whichSignal = 'Hptb' #Hptb,HTB, TTM, BBM, or X53X53M
-massList = [300, 500, 800, 1000, 1500]
+massList = [200, 220, 250, 300, 400,  500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
 #if massPt not in massList:    MICHAEL COMMENTED OUT THESE TWO LINES
 #	massList.append(massPt)
 sigList = [whichSignal+str(mass) for mass in massList]
@@ -692,99 +697,174 @@ def findfiles(path, filtre):
 def rundoTemp(category):
 	#iPlotList = ['HT''minBBdr','aveBBdr','deltaEta_maxBB','FW_momentum_2','centrality','aveCSVpt','HT','minMlb','Bjet1Pt','mass_maxJJJpt','MTlmet','lepDR_minBBdr','MET']
         iPlotList = [
-                'HT',
-                'HTpt40',
-                'ST',
-                'minMlb',
-                'mass_minBBdr',
-                'deltaR_lepBJet_maxpt',
-                'lepDR_minBBdr',
-                'centrality',
-                'deltaEta_maxBB',
-                'aveCSVpt',
-                'aveBBdr',
-                'topPt',
-                #'FW_momentum_0',
-                #'FW_momentum_1', ##TODO
-                #'FW_momentum_2', ##TODO
-                #'FW_momentum_3',
-                #'FW_momentum_4',
-                #'FW_momentum_5',
-                #'FW_momentum_6',
-                'mass_maxJJJpt',
-                'Bjet1Pt',
-                'deltaR_minBB', ##TODO
-                'deltaR',  ##TODO
-                'MTlmet',
-                'HT',
-                'hemiout',
-                'theLeadJetPt',
-                'MET',
-                'lepPt',
-                'masslepJets0',
-                'masslepJets1',
-                'masslepJets2',
-                'MT2bb',
-                'masslepBJets0',
-                'mass_lepBJet_mindr',
-                 
-                #'secondJetPt',
-#                'fifthJetPt',  ## TODO
-#                'sixthJetPt', ##TODO
-#                'PtFifthJet', ## TODO
-                'mass_minLLdr',
-                'mass_maxBBmass',
-                'deltaR_lepJetInMinMljet',
-                'deltaPhi_lepJetInMinMljet',
-                'deltaR_lepbJetInMinMlb',
-                'deltaPhi_lepbJetInMinMlb',
-                'M_allJet_W',
-                'HT_bjets',
-                'ratio_HTdHT4leadjets',
-                'csvJet1',
-                'csvJet2',
-                'csvJet3',
-                'csvJet4',
-                'firstcsvb_bb',
-                'secondcsvb_bb',
-                'thirdcsvb_bb',
-                'fourthcsvb_bb',
-                'NBJets',
-                'NJets',
-                'HT_2m',
-                'Sphericity',
-                'Aplanarity',
+                #'HT',
+                #'HTpt40',
+                #'ST',
+                #'minMlb',
+                #'mass_minBBdr',
+                #'deltaR_lepBJet_maxpt',
+                #'lepDR_minBBdr',
+                #'centrality',
+                #'deltaEta_maxBB',
+                #'aveCSVpt',
+                #'aveBBdr',
+                ##'topPt',
+                ##'FW_momentum_0',
+                ##'FW_momentum_1', ##TODO
+                ##'FW_momentum_2', ##TODO
+                ##'FW_momentum_3',
+                ##'FW_momentum_4',
+                ##'FW_momentum_5',
+                ##'FW_momentum_6',
+                #'mass_maxJJJpt',
+                #'Bjet1Pt',
+                #'deltaR_minBB', ##TODO
+                ##'deltaR',  ##TODO
+                #'MTlmet',
+                #'HT',
+                #'hemiout',
+                #'theLeadJetPt',
+                #'MET',
+                #'lepPt',
+                #'masslepJets0',
+                #'masslepJets1',
+                #'masslepJets2',
+                #'MT2bb',
+                #'masslepBJets0',
+                #'mass_lepBJet_mindr',
+                # 
+                ##'secondJetPt',
+                ##'fifthJetPt',  ## TODO
+                ##'sixthJetPt', ##TODO
+#               # 'PtFifthJet', ## TODO
+                #'mass_minLLdr',
+                #'mass_maxBBmass',
+                #'deltaR_lepJetInMinMljet',
+                #'deltaPhi_lepJetInMinMljet',
+                #'deltaR_lepbJetInMinMlb',
+                #'deltaPhi_lepbJetInMinMlb',
+                #'M_allJet_W',
+                #'HT_bjets',
+                #'ratio_HTdHT4leadjets',
+                #'csvJet1',
+                #'csvJet2',
+                #'csvJet3',
+                #'csvJet4',
+                #'firstcsvb_bb',
+                #'secondcsvb_bb',
+                #'thirdcsvb_bb',
+                #'fourthcsvb_bb',
+                #'NBJets',
+                #'NJets',
+                #'HT_2m',
+                #'Sphericity',
+                #'Aplanarity',
                 'BestTop_Disc',
                 'BestTop_Pt', 
-                'NoTop_Jet1_CSV', 
+                #'NoTop_Jet1_CSV', 
                 'NoTop_Jet1_Pt', 
                 'NoTop_Jet2_CSV',
                 'NoTop_Jet2_Pt',
 
-                'XGB300',
-                'XGB300_RS',
-                'XGB300_3b6j',
-                'XGB300_3b6j_RS',
-                
-                'XGB500',
-                'XGB500_RS',
-                'XGB500_3b6j',
-                'XGB500_3b6j_RS',
-                
-                'XGB800',
-                'XGB800_RS',
-                'XGB800_3b6j',
-                'XGB800_3b6j_RS',
-                
-                'XGB1000',
-                'XGB1000_RS',
-                'XGB1000_3b6j',
-                'XGB1000_3b6j_RS',
-                
+                'XGB200', 
+                'XGB220', 
+                'XGB250', 
+                'XGB300', 
+                'XGB350', 
+                'XGB400', 
+                'XGB500', 
+                'XGB600', 
+                'XGB700', 
+                'XGB800', 
+                'XGB1000',  
+                'XGB1250',
                 'XGB1500',
-                'XGB1500_RS',
-                'XGB1500_3b6j',
-                'XGB1500_3b6j_RS',
+                'XGB1750',
+                'XGB2000',
+                'XGB2500',
+                'XGB3000',
+                
+                'XGB200_SR1', 
+                'XGB220_SR1', 
+                'XGB250_SR1', 
+                'XGB300_SR1', 
+                'XGB350_SR1', 
+                'XGB400_SR1', 
+                'XGB500_SR1', 
+                'XGB600_SR1', 
+                'XGB700_SR1', 
+                'XGB800_SR1', 
+                'XGB1000_SR1', 
+                'XGB1250_SR1',
+                'XGB1500_SR1',
+                'XGB1750_SR1',
+                'XGB2000_SR1',
+                'XGB2500_SR1',
+                'XGB3000_SR1',
+                
+                'XGB200_SR2', 
+                'XGB220_SR2', 
+                'XGB250_SR2', 
+                'XGB300_SR2', 
+                'XGB350_SR2', 
+                'XGB400_SR2', 
+                'XGB500_SR2', 
+                'XGB600_SR2', 
+                'XGB700_SR2', 
+                'XGB800_SR2', 
+                'XGB1000_SR2', 
+                'XGB1250_SR2',
+                'XGB1500_SR2',
+                'XGB1750_SR2',
+                'XGB2000_SR2',
+                'XGB2500_SR2',
+                'XGB3000_SR2',
+                
+                
+                'XGB200_SR3', 
+                'XGB220_SR3', 
+                'XGB250_SR3', 
+                'XGB300_SR3', 
+                'XGB350_SR3', 
+                'XGB400_SR3', 
+                'XGB500_SR3', 
+                'XGB600_SR3', 
+                'XGB700_SR3', 
+                'XGB800_SR3', 
+                'XGB1000_SR3', 
+                'XGB1250_SR3',
+                'XGB1500_SR3',
+                'XGB1750_SR3',
+                'XGB2000_SR3',
+                'XGB2500_SR3',
+                'XGB3000_SR3',
+
+
+
+                #'XGB300',
+                #'XGB300_RS',
+                #'XGB300_3b6j',
+                #'XGB300_3b6j_RS',
+                #
+                #'XGB500',
+                #'XGB500_RS',
+                #'XGB500_3b6j',
+                #'XGB500_3b6j_RS',
+                #
+                #'XGB800',
+                #'XGB800_RS',
+                #'XGB800_3b6j',
+                #'XGB800_3b6j_RS',
+                #
+                #'XGB1000',
+                #'XGB1000_RS',
+                #'XGB1000_3b6j',
+                #'XGB1000_3b6j_RS',
+                #
+                #'XGB1500',
+                #'XGB1500_RS',
+                #'XGB1500_3b6j',
+                #'XGB1500_3b6j_RS',
 
                 ]
 

@@ -129,20 +129,23 @@ nRun['TTTT'] = 373734.0 # file TTTT_TuneCP5_13TeV-amcatnlo-pythia8_hadd.root
 
 ##### Signal samples with positive events weight only #####
 nRun['Hptb180'] = 7008080
-nRun['Hptb200'] = 7090943
-nRun['Hptb220'] = 6755421
-nRun['Hptb250'] = 7148825
-nRun['Hptb300'] =  390646#7202221
-nRun['Hptb350'] = 7142327
-nRun['Hptb400'] = 7060216.5
-nRun['Hptb500'] = 535876#7047022
-nRun['Hptb650'] = 6183058
-nRun['Hptb800'] = 357844#6913292
-nRun['Hptb1000'] = 339468#7014801
-nRun['Hptb1500'] = 653376#6661822
-nRun['Hptb2000'] = 7064547
-nRun['Hptb2500'] = 5653474
-nRun['Hptb3000'] = 7038568
+nRun['Hptb200'] = 2805392.0#7090943
+nRun['Hptb220'] = 2860338.0#6755421
+nRun['Hptb250'] = 2817666.0#7148825
+nRun['Hptb300'] = 2739790.0 #390646#7202221
+nRun['Hptb350'] = 2526912.0#7142327
+nRun['Hptb400'] = 2503436.0#7060216.5
+nRun['Hptb500'] = 2524012.0#535876#7047022
+nRun['Hptb600'] = 2447644.0#6183058
+nRun['Hptb700'] = 2666792.0#2447644.0#6183058
+nRun['Hptb800'] = 2371262.0#357844#6913292
+nRun['Hptb1000'] = 2328372.0#339468#7014801
+nRun['Hptb1250'] = 2397942.0 
+nRun['Hptb1500'] = 2463017.0#653376#6661822
+nRun['Hptb1750'] = 2263004.0
+nRun['Hptb2000'] = 2349254.0#7064547
+nRun['Hptb2500'] = 2330689.0#5653474
+nRun['Hptb3000'] = 2421234.0 #7038568
 
 
 #energy scale samples (Q^2)
@@ -263,13 +266,15 @@ xsec['Hptb250'] = 1.#0.524247*0.75 #was 0.4982015 interpolation using the fact t
 xsec['Hptb300'] = 1.#0.343796*0.75 #was 0.324766 http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb350'] = 1.#0.2312180*0.75 #was 0.2184385 interpolation using the fact that xsec proportuonal to exp(-m) http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb400'] = 1.#0.158142*0.75 #was 0.148574 http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
-xsec['Hptb450'] = 1.#0.1106674*0.75 #was 0.104141 interpolation using the fact that xsec proportuonal to exp(-m) http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
+#xsec['Hptb450'] = 1.#0.1106674*0.75 #was 0.104141 interpolation using the fact that xsec proportuonal to exp(-m) http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb500'] = 1.#0.0785572*0.75 #was 0.0735225 http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
-xsec['Hptb650'] = 1.
-xsec['Hptb750'] = 1.#0.0172205*0.75 #http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
+xsec['Hptb600'] = 1.
+xsec['Hptb700'] = 1.#0.0172205*0.75 #http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb800'] = 1.#0.0130645*0.75 #http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb1000'] = 1.#0.00474564*0.75 #http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
+xsec['Hptb1250'] = 1.
 xsec['Hptb1500'] = 1.
+xsec['Hptb1750'] = 1.
 xsec['Hptb2000'] = 1.#(8.70916e-05)*0.75 #http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
 xsec['Hptb2500'] = 1.
 xsec['Hptb3000'] = 1.#((8.70916e-05)**2/0.00474564)*0.75 #interpolation using the fact that xsec proportuonal to exp(-m) http://www.hephy.at/user/mflechl/hp_xsec/xsec_13TeV_tHp_2016_2_5.txt
