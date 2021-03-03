@@ -10,8 +10,8 @@ runDir = os.getcwd()
 start_time = time.time()
 
 #inputDir='/eos/uscms/store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step2_newvar_updated_Pt40_Eta2p4'
-outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_SVM_splited/'
-condorDir= runDir+'/condor_logs_SVM/'
+outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_SVM_SR3_splited/'
+condorDir= runDir+'/condor_logs_SVM_SR3/'
 
 print 'Starting submission'
 count=0
@@ -35,11 +35,11 @@ for mass in Masses:
     jdf=open(jdfName,'w')
     jdf.write(
 """universe = vanilla
-Executable = %(RUNDIR)s/submitROOTtoSVM.sh
+Executable = %(RUNDIR)s/submitROOTtoSVM_SR3.sh
 Request_memory = 8000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Transfer_Input_Files = %(RUNDIR)s/UpROOTtoSVM.py, %(RUNDIR)s/varsList.py 
+Transfer_Input_Files = %(RUNDIR)s/UpROOTtoSVM_SR3.py, %(RUNDIR)s/varsList.py 
 Output = M%(MASS)s.out
 Error = M%(MASS)s.err
 Log = M%(MASS)s.log

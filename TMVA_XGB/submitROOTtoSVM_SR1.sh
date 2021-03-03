@@ -1,8 +1,8 @@
 #!/bin/bash
 
-inputDir=${1}
-outputDir=${2}
-mass=${3}
+outputDir=${1}
+mass=${2}
+vListKey=${3}
 scratch=${PWD}
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -21,18 +21,9 @@ export PATH=$PATH:$macroDir
 #source /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/6.16.00/x86_64-centos7-gcc48-opt/bin/thisroot.sh
 #xrdcp -f ${haddFile} root://cmseos.fnal.gov/${outputDir//$NOM/$SHIFT}/${haddFile//${SHIFT}_hadd/} 2>&1
 
-xrdcp -f $inputDir/dtrainM${mass}.dat ./
-xrdcp -f $inputDir/dtestM${mass}.dat ./
+python UpROOTtoSVM_SR1.py  -k $vListKey -m ${mass} 
 
-ls
+xrdcp -f dtrainM${mass}.dat $outputDir/
+xrdcp -f dtestM${mass}.dat $outputDir/
 
-python SVMXGB.py   -m ${mass}
- 
-
-xrdcp -f *model $outputDir/
-xrdcp -f *txt $outputDir/
-
-rm *model
-rm *txt
 rm *dat
-rm *cache*

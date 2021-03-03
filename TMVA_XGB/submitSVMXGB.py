@@ -9,9 +9,9 @@ from XRootD import client
 runDir = os.getcwd()
 start_time = time.time()
 
-inputDir='/eos/uscms/store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step3_newvar_updated_Pt40_Eta2p4_SVM'
-outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET102X_1lep2017_Oct2019_4t_080420_step3_newvar_updated_Pt40_Eta2p4_XGBModels' # or 2018
-condorDir= runDir+'/condor_logs_SVMtoXGB/'
+inputDir='/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_SVM_SR3_splited'
+outputDir= '/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_models_SR3_splited'
+condorDir= runDir+'/condor_logs_SVMtoXGB_SR3_splited/'
 
 print 'Starting submission'
 count=0
@@ -28,7 +28,8 @@ eosindir = "root://cmseos.fnal.gov/"+eosindir
 eosoutdir = outputDir[outputDir.find("/store"):]
 eosoutdir = "root://cmseos.fnal.gov/"+eosoutdir
 
-Masses = [300, 500, 800, 1000, 1500, 3000]
+Masses = [200, 220, 250, 300, 350, 400, 500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
+#Masses = [500]#[800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
 
 for mass in Masses:
     #if not 'TTToSemiLeptonic' in file: continue

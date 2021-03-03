@@ -41,7 +41,7 @@ sig_df = sig_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weight
 
 #Event Selection
  
-sig_selected = ((sig_df["isTraining"]==1)|(sig_df["isTraining"]==2))&(sig_df["NJets_JetSubCalc"]>4)&(sig_df["NJetsCSV_JetSubCalc"]>1)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True))) 
+sig_selected = ((sig_df["isTraining"]==1)|(sig_df["isTraining"]==2))&((sig_df["NJets_JetSubCalc"]==4)|(sig_df["NJets_JetSubCalc"]==5))&(sig_df["NJetsCSV_JetSubCalc"]>=3)&( ((sig_df["leptonPt_MultiLepCalc"]>35)&(sig_df["isElectron"]==True))|((sig_df["leptonPt_MultiLepCalc"]>30)&(sig_df["isMuon"]==True))) 
 
 sig_df = sig_df[sig_selected]
 
@@ -54,7 +54,7 @@ for ibkg in bkgList:
     bkg_tree = uproot.open(inputDir+ibkg)["ljmet"]
     bkg_df = bkg_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList))
     print bkg_df
-    bkg_selected = ((bkg_df["isTraining"]==1)|(bkg_df["isTraining"]==2))&(bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
+    bkg_selected = ((bkg_df["isTraining"]==1)|(bkg_df["isTraining"]==2))&((bkg_df["NJets_JetSubCalc"]==4)|(bkg_df["NJets_JetSubCalc"]==5))&(bkg_df["NJetsCSV_JetSubCalc"]>=3)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
     bkg_df = bkg_df[bkg_selected]
     print bkg_df
     back_dfs.append(bkg_df)
@@ -105,7 +105,6 @@ dfall_train = dfall_var[isTrain]
 dfall_test = dfall_var[isTrain==False]
 
 print "Columns:", dfall.columns
-print "dfall_var cloumns:", dfall_var.columns
 d_train = dfall_train[np.setdiff1d(dfall_var.columns, ['idx', 'isSignal'])]
 labels_train = dfall_train['isSignal']
 
