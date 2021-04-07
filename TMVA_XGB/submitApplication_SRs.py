@@ -1,6 +1,7 @@
 import os,shutil,datetime,time
 import getpass
 import varsList
+import sys
 from ROOT import *
 from XRootD import client
 
@@ -8,10 +9,11 @@ from XRootD import client
 
 runDir = os.getcwd()
 start_time = time.time()
+shift = sys.argv[1]
 
-inputDir='/eos/uscms/store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0'
-outputDir= '/eos/uscms/store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_splited' # or 2018
-condorDir= runDir+'/condor_logs_XGBSRs/'
+inputDir='/eos/uscms/store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_Sys/'+shift+'/'
+outputDir= '/eos/uscms/store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_added_sys/'+shift+'/' # or 2018
+condorDir= runDir+'/condor_logs_XGBSRs_sys_added_'+shift+'/'
 
 print 'Starting submission'
 count=0
@@ -50,7 +52,7 @@ Output = %(FILENAME)s.out
 Error = %(FILENAME)s.err
 Log = %(FILENAME)s.log
 Notification = Never
-Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar    
+Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar_added    
 
 Queue 1"""%dict)
     jdf.close()

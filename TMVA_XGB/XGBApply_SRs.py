@@ -253,10 +253,11 @@ train_var = []
 varList.sort()
 for ivar in varList:
     train_var.append(ivar[0])
-sig_tree = uproot.open(inputDir+infname)["ljmet"]
+#sig_tree = uproot.open(inputDir+infname)["ljmet"]
+sig_tree = uproot.open(infname)["ljmet"]
 numentries = sig_tree.numentries
 
-tfile = ROOT.TFile.Open(inputDir+infname)
+tfile = ROOT.TFile.Open(infname)
 ttree = tfile.Get("ljmet")
 
 outputname = args.output+".root"
