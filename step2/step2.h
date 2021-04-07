@@ -44,13 +44,55 @@ public :
    Bool_t          isTT1B = false; 
    Bool_t          isTTCC = false; 
    Bool_t          isTTLF = false; 
-   Bool_t          isWJets = false; 
+   Bool_t          isWJets = false;
+   Bool_t          isCHM200 = false;  
+   Bool_t          isCHM220 = false;
+   Bool_t          isCHM250 = false;
+   Bool_t          isCHM300 = false;
+   Bool_t          isCHM350 = false;
+   Bool_t          isCHM400 = false;
+   Bool_t          isCHM500 = false;
+   Bool_t          isCHM600 = false;
+   Bool_t          isCHM700 = false;
+   Bool_t          isCHM800 = false;
+   Bool_t          isCHM1000= false;
+   Bool_t          isCHM1250= false;
+   Bool_t          isCHM1500= false;
+   Bool_t          isCHM1750= false;
+   Bool_t          isCHM2000= false;
+   Bool_t          isCHM2500= false;
+   Bool_t          isCHM3000= false;
+
+
+
+
+
+
+  
    TString         sample_ = "";
    std::string     sample = "";
   
    Float_t         btagDeepJet2DWeight;
    Float_t         btagDeepJet2DWeight_Pt120; 
    Float_t         btagDeepJet2DWeight_HTnj;
+   Float_t         btagDeepJet2DWeight_HTnj_HFup;
+   Float_t         btagDeepJet2DWeight_HTnj_HFdn;
+   Float_t         btagDeepJet2DWeight_HTnj_LFup;
+   Float_t         btagDeepJet2DWeight_HTnj_LFdn;
+   Float_t         btagDeepJet2DWeight_HTnj_jesup;
+   Float_t         btagDeepJet2DWeight_HTnj_jesdn;
+   Float_t         btagDeepJet2DWeight_HTnj_hfstats1up;
+   Float_t         btagDeepJet2DWeight_HTnj_hfstats1dn;
+   Float_t         btagDeepJet2DWeight_HTnj_hfstats2up;
+   Float_t         btagDeepJet2DWeight_HTnj_hfstats2dn;
+   Float_t         btagDeepJet2DWeight_HTnj_cferr1up;
+   Float_t         btagDeepJet2DWeight_HTnj_cferr1dn;
+   Float_t         btagDeepJet2DWeight_HTnj_cferr2up;
+   Float_t         btagDeepJet2DWeight_HTnj_cferr2dn;
+   Float_t         btagDeepJet2DWeight_HTnj_lfstats1up;
+   Float_t         btagDeepJet2DWeight_HTnj_lfstats1dn;
+   Float_t         btagDeepJet2DWeight_HTnj_lfstats2up;
+   Float_t         btagDeepJet2DWeight_HTnj_lfstats2dn;
    Float_t         tmp_minMleppBjet;
    vector<double>  GD_DR_Tridijet;
    vector<double>  BD_DR_Tridijet;   
@@ -499,7 +541,25 @@ public :
    Float_t        NoTop_Jet2_Pt;
    Float_t        NoTop_Jet2_Phi;
    Float_t        NoTop_Jet2_Eta;
-   Float_t        NoTop_Jet2_Energy;                  
+   Float_t        NoTop_Jet2_Energy;                 
+
+   Float_t        LeptonicTB1_M;
+   Float_t        LeptonicTB2_M;
+   
+   Float_t        LeptonicTB1_Pt;
+   Float_t        LeptonicTB2_Pt;
+
+   Float_t        LeptonicTB1_Eta;
+   Float_t        LeptonicTB2_Eta;
+
+   Float_t        HadronicTB1_M;
+   Float_t        HadronicTB2_M;
+  
+   Float_t        HadronicTB1_Pt;
+   Float_t        HadronicTB2_Pt; 
+ 
+   Float_t        HadronicTB1_Eta;
+   Float_t        HadronicTB2_Eta;
 
 
    // List of branches
@@ -842,6 +902,26 @@ step2::step2(TString inputFileName, TString outputFileName)// : inputTree(0), in
    isTT1B = inputFileName.Contains("_tt1b");
    isTTCC = inputFileName.Contains("_ttcc");
    isTTLF = inputFileName.Contains("_ttjj");
+   isCHM200 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-200"));  
+   isCHM220 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-220"));
+   isCHM250 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-250"));
+   isCHM300 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-300"));
+   isCHM350 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-350"));
+   isCHM400 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-400"));
+   isCHM500 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-500"));
+   isCHM600 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-600"));
+   isCHM700 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-700"));
+   isCHM800 = (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-800"));
+   isCHM1000= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-1000"));
+   isCHM1250= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-1250"));
+   isCHM1500= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-1500"));
+   isCHM1750= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-1750"));
+   isCHM2000= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-2000"));
+   isCHM2500= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-2500"));
+   isCHM3000= (inputFileName.Contains("ChargedHiggs") && inputFileName.Contains("M-3000"));
+
+
+   
    //isWJets = inputFileName.BeginsWith("WJetsToLNu");
 
   sample_ = inputFileName;
