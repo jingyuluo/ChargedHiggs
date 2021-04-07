@@ -431,14 +431,30 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    outputTree->Branch("btagDeepJetWeight", &btagDeepJetWeight, "btagDeepJetWeight/F");
    outputTree->Branch("btagDeepJetWeight_HFup", &btagDeepJetWeight_HFup, "btagDeepJetWeight_HFup/F");
    outputTree->Branch("btagDeepJetWeight_HFdn", &btagDeepJetWeight_HFdn, "btagDeepJetWeight_HFdn/F");
-   outputTree->Branch("btagDeepJetWeight_LFup", &btagDeepJetWeight_HFup, "btagDeepJetWeight_LFup/F");
-   outputTree->Branch("btagDeepJetWeight_LFdn", &btagDeepJetWeight_HFdn, "btagDeepJetWeight_LFdn/F");
+   outputTree->Branch("btagDeepJetWeight_LFup", &btagDeepJetWeight_LFup, "btagDeepJetWeight_LFup/F");
+   outputTree->Branch("btagDeepJetWeight_LFdn", &btagDeepJetWeight_LFdn, "btagDeepJetWeight_LFdn/F");
+   outputTree->Branch("btagDeepJetWeight_jesup", &btagDeepJetWeight_jesup, "btagDeepJetWeight_jesup/F");
+   outputTree->Branch("btagDeepJetWeight_jesdn", &btagDeepJetWeight_jesdn, "btagDeepJetWeight_jesdn/F");
+   outputTree->Branch("btagDeepJetWeight_hfstats1up", &btagDeepJetWeight_hfstats1up, "btagDeepJetWeight_hfstats1up/F");
+   outputTree->Branch("btagDeepJetWeight_hfstats1dn", &btagDeepJetWeight_hfstats1dn, "btagDeepJetWeight_hfstats1dn/F");
+   outputTree->Branch("btagDeepJetWeight_hfstats2up", &btagDeepJetWeight_hfstats2up, "btagDeepJetWeight_hfstats2up/F");
+   outputTree->Branch("btagDeepJetWeight_hfstats2dn", &btagDeepJetWeight_hfstats2dn, "btagDeepJetWeight_hfstats2dn/F");
+   outputTree->Branch("btagDeepJetWeight_cferr1up", &btagDeepJetWeight_cferr1up, "btagDeepJetWeight_cferr1up/F");
+   outputTree->Branch("btagDeepJetWeight_cferr1dn", &btagDeepJetWeight_cferr1dn, "btagDeepJetWeight_cferr1dn/F");
+   outputTree->Branch("btagDeepJetWeight_cferr2up", &btagDeepJetWeight_cferr2up, "btagDeepJetWeight_cferr2up/F");
+   outputTree->Branch("btagDeepJetWeight_cferr2dn", &btagDeepJetWeight_cferr2dn, "btagDeepJetWeight_cferr2dn/F");
+   outputTree->Branch("btagDeepJetWeight_lfstats1up", &btagDeepJetWeight_lfstats1up, "btagDeepJetWeight_lfstats1up/F");
+   outputTree->Branch("btagDeepJetWeight_lfstats1dn", &btagDeepJetWeight_lfstats1dn, "btagDeepJetWeight_lfstats1dn/F"); 
+   outputTree->Branch("btagDeepJetWeight_lfstats2up", &btagDeepJetWeight_lfstats2up, "btagDeepJetWeight_lfstats2up/F");
+   outputTree->Branch("btagDeepJetWeight_lfstats2dn", &btagDeepJetWeight_lfstats2dn, "btagDeepJetWeight_lfstats2dn/F");
+ 
 
    outputTree->Branch("njetsWeight",&njetsWeight,"njetsWeight/F");
    outputTree->Branch("njetsWeightUp",&njetsWeightUp,"njetsWeightUp/F");
    outputTree->Branch("njetsWeightDown",&njetsWeightDown,"njetsWeightDown/F");
    outputTree->Branch("tthfWeight",&tthfWeight,"tthfWeight/F");
-   
+   outputTree->Branch("btagCSVRenormWeight",&btagCSVRenormWeight,"btagCSVRenormWeight/F");
+  
    //ttbar generator
    outputTree->Branch("ttbarMass_TTbarMassCalc",&ttbarMass_TTbarMassCalc,"ttbarMass_TTbarMassCalc/D");
    outputTree->Branch("genTopPt",&genTopPt,"genTopPt/F");
@@ -692,7 +708,7 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
    float elEtaCut=2.4;
    float muEtaCut=2.4;
    int   njetsCut=4;
-   int   nbjetsCut=1; // events with # of b-tags <nbjetsCut (incl. btag shifts) are removed!
+   int   nbjetsCut=0; // events with # of b-tags <nbjetsCut (incl. btag shifts) are removed!
    float jetPtCut=40;
    float jetEtaCut=2.4;
    float ak8EtaCut=2.4;
@@ -908,6 +924,28 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       }
 
 
+      btagCSVRenormWeight = 1.0;
+
+      std::string sampleType = "";
+      if (isTTTT) sampleType = "tttt";
+      else if (outTTLF) sampleType = "ttjj";
+      else if (outTTCC) sampleType = "ttcc";
+      else if (outTTBB) sampleType = "ttbb";
+      else if (outTT1B) sampleType = "tt1b";
+      else if (outTT2B) sampleType = "tt2b";
+      else if (isST) sampleType = "T";
+      else if (isTTV || isTTHbb || isTTHnonbb) sampleType = "TTV";
+      else if (isTTTX || isTTVV) sampleType = "TTXY";
+      else if (isVV) sampleType = "VV";
+      else if (sample.find("WJetsToLNu_") != std::string::npos) sampleType = "WJets";
+      else if (sample.find("DYJetsToLL_") != std::string::npos) sampleType = "ZJets";
+      else if (sample.find("QCD_") != std::string::npos) sampleType = "qcd";
+
+
+      if (isMC) {
+          btagCSVRenormWeight = hardcodedConditions.GetCSVRenormSF(Year, isElectron, NJets_JetSubCalc, sampleType);  
+      }	
+
       // ----------------------------------------------------------------------------
       // ttHF weight calculation
       // ----------------------------------------------------------------------------
@@ -974,6 +1012,20 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
       btagDeepJetWeight_HFdn = 1.0;
       btagDeepJetWeight_LFup = 1.0;
       btagDeepJetWeight_LFdn = 1.0;
+      btagDeepJetWeight_jesup = 1.0;
+      btagDeepJetWeight_jesdn = 1.0;
+      btagDeepJetWeight_hfstats1up = 1.0;
+      btagDeepJetWeight_hfstats1dn = 1.0;
+      btagDeepJetWeight_hfstats2up = 1.0;
+      btagDeepJetWeight_hfstats2dn = 1.0;
+      btagDeepJetWeight_cferr1up = 1.0;
+      btagDeepJetWeight_cferr1dn = 1.0;
+      btagDeepJetWeight_cferr2up = 1.0;
+      btagDeepJetWeight_cferr2dn = 1.0;
+      btagDeepJetWeight_lfstats1up = 1.0;
+      btagDeepJetWeight_lfstats1dn = 1.0;
+      btagDeepJetWeight_lfstats2up = 1.0;
+      btagDeepJetWeight_lfstats2dn = 1.0;
 
       for(unsigned int ijet=0; ijet < theJetPt_JetSubCalc->size(); ijet++){
 	// ----------------------------------------------------------------------------
@@ -1046,7 +1098,9 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
         double deepjet = AK4JetDeepFlavb_MultiLepCalc->at(ijet)+AK4JetDeepFlavbb_MultiLepCalc->at(ijet)+AK4JetDeepFlavlepb_MultiLepCalc->at(ijet);
 	double jptForBtag(ijetPt>1000. ? 999. : ijetPt), jetaForBtag(fabs(ijetEta));
 	float csvWgt(1.0), csvWgt_hfup(1.0), csvWgt_hfdn(1.0), csvWgt_lfup(1.0), csvWgt_lfdn(1.0);
-        float djetWgt(1.0), djetWgt_hfup(1.0), djetWgt_hfdn(1.0), djetWgt_lfup(1.0), djetWgt_lfdn(1.0);
+        float djetWgt(1.0), djetWgt_hfup(1.0), djetWgt_hfdn(1.0), djetWgt_lfup(1.0), djetWgt_lfdn(1.0), djetWgt_jesup(1.0), djetWgt_jesdn(1.0), 
+djetWgt_hfstats1up(1.0), djetWgt_hfstats1dn(1.0), djetWgt_hfstats2up(1.0), djetWgt_hfstats2dn(1.0), djetWgt_cferr1up(1.0), djetWgt_cferr1dn(1.0), 
+djetWgt_cferr2up(1.0), djetWgt_cferr2dn(1.0), djetWgt_lfstats1up(1.0), djetWgt_lfstats1dn(1.0), djetWgt_lfstats2up(1.0), djetWgt_lfstats2dn(1.0);
 	if (abs(ijetHFlv) ==5) { 
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
 	    csvWgt_hfup = reader.eval_auto_bounds("up_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
@@ -1054,15 +1108,55 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
             csvWgt_lfup = reader.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);
             csvWgt_lfdn = reader.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, csv);           
 
-            djetWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+ 
             djetWgt_hfup = reader_dj.eval_auto_bounds("up_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
             djetWgt_hfdn = reader_dj.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
             djetWgt_lfup = reader_dj.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
-            djetWgt_lfdn = reader_dj.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfdn = reader_dj.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_jesup = reader_dj.eval_auto_bounds("up_jes", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_jesdn = reader_dj.eval_auto_bounds("down_jes", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1up = reader_dj.eval_auto_bounds("up_hfstats1", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1dn = reader_dj.eval_auto_bounds("down_hfstats1", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_hfstats2up = reader_dj.eval_auto_bounds("up_hfstats2", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats2dn = reader_dj.eval_auto_bounds("down_hfstats2", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_lfstats1up = reader_dj.eval_auto_bounds("up_lfstats1", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats1dn = reader_dj.eval_auto_bounds("down_lfstats1", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2up = reader_dj.eval_auto_bounds("up_lfstats2", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2dn = reader_dj.eval_auto_bounds("down_lfstats2", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+
+            djetWgt_cferr1up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr1dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_B, jetaForBtag, jptForBtag, deepjet);
+           
 	}
 	else if (abs(ijetHFlv) ==4) {
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, csv);
-            csvWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+
+            djetWgt = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+
+            djetWgt_hfup = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfdn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfup = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfdn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_jesup = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_jesdn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_hfstats2up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats2dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_lfstats1up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats1dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+
+            djetWgt_cferr1up = reader_dj.eval_auto_bounds("up_cferr1", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr1dn = reader_dj.eval_auto_bounds("down_cferr1", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2up = reader_dj.eval_auto_bounds("up_cferr2", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2dn = reader_dj.eval_auto_bounds("down_cferr2", BTagEntryForLJMet::FLAV_C, jetaForBtag, jptForBtag, deepjet);
+            
+  
 	}
 	else {
 	    csvWgt = reader.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, csv);
@@ -1076,6 +1170,21 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
             djetWgt_hfdn = reader_dj.eval_auto_bounds("down_hf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
             djetWgt_lfup = reader_dj.eval_auto_bounds("up_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
             djetWgt_lfdn = reader_dj.eval_auto_bounds("down_lf", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_jesup      = reader_dj.eval_auto_bounds("up_jes", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_jesdn      = reader_dj.eval_auto_bounds("down_jes", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1up = reader_dj.eval_auto_bounds("up_hfstats1", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats1dn = reader_dj.eval_auto_bounds("down_hfstats1", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_hfstats2up = reader_dj.eval_auto_bounds("up_hfstats2", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_hfstats2dn = reader_dj.eval_auto_bounds("down_hfstats2", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_lfstats1up = reader_dj.eval_auto_bounds("up_lfstats1", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats1dn = reader_dj.eval_auto_bounds("down_lfstats1", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2up = reader_dj.eval_auto_bounds("up_lfstats2", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+            djetWgt_lfstats2dn = reader_dj.eval_auto_bounds("down_lfstats2", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet); 
+
+            djetWgt_cferr1up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr1dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2up = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
+            djetWgt_cferr2dn = reader_dj.eval_auto_bounds("central", BTagEntryForLJMet::FLAV_UDSG, jetaForBtag, jptForBtag, deepjet);
 
 	}	 
 
@@ -1090,6 +1199,22 @@ void step1::Loop(TString inTreeName, TString outTreeName, const BTagCalibrationF
         if (djetWgt_hfdn != 0) btagDeepJetWeight_HFdn *= djetWgt_hfdn;
         if (djetWgt_lfup != 0) btagDeepJetWeight_LFup *= djetWgt_lfup;
         if (djetWgt_lfdn != 0) btagDeepJetWeight_LFdn *= djetWgt_lfdn;
+        if (djetWgt_jesup     != 0)   btagDeepJetWeight_jesup       *=  djetWgt_jesup;       
+        if (djetWgt_jesdn     != 0)   btagDeepJetWeight_jesdn       *=  djetWgt_jesdn;      
+        if (djetWgt_hfstats1up!= 0)   btagDeepJetWeight_hfstats1up  *=  djetWgt_hfstats1up; 
+        if (djetWgt_hfstats1dn!= 0)   btagDeepJetWeight_hfstats1dn  *=  djetWgt_hfstats1dn; 
+        if (djetWgt_hfstats2up!= 0)   btagDeepJetWeight_hfstats2up  *=  djetWgt_hfstats2up; 
+        if (djetWgt_hfstats2dn!= 0)   btagDeepJetWeight_hfstats2dn  *=  djetWgt_hfstats2dn; 
+        if (djetWgt_lfstats1up!= 0)   btagDeepJetWeight_lfstats1up  *=  djetWgt_lfstats1up; 
+        if (djetWgt_lfstats1dn!= 0)   btagDeepJetWeight_lfstats1dn  *=  djetWgt_lfstats1dn; 
+        if (djetWgt_lfstats2up!= 0)   btagDeepJetWeight_lfstats2up  *=  djetWgt_lfstats2up; 
+        if (djetWgt_lfstats2dn!= 0)   btagDeepJetWeight_lfstats2dn  *=  djetWgt_lfstats2dn; 
+
+        if (djetWgt_cferr1up!= 0)   btagDeepJetWeight_cferr1up  *=  djetWgt_cferr1up;  
+        if (djetWgt_cferr1dn!= 0)   btagDeepJetWeight_cferr1dn  *=  djetWgt_cferr1dn;
+        if (djetWgt_cferr2up!= 0)   btagDeepJetWeight_cferr2up  *=  djetWgt_cferr2up;
+        if (djetWgt_cferr2dn!= 0)   btagDeepJetWeight_cferr2dn  *=  djetWgt_cferr2dn;
+
         
 	}
 
