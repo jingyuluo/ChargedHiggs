@@ -40,7 +40,7 @@ saveKey = ''#'_50GeV_100GeVnB2'
 # if len(sys.argv)>1: iPlot=str(sys.argv[1])
 cutString = ''#'lep30_MET150_NJets4_DR1_1jet450_2jet150'
 lumiStr = str(targetlumi/1000).replace('.','p')+'fb' # 1/fb
-templateDir = 'templates_M500_2021_3_2_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_split' 
+templateDir = 'templates_M500_2021_4_4_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_added_Sys'#'templates_M500_2021_3_10_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_added_nosplit' 
 combinefile = 'templates_'+iPlot+'_'+lumiStr+'_wNegBinsCorrec_.root'
 
 quiet = True #if you don't want to see the warnings that are mostly from the stat. shape algorithm!

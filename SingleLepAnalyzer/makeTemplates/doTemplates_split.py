@@ -26,6 +26,7 @@ def SplitSR(cat):
 parser = argparse.ArgumentParser(description="template building for the charged Higgs analysis")
 parser.add_argument("-d", "--directory", help="the directory to be processed")
 parser.add_argument("-c", "--Categorized", default=False, action="store_true", help="Categorize or not")
+parser.add_argument("-s", "--sys", default=False, action="store_true", help="build the systematic uncertainty templates")
 args = parser.parse_args()
 
 gROOT.SetBatch(1)
@@ -49,18 +50,18 @@ pfix = args.directory#'templates_M500_2020_11_23_topPtRW_NC_allweights_DJ'#'kine
 outDir = os.getcwd()+'/'+pfix+'/'+cutString
 
 scaleSignalXsecTo1pb = True # this has to be "True" if you are making templates for limit calculation!!!!!!!!
-doAllSys = False
+doAllSys = args.sys
 doQ2sys  = False
 doPDFsys = False
 if not doAllSys: doQ2sys = False
 addCRsys = False
-systematicList = ['trigeff','pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2']
+systematicList = ['pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2', 'DJjes']
 systList_jsf = ['jsfJES','jsfJESAbsoluteMPFBias', 'jsfJESAbsoluteScale', 'jsfJESAbsoluteStat', 'jsfJESFlavorQCD', 'jsfJESFragmentation', 'jsfJESPileUpDataMC',
 'jsfJESPileUpPtBB', 'jsfJESPileUpPtEC1', 'jsfJESPileUpPtEC2', 'jsfJESPileUpPtHF', 'jsfJESPileUpPtRef', 'jsfJESRelativeBal', 'jsfJESRelativeFSR',
 'jsfJESRelativeJEREC1', 'jsfJESRelativeJEREC2', 'jsfJESRelativeJERHF', 'jsfJESRelativeJERHF', 'jsfJESRelativePtBB', 'jsfJESRelativePtEC1',
 'jsfJESRelativePtEC2', 'jsfJESRelativePtHF', 'jsfJESRelativeStatEC', 'jsfJESRelativeStatFSR', 'jsfJESRelativeStatHF', 'jsfJESSinglePionECAL',
 'jsfJESSinglePionHCAL', 'jsfJESTimePtEta']
-systematicList += systList_jsf
+#systematicList += systList_jsf
 normalizeRENORM_PDF = False #normalize the renormalization/pdf uncertainties to nominal templates --> normalizes signal processes only !!!!
 rebinBy = -1#4#performs a regular rebinning with "Rebin(rebinBy)", put -1 if rebinning is not wanted
 
@@ -228,7 +229,7 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 		
 		#Group processes
 		for proc in bkgProcList+bkgGrupList:
-			print proc
+			#print proc
                         hists[proc+i] = bkghists[histoPrefixSR+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc)
 			for bkg in bkgProcs[proc]:
 				if bkg!=bkgProcs[proc][0]: hists[proc+i].Add(bkghists[histoPrefixSR+'_'+bkg])
@@ -237,7 +238,7 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
  			for signal in sigList:
  				print "histoPrefix ", histoPrefix
  				print "signal+decays[0]", signal+decays[0]
- 				print sighists
+ 				#print sighists
                                 hists[signal+i] = sighists[histoPrefixSR+'_'+signal+decays[0]].Clone(histoPrefix+'__sig')
  				for decay in decays:
  					if decay!=decays[0]:
@@ -252,28 +253,28 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 						if syst=='toppt' and proc not in topptProcs: continue
 						if syst=='ht' and proc not in htProcs: continue
 #  							print "proc+i+syst+ud : ", proc+i+syst+ud
-						hists[proc+i+syst+ud] = bkghists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
+						hists[proc+i+syst+ud] = bkghists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+syst+ud)+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
 						for bkg in bkgProcs[proc]:
-							if bkg!=bkgProcs[proc][0]: hists[proc+i+syst+ud].Add(bkghists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+bkg])
+							if bkg!=bkgProcs[proc][0]: hists[proc+i+syst+ud].Add(bkghists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+syst+ud)+'_'+bkg])
 					if syst=='toppt' or syst=='ht': continue
 					for signal in sigList:
-						hists[signal+i+syst+ud] = sighists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
+						hists[signal+i+syst+ud] = sighists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+syst+ud)+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__'+syst+'__'+ud.replace('Up','plus').replace('Down','minus'))
 						if doBRScan: hists[signal+i+syst+ud].Scale(BRs[decays[0][:2]][BRind]*BRs[decays[0][2:]][BRind]/(BR[decays[0][:2]]*BR[decays[0][2:]]))
 						for decay in decays:
-							htemp = sighists[histoPrefixSR.replace(discriminant,discriminant+syst+ud)+'_'+signal+decay].Clone()
+							htemp = sighists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+syst+ud)+'_'+signal+decay].Clone()
 							if doBRScan: htemp.Scale(BRs[decay[:2]][BRind]*BRs[decay[2:]][BRind]/(BR[decay[:2]]*BR[decay[2:]]))
 							if decay!=decays[0]: hists[signal+i+syst+ud].Add(htemp)
 		if doPDFsys:
 			for pdfInd in range(100):
 				for proc in bkgProcList+bkgGrupList:
-					hists[proc+i+'pdf'+str(pdfInd)] = bkghists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__pdf'+str(pdfInd))
+					hists[proc+i+'pdf'+str(pdfInd)] = bkghists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+'pdf'+str(pdfInd))+'_'+bkgProcs[proc][0]].Clone(histoPrefix+'__'+proc+'__pdf'+str(pdfInd))
 					for bkg in bkgProcs[proc]:
-						if bkg!=bkgProcs[proc][0]: hists[proc+i+'pdf'+str(pdfInd)].Add(bkghists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+bkg])
+						if bkg!=bkgProcs[proc][0]: hists[proc+i+'pdf'+str(pdfInd)].Add(bkghists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+'pdf'+str(pdfInd))+'_'+bkg])
 				for signal in sigList:
-					hists[signal+i+'pdf'+str(pdfInd)] = sighists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__pdf'+str(pdfInd))
+					hists[signal+i+'pdf'+str(pdfInd)] = sighists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+'pdf'+str(pdfInd))+'_'+signal+decays[0]].Clone(histoPrefix+'__sig__pdf'+str(pdfInd))
 					if doBRScan: hists[signal+i+'pdf'+str(pdfInd)].Scale(BRs[decays[0][:2]][BRind]*BRs[decays[0][2:]][BRind]/(BR[decays[0][:2]]*BR[decays[0][2:]]))
 					for decay in decays:
-						htemp = sighists[histoPrefixSR.replace(discriminant,discriminant+'pdf'+str(pdfInd))+'_'+signal+decay].Clone()
+						htemp = sighists[histoPrefixSR.replace(discriminant+SR_postfix,discriminant+SR_postfix+'pdf'+str(pdfInd))+'_'+signal+decay].Clone()
 						if doBRScan: htemp.Scale(BRs[decay[:2]][BRind]*BRs[decay[2:]][BRind]/(BR[decay[:2]]*BR[decay[2:]]))
 						if decay!=decays[0]:hists[signal+i+'pdf'+str(pdfInd)].Add(htemp)
                                         
@@ -309,10 +310,10 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 # 				print "i : ",i
 # 				print hists[proc+i].GetEntries()
             
-		print bkgGrupList
+		#print bkgGrupList
 		yieldTable[histoPrefix]['totBkg'] = sum([hists[proc+i].Integral() for proc in bkgGrupList])
-                print yieldTable[histoPrefix]['totBkg']
-                print histoPrefix
+                #print yieldTable[histoPrefix]['totBkg']
+                #print histoPrefix
 		if yieldTable[histoPrefix]['totBkg']==0:
 			yieldTable[histoPrefix]['dataOverBkg'] =0
 		else:
@@ -413,17 +414,17 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
                         mass = [str(mass) for mass in massList if signal.endswith(str(mass))][0]
                         hists[signal+i].SetName(hists[signal+i].GetName().replace('fb_','fb_'+postTag).replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
                         hists[signal+i].Write()
-				# if doAllSys:
-				# 	for syst in systematicList:
-				# 		if syst=='toppt' or syst=='ht': continue
-				# 		hists[signal+i+syst+'Up'].SetName(hists[signal+i+syst+'Up'].GetName().replace('fb_','fb_'+postTag).replace('__plus','Up').replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
-				# 		hists[signal+i+syst+'Down'].SetName(hists[signal+i+syst+'Down'].GetName().replace('fb_','fb_'+postTag).replace('__minus','Down').replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
-				# 		hists[signal+i+syst+'Up'].Write()
-				# 		hists[signal+i+syst+'Down'].Write()
-				# if doPDFsys:
-				# 	for pdfInd in range(100): 
-				# 		hists[signal+i+'pdf'+str(pdfInd)].SetName(hists[signal+i+'pdf'+str(pdfInd)].GetName().replace('fb_','fb_'+postTag).replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
-				# 		hists[signal+i+'pdf'+str(pdfInd)].Write()
+			if doAllSys:
+				for syst in systematicList:
+					if syst=='toppt' or syst=='ht': continue
+					hists[signal+i+syst+'Up'].SetName(hists[signal+i+syst+'Up'].GetName().replace('fb_','fb_'+postTag).replace('__plus','Up').replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
+					hists[signal+i+syst+'Down'].SetName(hists[signal+i+syst+'Down'].GetName().replace('fb_','fb_'+postTag).replace('__minus','Down').replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
+					hists[signal+i+syst+'Up'].Write()
+					hists[signal+i+syst+'Down'].Write()
+			if doPDFsys:
+				for pdfInd in range(100): 
+					hists[signal+i+'pdf'+str(pdfInd)].SetName(hists[signal+i+'pdf'+str(pdfInd)].GetName().replace('fb_','fb_'+postTag).replace('__sig','__'+signal))#.replace('M'+mass,'')+'M'+mass))
+					hists[signal+i+'pdf'+str(pdfInd)].Write()
 		for proc in bkgGrupList:
 			hists[proc+i].SetName(hists[proc+i].GetName().replace('fb_','fb_'+postTag))
 			hists[proc+i].Write()

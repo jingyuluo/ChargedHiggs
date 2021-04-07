@@ -144,6 +144,7 @@ public :
    Float_t         njetsWeightUp;
    Float_t         njetsWeightDown;
    Float_t         tthfWeight;
+   Float_t         btagCSVRenormWeight;
 
    Float_t         leptonPt_MultiLepCalc;
    Float_t         leptonEta_MultiLepCalc;
@@ -361,6 +362,21 @@ public :
    float           btagDeepJetWeight_HFdn;
    float           btagDeepJetWeight_LFup;
    float           btagDeepJetWeight_LFdn;
+   float           btagDeepJetWeight_jesup;
+   float           btagDeepJetWeight_jesdn;
+   float           btagDeepJetWeight_hfstats1up;
+   float           btagDeepJetWeight_hfstats1dn;
+   float           btagDeepJetWeight_hfstats2up;
+   float           btagDeepJetWeight_hfstats2dn;
+   float           btagDeepJetWeight_cferr1up;
+   float           btagDeepJetWeight_cferr1dn;
+   float           btagDeepJetWeight_cferr2up;
+   float           btagDeepJetWeight_cferr2dn;
+   float           btagDeepJetWeight_lfstats1up;
+   float           btagDeepJetWeight_lfstats1dn;
+   float           btagDeepJetWeight_lfstats2up;
+   float           btagDeepJetWeight_lfstats2dn;
+   
 
    // Declaration of leaf types
    Bool_t          flagBadMu_MultiLepCalc;

@@ -283,6 +283,24 @@ void step2::Loop()
    TBranch *b_btagDeepJet2DWeight   = outputTree->Branch("btagDeepJet2DWeight", &btagDeepJet2DWeight, "btagDeepJet2DWeight/F");
    TBranch *b_btagDeepJet2DWeight_Pt120 = outputTree->Branch("btagDeepJet2DWeight_Pt120", &btagDeepJet2DWeight_Pt120, "btagDeepJet2DWeight_Pt120/F");
    TBranch *b_btagDeepJet2DWeight_HTnj   = outputTree->Branch("btagDeepJet2DWeight_HTnj", &btagDeepJet2DWeight_HTnj, "btagDeepJet2DWeight_HTnj/F");
+   TBranch *b_btagDeepJet2DWeight_HTnj_HFup         = outputTree->Branch("btagDeepJet2DWeight_HTnj_HFup",         &btagDeepJet2DWeight_HTnj_HFup,         "btagDeepJet2DWeight_HTnj_HFup/F");         
+   TBranch *b_btagDeepJet2DWeight_HTnj_HFdn         = outputTree->Branch("btagDeepJet2DWeight_HTnj_HFdn",         &btagDeepJet2DWeight_HTnj_HFdn,         "btagDeepJet2DWeight_HTnj_HFdn/F");         
+   TBranch *b_btagDeepJet2DWeight_HTnj_LFup         = outputTree->Branch("btagDeepJet2DWeight_HTnj_LFup",         &btagDeepJet2DWeight_HTnj_LFup,         "btagDeepJet2DWeight_HTnj_LFup/F");         
+   TBranch *b_btagDeepJet2DWeight_HTnj_LFdn         = outputTree->Branch("btagDeepJet2DWeight_HTnj_LFdn",         &btagDeepJet2DWeight_HTnj_LFdn,         "btagDeepJet2DWeight_HTnj_LFdn/F");         
+   TBranch *b_btagDeepJet2DWeight_HTnj_jesup        = outputTree->Branch("btagDeepJet2DWeight_HTnj_jesup",        &btagDeepJet2DWeight_HTnj_jesup,        "btagDeepJet2DWeight_HTnj_jesup/F");        
+   TBranch *b_btagDeepJet2DWeight_HTnj_jesdn        = outputTree->Branch("btagDeepJet2DWeight_HTnj_jesdn",        &btagDeepJet2DWeight_HTnj_jesdn,        "btagDeepJet2DWeight_HTnj_jesdn/F");        
+   TBranch *b_btagDeepJet2DWeight_HTnj_hfstats1up   = outputTree->Branch("btagDeepJet2DWeight_HTnj_hfstats1up",   &btagDeepJet2DWeight_HTnj_hfstats1up,   "btagDeepJet2DWeight_HTnj_hfstats1up/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_hfstats1dn   = outputTree->Branch("btagDeepJet2DWeight_HTnj_hfstats1dn",   &btagDeepJet2DWeight_HTnj_hfstats1dn,   "btagDeepJet2DWeight_HTnj_hfstats1dn/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_hfstats2up   = outputTree->Branch("btagDeepJet2DWeight_HTnj_hfstats2up",   &btagDeepJet2DWeight_HTnj_hfstats2up,   "btagDeepJet2DWeight_HTnj_hfstats2up/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_hfstats2dn   = outputTree->Branch("btagDeepJet2DWeight_HTnj_hfstats2dn",   &btagDeepJet2DWeight_HTnj_hfstats2dn,   "btagDeepJet2DWeight_HTnj_hfstats2dn/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_cferr1up     = outputTree->Branch("btagDeepJet2DWeight_HTnj_cferr1up",     &btagDeepJet2DWeight_HTnj_cferr1up,     "btagDeepJet2DWeight_HTnj_cferr1up/F");     
+   TBranch *b_btagDeepJet2DWeight_HTnj_cferr1dn     = outputTree->Branch("btagDeepJet2DWeight_HTnj_cferr1dn",     &btagDeepJet2DWeight_HTnj_cferr1dn,     "btagDeepJet2DWeight_HTnj_cferr1dn/F");     
+   TBranch *b_btagDeepJet2DWeight_HTnj_cferr2up     = outputTree->Branch("btagDeepJet2DWeight_HTnj_cferr2up",     &btagDeepJet2DWeight_HTnj_cferr2up,     "btagDeepJet2DWeight_HTnj_cferr2up/F");     
+   TBranch *b_btagDeepJet2DWeight_HTnj_cferr2dn     = outputTree->Branch("btagDeepJet2DWeight_HTnj_cferr2dn",     &btagDeepJet2DWeight_HTnj_cferr2dn,     "btagDeepJet2DWeight_HTnj_cferr2dn/F");     
+   TBranch *b_btagDeepJet2DWeight_HTnj_lfstats1up   = outputTree->Branch("btagDeepJet2DWeight_HTnj_lfstats1up",   &btagDeepJet2DWeight_HTnj_lfstats1up,   "btagDeepJet2DWeight_HTnj_lfstats1up/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_lfstats1dn   = outputTree->Branch("btagDeepJet2DWeight_HTnj_lfstats1dn",   &btagDeepJet2DWeight_HTnj_lfstats1dn,   "btagDeepJet2DWeight_HTnj_lfstats1dn/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_lfstats2up   = outputTree->Branch("btagDeepJet2DWeight_HTnj_lfstats2up",   &btagDeepJet2DWeight_HTnj_lfstats2up,   "btagDeepJet2DWeight_HTnj_lfstats2up/F");   
+   TBranch *b_btagDeepJet2DWeight_HTnj_lfstats2dn   = outputTree->Branch("btagDeepJet2DWeight_HTnj_lfstats2dn",   &btagDeepJet2DWeight_HTnj_lfstats2dn,   "btagDeepJet2DWeight_HTnj_lfstats2dn/F");   
    TBranch *b_isTraining            = outputTree->Branch("isTraining",&isTraining,"isTraining/I");
    TBranch *b_xsecEff               = outputTree->Branch("xsecEff",&xsecEff,"xsecEff/F");
    TBranch *b_deltaR_minBB          = outputTree->Branch("deltaR_minBB",&deltaR_minBB,"deltaR_minBB/F");
@@ -482,6 +500,25 @@ void step2::Loop()
    TBranch *b_recLeptonicTopJetCSV              = outputTree->Branch("recLeptonicTopJetCSV", &recLeptonicTopJetCSV, "recLeptonicTopJetCSV/F"); 
    TBranch *b_recLeptonicTopJetPt               = outputTree->Branch("recLeptonicTopJetPt", &recLeptonicTopJetPt, "recLeptonicTopJetPt/F");
 
+   TBranch *b_LeptonicTB1_M                     = outputTree->Branch("LeptonicTB1_M", &LeptonicTB1_M, "LeptonicTB1_M/F");
+   TBranch *b_LeptonicTB2_M                     = outputTree->Branch("LeptonicTB2_M", &LeptonicTB2_M, "LeptonicTB2_M/F");
+   
+   TBranch *b_LeptonicTB1_Pt                      = outputTree->Branch("LeptonicTB1_Pt", &LeptonicTB1_Pt, "LeptonicTB1_Pt/F");
+   TBranch *b_LeptonicTB2_Pt                      = outputTree->Branch("LeptonicTB2_Pt", &LeptonicTB2_Pt, "LeptonicTB2_Pt/F");
+
+   TBranch *b_LeptonicTB1_Eta                     = outputTree->Branch("LeptonicTB1_Eta", &LeptonicTB1_Eta, "LeptonicTB1_Eta/F");
+   TBranch *b_LeptonicTB2_Eta                     = outputTree->Branch("LeptonicTB2_Eta", &LeptonicTB2_Eta, "LeptonicTB2_Eta/F");
+   
+   TBranch *b_HadronicTB1_M                       = outputTree->Branch("HadronicTB1_M", &HadronicTB1_M, "HadronicTB1_M/F");
+   TBranch *b_HadronicTB2_M                       = outputTree->Branch("HadronicTB2_M", &HadronicTB2_M, "HadronicTB2_M/F");
+
+   TBranch *b_HadronicTB1_Pt                      = outputTree->Branch("HadronicTB1_Pt", &HadronicTB1_Pt, "HadronicTB1_Pt/F");
+   TBranch *b_HadronicTB2_Pt                      = outputTree->Branch("HadronicTB2_Pt", &HadronicTB2_Pt, "HadronicTB2_Pt/F");
+
+   TBranch *b_HadronicTB1_Eta                     = outputTree->Branch("HadronicTB1_Eta", &HadronicTB1_Eta, "HadronicTB1_Eta/F");
+   TBranch *b_HadronicTB2_Eta                     = outputTree->Branch("HadronicTB2_Eta", &HadronicTB2_Eta, "HadronicTB2_Eta/F");
+
+
 
 
    Long64_t nentries = inputTree->GetEntriesFast();
@@ -504,6 +541,31 @@ void step2::Loop()
    if(isSTt) sampleType = "STt";
    if(isSTtw) sampleType = "STtw";
    if(isWJets) sampleType = "WJets";
+   if(isCHM200 )   sampleType = "CHM200";   
+   if(isCHM220 )   sampleType = "CHM220"; 
+   if(isCHM250 )   sampleType = "CHM250"; 
+   if(isCHM300 )   sampleType = "CHM300"; 
+   if(isCHM350 )   sampleType = "CHM350"; 
+   if(isCHM400 )   sampleType = "CHM400"; 
+   if(isCHM500 )   sampleType = "CHM500"; 
+   if(isCHM600 )   sampleType = "CHM600"; 
+   if(isCHM700 )   sampleType = "CHM700"; 
+   if(isCHM800 )   sampleType = "CHM800"; 
+   if(isCHM1000)   sampleType = "CHM1000"; 
+   if(isCHM1250)   sampleType = "CHM1250";
+   if(isCHM1500)   sampleType = "CHM1500";
+   if(isCHM1750)   sampleType = "CHM1750";
+   if(isCHM2000)   sampleType = "CHM2000";
+   if(isCHM2500)   sampleType = "CHM2500";
+   if(isCHM3000)   sampleType = "CHM3000";
+
+
+
+
+
+
+
+ 
 
    std::cout<<sampleType<<std::endl;
          
@@ -581,6 +643,20 @@ void step2::Loop()
      NoTop_Jet2_Energy = -10;
      recLeptonicTopJetCSV = -10;
      recLeptonicTopJetPt  = -10;
+
+     LeptonicTB1_M = -10;
+     LeptonicTB2_M = -10;
+     LeptonicTB1_Pt = -10;
+     LeptonicTB2_Pt = -10;
+     LeptonicTB1_Eta = -100;
+     LeptonicTB2_Eta = -100;
+     HadronicTB1_M = -10;
+     HadronicTB2_M = -10;
+     HadronicTB1_Pt = -10;
+     HadronicTB2_Pt = -10;
+     HadronicTB1_Eta = -100;
+     HadronicTB2_Eta = -100;
+
       
      NJets_JetSubCalc_float = (float) NJets_JetSubCalc;
      NJetsCSVwithSF_MultiLepCalc_float = (float) NJetsCSVwithSF_MultiLepCalc;
@@ -614,10 +690,28 @@ void step2::Loop()
         if(theJetPt_JetSubCalc_PtOrdered->at(ijet)>=120) nhjets_pt120+=1;
     } 
     
-      
+     
     btagDeepJet2DWeight = hardcodedConditions.GetDeepJetRenorm2DSF(nljets, nhjets, sampleType);   
     btagDeepJet2DWeight_Pt120 = hardcodedConditions.GetDeepJetRenorm2DSF_Pt120(nljets_pt120, nhjets_pt120, sampleType);  
-    btagDeepJet2DWeight_HTnj = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType); 
+    btagDeepJet2DWeight_HTnj      = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "");
+    btagDeepJet2DWeight_HTnj_HFup           = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_HFup");
+    btagDeepJet2DWeight_HTnj_HFdn           = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_HFdn");
+    btagDeepJet2DWeight_HTnj_LFup           = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_LFup");
+    btagDeepJet2DWeight_HTnj_LFdn           = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_LFdn");
+    btagDeepJet2DWeight_HTnj_jesup          = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_jesup");
+    btagDeepJet2DWeight_HTnj_jesdn          = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_jesdn");
+    btagDeepJet2DWeight_HTnj_hfstats1up     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_hfstats1up");
+    btagDeepJet2DWeight_HTnj_hfstats1dn     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_hfstats1dn");
+    btagDeepJet2DWeight_HTnj_hfstats2up     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_hfstats2up");
+    btagDeepJet2DWeight_HTnj_hfstats2dn     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_hfstats2dn");
+    btagDeepJet2DWeight_HTnj_cferr1up       = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_cferr1up");
+    btagDeepJet2DWeight_HTnj_cferr1dn       = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_cferr1dn");
+    btagDeepJet2DWeight_HTnj_cferr2up       = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_cferr2up");
+    btagDeepJet2DWeight_HTnj_cferr2dn       = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_cferr2dn");
+    btagDeepJet2DWeight_HTnj_lfstats1up     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_lfstats1up");
+    btagDeepJet2DWeight_HTnj_lfstats1dn     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_lfstats1dn");
+    btagDeepJet2DWeight_HTnj_lfstats2up     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_lfstats2up");
+    btagDeepJet2DWeight_HTnj_lfstats2dn     = hardcodedConditions.GetDeepJetRenorm2DSF_HTnj(AK4HT, NJets_JetSubCalc, sampleType, "_lfstats2dn");
    // std::cout<<nljets<<","<<nhjets<<","<<btagDeepJet2DWeight_Pt120<<std::endl; 
 //////////////////////////////////////////////////////////////////
 // build BB PAIR variables, aveCSVpt, HT_bjets, HT_ratio, HT_2m //
@@ -1634,9 +1728,12 @@ void step2::Loop()
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////Find the jets with the highest CSVs while not belonging to the tops////////////////////////////
     //
+
+    TLorentzVector lptTB1, lptTB2, hadTB1, hadTB2, lptT, hadT, B1, B2;
     unsigned int lepTopJetIdx = (unsigned int)(recLeptonicTopJetIdx);
     recLeptonicTopJetCSV = float(theJetDeepFlavB_JetSubCalc->at(lepTopJetIdx));
     recLeptonicTopJetPt  = theJetPt_JetSubCalc->at(lepTopJetIdx);
+
     
     for(unsigned int ijet = 0; ijet < theJetPt_JetSubCalc->size(); ijet++){
     int int_idx = int(ijet);
@@ -1675,6 +1772,34 @@ void step2::Loop()
 
     }
     
+    B1.SetPtEtaPhiE(NoTop_Jet1_Pt, NoTop_Jet1_Eta, NoTop_Jet1_Phi, NoTop_Jet1_Energy);
+    B2.SetPtEtaPhiE(NoTop_Jet2_Pt, NoTop_Jet2_Eta, NoTop_Jet2_Phi, NoTop_Jet2_Energy);
+   
+    lptT.SetPtEtaPhiM(recLeptonicTopPt, recLeptonicTopEta, recLeptonicTopPhi, recLeptonicTopMass);
+    hadT.SetPtEtaPhiM(BestTop_Pt, BestTop_Eta, BestTop_Phi, BestTop_Mass);
+
+    lptTB1 = lptT+B1;
+    lptTB2 = lptT+B2;
+    hadTB1 = hadT+B1;
+    hadTB2 = hadT+B2;
+
+    LeptonicTB1_M = lptTB1.M();
+    LeptonicTB2_M = lptTB2.M();
+
+    LeptonicTB1_Pt = lptTB1.Pt();
+    LeptonicTB2_Pt = lptTB2.Pt();
+
+    LeptonicTB1_Eta = lptTB1.Eta();
+    LeptonicTB2_Eta = lptTB2.Eta();
+
+    HadronicTB1_M = hadTB1.M();
+    HadronicTB2_M = hadTB2.M();
+    
+    HadronicTB1_Pt = hadTB1.Pt();
+    HadronicTB2_Pt = hadTB2.Pt(); 
+
+    HadronicTB1_Eta = hadTB1.Eta();
+    HadronicTB2_Eta = hadTB2.Eta();
     
 
 
@@ -1682,7 +1807,25 @@ void step2::Loop()
 
       b_btagDeepJet2DWeight->Fill();	 
       b_btagDeepJet2DWeight_Pt120->Fill();
-      b_btagDeepJet2DWeight_HTnj->Fill(); 
+      b_btagDeepJet2DWeight_HTnj->Fill();
+      b_btagDeepJet2DWeight_HTnj_HFup->Fill();       
+      b_btagDeepJet2DWeight_HTnj_HFdn->Fill();      
+      b_btagDeepJet2DWeight_HTnj_LFup->Fill();      
+      b_btagDeepJet2DWeight_HTnj_LFdn->Fill();      
+      b_btagDeepJet2DWeight_HTnj_jesup->Fill();     
+      b_btagDeepJet2DWeight_HTnj_jesdn->Fill();     
+      b_btagDeepJet2DWeight_HTnj_hfstats1up->Fill();
+      b_btagDeepJet2DWeight_HTnj_hfstats1dn->Fill();
+      b_btagDeepJet2DWeight_HTnj_hfstats2up->Fill();
+      b_btagDeepJet2DWeight_HTnj_hfstats2dn->Fill();
+      b_btagDeepJet2DWeight_HTnj_cferr1up->Fill();  
+      b_btagDeepJet2DWeight_HTnj_cferr1dn->Fill();  
+      b_btagDeepJet2DWeight_HTnj_cferr2up->Fill();  
+      b_btagDeepJet2DWeight_HTnj_cferr2dn->Fill();  
+      b_btagDeepJet2DWeight_HTnj_lfstats1up->Fill();
+      b_btagDeepJet2DWeight_HTnj_lfstats1dn->Fill();
+      b_btagDeepJet2DWeight_HTnj_lfstats2up->Fill();
+      b_btagDeepJet2DWeight_HTnj_lfstats2dn->Fill();
       b_isTraining->Fill();
       b_xsecEff->Fill();
       b_deltaR_minBB->Fill();
@@ -1871,7 +2014,25 @@ void step2::Loop()
       b_NoTop_Jet2_Energy->Fill();     
 
       b_recLeptonicTopJetCSV->Fill();
-      b_recLeptonicTopJetPt->Fill(); 
+      b_recLeptonicTopJetPt->Fill();
+
+      b_LeptonicTB1_M->Fill();
+      b_LeptonicTB2_M->Fill();
+   
+      b_LeptonicTB1_Pt->Fill();
+      b_LeptonicTB2_Pt->Fill();
+
+      b_LeptonicTB1_Eta->Fill();
+      b_LeptonicTB2_Eta->Fill();
+
+      b_HadronicTB1_M->Fill();
+      b_HadronicTB2_M->Fill();
+
+      b_HadronicTB1_Pt->Fill();
+      b_HadronicTB2_Pt->Fill();
+
+      b_HadronicTB1_Eta->Fill();
+      b_HadronicTB2_Eta->Fill(); 
    }
 
 std::cout<<"DONE "<<nentries<<std::endl;   

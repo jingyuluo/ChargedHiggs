@@ -19,37 +19,40 @@ using namespace std;
 
 S2HardcodedConditions::S2HardcodedConditions() {
 
-   if(!(tfile_HTNJ_SF=TFile::Open("HT_njets_SF.root"))){
+   if(!(tfile_HTNJ_SF=TFile::Open("HT_njets_SF_sys.root"))){
     std::cout<<"WARNING! SF file doesn't exist! Exiting" << std::endl;
     exit(1);
    }
-
-  hscale_ttjj    = (TH2F*)tfile_HTNJ_SF->Get("hscale_ttjj")->Clone();
-  hscale_ttbb    = (TH2F*)tfile_HTNJ_SF->Get("hscale_ttbb")->Clone();  
-  hscale_ttcc    = (TH2F*)tfile_HTNJ_SF->Get("hscale_ttcc")->Clone();
-  hscale_tt2b    = (TH2F*)tfile_HTNJ_SF->Get("hscale_tt2b")->Clone();
-  hscale_tt1b    = (TH2F*)tfile_HTNJ_SF->Get("hscale_tt1b")->Clone();
-  hscale_STs     = (TH2F*)tfile_HTNJ_SF->Get("hscale_STs")->Clone();
-  hscale_STtw    = (TH2F*)tfile_HTNJ_SF->Get("hscale_STtw")->Clone();
-  hscale_STt     = (TH2F*)tfile_HTNJ_SF->Get("hscale_STt")->Clone();
-  hscale_WJets   = (TH2F*)tfile_HTNJ_SF->Get("hscale_WJets")->Clone();
-  hscale_CHM200   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM200")->Clone(); 
-  hscale_CHM220   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM220")->Clone();
-  hscale_CHM250   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM250")->Clone();
-  hscale_CHM300   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM300")->Clone();
-  hscale_CHM350   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM350")->Clone();
-  hscale_CHM400   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM400")->Clone();
-  hscale_CHM500   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM500")->Clone();
-  hscale_CHM600   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM600")->Clone();
-  hscale_CHM700   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM700")->Clone();
-  hscale_CHM800   = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM800")->Clone();
-  hscale_CHM1000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1000")->Clone(); 
-  hscale_CHM1250  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1250")->Clone();
-  hscale_CHM1500  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1500")->Clone();
-  hscale_CHM1750  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM1750")->Clone();
-  hscale_CHM2000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM2000")->Clone();
-  hscale_CHM2500  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM2500")->Clone();
-  hscale_CHM3000  = (TH2F*)tfile_HTNJ_SF->Get("hscale_CHM3000")->Clone();
+  
+  std::string SYSs[19] = {"", "_HFup", "_HFdn", "_LFup", "_LFdn", "_jesup", "_jesdn", "_hfstats1up", "_hfstats1dn", "_hfstats2up", "_hfstats2dn", "_cferr1up", "_cferr1dn", "_cferr2up", "_cferr2dn", "_lfstats1up", "_lfstats1dn", "_lfstats2up", "_lfstats2dn"};
+  for(size_t isys = 0; isys<19; isys++){
+      hscale_ttjj[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_ttjj"+SYSs[isys]).c_str())->Clone();
+      hscale_ttbb[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_ttbb"+SYSs[isys]).c_str())->Clone();  
+      hscale_ttcc[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_ttcc"+SYSs[isys]).c_str())->Clone();
+      hscale_tt2b[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_tt2b"+SYSs[isys]).c_str())->Clone();
+      hscale_tt1b[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_tt1b"+SYSs[isys]).c_str())->Clone();
+      hscale_STs[SYSs[isys]]     = (TH2F*)tfile_HTNJ_SF->Get(("hscale_STs"+SYSs[isys]).c_str())->Clone();
+      hscale_STtw[SYSs[isys]]    = (TH2F*)tfile_HTNJ_SF->Get(("hscale_STtw"+SYSs[isys]).c_str())->Clone();
+      hscale_STt[SYSs[isys]]     = (TH2F*)tfile_HTNJ_SF->Get(("hscale_STt"+SYSs[isys]).c_str())->Clone();
+      hscale_WJets[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_WJets"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM200[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM200"+SYSs[isys]).c_str())->Clone(); 
+      hscale_CHM220[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM220"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM250[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM250"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM300[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM300"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM350[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM350"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM400[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM400"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM500[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM500"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM600[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM600"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM700[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM700"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM800[SYSs[isys]]   = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM800"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM1000[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM1000"+SYSs[isys]).c_str())->Clone(); 
+      hscale_CHM1250[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM1250"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM1500[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM1500"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM1750[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM1750"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM2000[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM2000"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM2500[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM2500"+SYSs[isys]).c_str())->Clone();
+      hscale_CHM3000[SYSs[isys]]  = (TH2F*)tfile_HTNJ_SF->Get(("hscale_CHM3000"+SYSs[isys]).c_str())->Clone();
+  }
 }
 
 S2HardcodedConditions::~S2HardcodedConditions() {
@@ -465,114 +468,116 @@ float S2HardcodedConditions::GetDeepJetRenorm2DSF_Pt120(int nljet, int nhjet, st
 }
 
 
-float S2HardcodedConditions::GetDeepJetRenorm2DSF_HTnj(float HT, int njets, std::string sampleType){
+float S2HardcodedConditions::GetDeepJetRenorm2DSF_HTnj(float HT, int njets, std::string sampleType, std::string sysType){
 
+  if(hscale_ttjj.find(sysType)==hscale_ttjj.end()) return 1.0;
+  if(sampleType=="") return 1.0;
   int tmp_njets = njets;
   if(tmp_njets>6) tmp_njets=6;
   if (sampleType == "ttjj"){
-      return hscale_ttjj->GetBinContent(hscale_ttjj->FindBin(tmp_njets, HT));  
+      return hscale_ttjj[sysType]->GetBinContent(hscale_ttjj[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "ttcc"){
-      return hscale_ttcc->GetBinContent(hscale_ttcc->FindBin(tmp_njets, HT));  
+      return hscale_ttcc[sysType]->GetBinContent(hscale_ttcc[sysType]->FindBin(tmp_njets, HT));  
   }
 
 
   if (sampleType == "ttbb"){
-      return hscale_ttbb->GetBinContent(hscale_ttbb->FindBin(tmp_njets, HT));  
+      return hscale_ttbb[sysType]->GetBinContent(hscale_ttbb[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "tt2b"){
-      return hscale_tt2b->GetBinContent(hscale_tt2b->FindBin(tmp_njets, HT));  
+      return hscale_tt2b[sysType]->GetBinContent(hscale_tt2b[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "tt1b"){
-      return hscale_tt1b->GetBinContent(hscale_tt1b->FindBin(tmp_njets, HT));  
+      return hscale_tt1b[sysType]->GetBinContent(hscale_tt1b[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "STs"){
-      return hscale_STs->GetBinContent(hscale_STs->FindBin(tmp_njets, HT));  
+      return hscale_STs[sysType]->GetBinContent(hscale_STs[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "STt"){
-      return hscale_STt->GetBinContent(hscale_STt->FindBin(tmp_njets, HT));  
+      return hscale_STt[sysType]->GetBinContent(hscale_STt[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "STtw"){
-      return hscale_STtw->GetBinContent(hscale_STtw->FindBin(tmp_njets, HT));  
+      return hscale_STtw[sysType]->GetBinContent(hscale_STtw[sysType]->FindBin(tmp_njets, HT));  
   }
 
   if (sampleType == "WJets"){
-      return hscale_WJets->GetBinContent(hscale_WJets->FindBin(tmp_njets, HT));  
+      return hscale_WJets[sysType]->GetBinContent(hscale_WJets[sysType]->FindBin(tmp_njets, HT));  
   }
   
   if (sampleType == "CHM200"){
-      return hscale_CHM200->GetBinContent(hscale_CHM200->FindBin(tmp_njets, HT));
+      return hscale_CHM200[sysType]->GetBinContent(hscale_CHM200[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM220"){
-      return hscale_CHM220->GetBinContent(hscale_CHM220->FindBin(tmp_njets, HT));
+      return hscale_CHM220[sysType]->GetBinContent(hscale_CHM220[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM250"){
-      return hscale_CHM250->GetBinContent(hscale_CHM250->FindBin(tmp_njets, HT));
+      return hscale_CHM250[sysType]->GetBinContent(hscale_CHM250[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM300"){
-      return hscale_CHM300->GetBinContent(hscale_CHM300->FindBin(tmp_njets, HT));
+      return hscale_CHM300[sysType]->GetBinContent(hscale_CHM300[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM350"){
-      return hscale_CHM350->GetBinContent(hscale_CHM350->FindBin(tmp_njets, HT));
+      return hscale_CHM350[sysType]->GetBinContent(hscale_CHM350[sysType]->FindBin(tmp_njets, HT));
   }  
 
 
   if (sampleType == "CHM400"){
-      return hscale_CHM400->GetBinContent(hscale_CHM400->FindBin(tmp_njets, HT));
+      return hscale_CHM400[sysType]->GetBinContent(hscale_CHM400[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM500"){
-      return hscale_CHM500->GetBinContent(hscale_CHM500->FindBin(tmp_njets, HT));
+      return hscale_CHM500[sysType]->GetBinContent(hscale_CHM500[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM600"){
-      return hscale_CHM600->GetBinContent(hscale_CHM600->FindBin(tmp_njets, HT));
+      return hscale_CHM600[sysType]->GetBinContent(hscale_CHM600[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM700"){
-      return hscale_CHM700->GetBinContent(hscale_CHM700->FindBin(tmp_njets, HT));
+      return hscale_CHM700[sysType]->GetBinContent(hscale_CHM700[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM800"){
-      return hscale_CHM800->GetBinContent(hscale_CHM800->FindBin(tmp_njets, HT));
+      return hscale_CHM800[sysType]->GetBinContent(hscale_CHM800[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM1000"){
-      return hscale_CHM1000->GetBinContent(hscale_CHM1000->FindBin(tmp_njets, HT));
+      return hscale_CHM1000[sysType]->GetBinContent(hscale_CHM1000[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM1250"){
-      return hscale_CHM1250->GetBinContent(hscale_CHM1250->FindBin(tmp_njets, HT));
+      return hscale_CHM1250[sysType]->GetBinContent(hscale_CHM1250[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM1500"){
-      return hscale_CHM1500->GetBinContent(hscale_CHM1500->FindBin(tmp_njets, HT));
+      return hscale_CHM1500[sysType]->GetBinContent(hscale_CHM1500[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM1750"){
-      return hscale_CHM1750->GetBinContent(hscale_CHM1750->FindBin(tmp_njets, HT));
+      return hscale_CHM1750[sysType]->GetBinContent(hscale_CHM1750[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM2000"){
-      return hscale_CHM2000->GetBinContent(hscale_CHM2000->FindBin(tmp_njets, HT));
+      return hscale_CHM2000[sysType]->GetBinContent(hscale_CHM2000[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM2500"){
-      return hscale_CHM2500->GetBinContent(hscale_CHM2500->FindBin(tmp_njets, HT));
+      return hscale_CHM2500[sysType]->GetBinContent(hscale_CHM2500[sysType]->FindBin(tmp_njets, HT));
   }  
 
   if (sampleType == "CHM3000"){
-      return hscale_CHM3000->GetBinContent(hscale_CHM3000->FindBin(tmp_njets, HT));
+      return hscale_CHM3000[sysType]->GetBinContent(hscale_CHM3000[sysType]->FindBin(tmp_njets, HT));
   }  
 
   return 1.0;

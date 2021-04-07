@@ -9,9 +9,11 @@
 #include <TFile.h>
 #include <TH2.h>
 #include <algorithm>
- 
+
+typedef std::map<std::string, TH2F*> SFmap; 
+
 class S2HardcodedConditions{
-    
+      
 public:
     
     S2HardcodedConditions();
@@ -37,35 +39,35 @@ public:
     float GetCSVRenormSF(int year, int isE, int njet, std::string sampleType);
     float GetDeepJetRenorm2DSF( int nljet, int hjet, std::string sampleType);
     float GetDeepJetRenorm2DSF_Pt120(int nljet, int hjet, std::string sampleType);
-    float GetDeepJetRenorm2DSF_HTnj(float HT, int njets, std::string sampleType);
+    float GetDeepJetRenorm2DSF_HTnj(float HT, int njets, std::string sampleType, std::string sysType);
 
     TFile *tfile_HTNJ_SF;
-    TH2F* hscale_ttjj;
-    TH2F* hscale_ttbb;
-    TH2F* hscale_ttcc;
-    TH2F* hscale_tt2b;
-    TH2F* hscale_tt1b;
-    TH2F* hscale_STs;
-    TH2F* hscale_STt;
-    TH2F* hscale_STtw;
-    TH2F* hscale_WJets;   
-    TH2F* hscale_CHM200; 
-    TH2F* hscale_CHM220; 
-    TH2F* hscale_CHM250; 
-    TH2F* hscale_CHM300; 
-    TH2F* hscale_CHM350; 
-    TH2F* hscale_CHM400; 
-    TH2F* hscale_CHM500; 
-    TH2F* hscale_CHM600; 
-    TH2F* hscale_CHM700; 
-    TH2F* hscale_CHM800; 
-    TH2F* hscale_CHM1000; 
-    TH2F* hscale_CHM1250;
-    TH2F* hscale_CHM1500;
-    TH2F* hscale_CHM1750;
-    TH2F* hscale_CHM2000;
-    TH2F* hscale_CHM2500;
-    TH2F* hscale_CHM3000;
+    SFmap  hscale_ttjj;
+    SFmap  hscale_ttbb;
+    SFmap  hscale_ttcc;
+    SFmap  hscale_tt2b;
+    SFmap  hscale_tt1b;
+    SFmap  hscale_STs;
+    SFmap  hscale_STt;
+    SFmap  hscale_STtw;
+    SFmap  hscale_WJets;   
+    SFmap  hscale_CHM200; 
+    SFmap  hscale_CHM220; 
+    SFmap  hscale_CHM250; 
+    SFmap  hscale_CHM300; 
+    SFmap  hscale_CHM350; 
+    SFmap  hscale_CHM400; 
+    SFmap  hscale_CHM500; 
+    SFmap  hscale_CHM600; 
+    SFmap  hscale_CHM700; 
+    SFmap  hscale_CHM800; 
+    SFmap  hscale_CHM1000; 
+    SFmap  hscale_CHM1250;
+    SFmap  hscale_CHM1500;
+    SFmap  hscale_CHM1750;
+    SFmap  hscale_CHM2000;
+    SFmap  hscale_CHM2500;
+    SFmap  hscale_CHM3000;
 
 
     //void GetBtaggingSF(double pt, double eta, double *btagsf, double *btagsfunc, std::string tagger="CSVM", int jetHFlav = 5, int year = 2017);

@@ -20,7 +20,7 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_splited'
+step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_added_sys/nominal/'
 
 """
 Note: 
@@ -76,7 +76,7 @@ isCategorized = False
 BDTSR_Merged = False
 if len(sys.argv)>4: isCategorized=int(sys.argv[4])
 doJetRwt= 0
-doAllSys= False
+doAllSys= True
 cutList = {'metCut':30,'jet1PtCut':40,'jet2PtCut':40}
 
 cutString  = 'MET'+str(int(cutList['metCut']))
@@ -149,10 +149,17 @@ for bkg in bkgList:
         else: 
 	    tFileBkg[bkg],tTreeBkg[bkg]=readTree(step1Dir+'/'+samples[bkg]+'_hadd.root')
 	if doAllSys:
-		for syst in shapesFiles:
-			for ud in ['Up','Down']:
-				print "        "+bkg+syst+ud
-				tFileBkg[bkg+syst+ud],tTreeBkg[bkg+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+'_hadd.root')
+		if 'TTTo' in bkg and len(ttFlvs)!=0:
+			for flv in ttFlvs:
+				for syst in shapesFiles:
+					for ud in ['Up','Down']:
+						print "        "+bkg+flv+syst+ud
+						tFileBkg[bkg+flv+syst+ud],tTreeBkg[bkg+flv+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+flv+'_hadd.root')
+		else:
+			for syst in shapesFiles:
+				for ud in ['Up','Down']:
+					print "        "+bkg+syst+ud
+					tFileBkg[bkg+syst+ud],tTreeBkg[bkg+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+'_hadd.root')
 
 print "FINISHED READING"
 
@@ -390,6 +397,8 @@ runBkgs = True
 runSigs = True#False
 nCats  = len(catList)
 
+print "Keys: ", tTreeBkg.keys()
+
 catInd = 1
 for cat in catList:
  	if not runData: break
@@ -431,6 +440,7 @@ for cat in catList:
 		outDir+='/'+catDir
 		if not os.path.exists(outDir): os.system('mkdir '+outDir)
  	category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
+        print "Keys: ", tTreeBkg.keys()
  	for bkg in bkgList: 
 		print "*****"*20
 		print "*****"*20
