@@ -58,9 +58,9 @@ if iPlot=='YLD': tempsig='templates_'+iPlot+'_'+sig1+'_'+lumiInTemplates+'fb'+is
 print "tempsig : ",tempsig
 if splitTTbar: 
 
-    bkgTTBarList = ['ttnobb','ttbb'] 
-    bkgProcList = bkgTTBarList+['top','ewk','qcd']
-    #    bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
+    #bkgTTBarList = ['ttnobb','ttbb'] 
+    #bkgProcList = bkgTTBarList+['top','ewk','qcd']
+    bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
     #    bkgProcList = ['ttb','ttcc','ttlf','top','ewk','qcd']
 else: 
     bkgProcList = ['ttbar','top','ewk','qcd']
@@ -78,14 +78,15 @@ if plotqcd:
 
 bkgHistColors = {'tt2b':rt.kRed+3,'ttbb':rt.kRed,'tt1b':rt.kRed-3,'ttcc':rt.kRed-5,'ttjj':rt.kRed-7,'top':rt.kBlue,'ewk':rt.kGreen-8,'qcd':rt.kOrange+5,'ttbar':rt.kRed,'ttnobb':rt.kRed-7} #HTB
 systematicList = [
-'CMS_scale_j'       , 'CMS_HPTB_mcreweight_ewk', 'CMS_res_j'        , 'muR_ttbar', 'muF_ttbar',
-'CMS_btag_LF'       , 'CMS_pileup'             , 'CMS_btag_HF'      , 'muR_top'  , 'muF_top'  , 
-'CMS_topreweight' ,
-'CMS_btag_LFstat1'  , 'CMS_btag_CFerr1'        , 'CMS_btag_HFstat1' ,  #'QCDscaleHptb'    , 
-'CMS_btag_LFstat2'  , 'CMS_btag_CFerr2'        , 'CMS_btag_HFstat2' , 'muR_ewk'  , 'muF_ewk'   
+'pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2', 'DJjes'
+#'CMS_scale_j'       , 'CMS_HPTB_mcreweight_ewk', 'CMS_res_j'        , 'muR_ttbar', 'muF_ttbar',
+#'CMS_btag_LF'       , 'CMS_pileup'             , 'CMS_btag_HF'      , 'muR_top'  , 'muF_top'  , 
+#'CMS_topreweight' ,
+#'CMS_btag_LFstat1'  , 'CMS_btag_CFerr1'        , 'CMS_btag_HFstat1' ,  #'QCDscaleHptb'    , 
+#'CMS_btag_LFstat2'  , 'CMS_btag_CFerr2'        , 'CMS_btag_HFstat2' , 'muR_ewk'  , 'muF_ewk'   
 ]
 
-doAllSys = False
+doAllSys = True
 doQ2sys  = False
 if not doAllSys: doQ2sys = False
 addCRsys = False
@@ -93,7 +94,7 @@ doNormByBinWidth=False
 #set true, to see the actual shape of the distributions when the binning is not uniform, e.g binning with 0.3
 doOneBand = True
 if not doAllSys: doOneBand = True # Don't change this!
-blind = False
+blind = True
 blindYLD = False
 yLog  = True
 doRealPull = False
@@ -438,7 +439,7 @@ for tag in tagList:
 		hData.SetLineColor(rt.kBlack)
 		if drawYields: hData.SetMarkerSize(4)
 
-		bkgHTgerr.SetFillStyle(3004)
+		bkgHTgerr.SetFillStyle(3002)
 		bkgHTgerr.SetFillColor(rt.kBlack)
 		bkgHTgerr.SetLineColor(rt.kBlack)
 
@@ -566,19 +567,19 @@ for tag in tagList:
 		if not scaleSignals:
 			scaleFact1Str = ''
 			scaleFact2Str = ''
-		try: leg.AddEntry(bkghists['ttlf'+catStr],"t#bar{t}+lf","f")
+		try: leg.AddEntry(bkghists['ttjj'+catStr],"t#bar{t}+jj","f")
 		except: pass
  		leg.AddEntry(hsig1,sig1leg+scaleFact1Str,"l")
 		try: leg.AddEntry(bkghists['ttcc'+catStr],"t#bar{t}+c#bar{c}","f")
 		except: pass
 # 		leg.AddEntry(hsig2,sig2leg+scaleFact2Str,"l")
-		try: leg.AddEntry(bkghists['ttb'+catStr],"t#bar{t}+b","f")
+		try: leg.AddEntry(bkghists['tt1b'+catStr],"t#bar{t}+1b","f")
 		except: pass
 		try: leg.AddEntry(bkghists['top'+catStr],"TOP","f")
 		except: pass
                 try: leg.AddEntry(bkghists['tt2b'+catStr],"t#bar{t}+2b","f")
 		except: pass
-                print bkghists['ttnobb'+catStr]
+                #print bkghists['ttnobb'+catStr]
                 try: leg.AddEntry(bkghists['ttnobb'+catStr],"t#bar{t}+!b#bar{b}","f")
                 except: pass
 		try: leg.AddEntry(bkghists['ewk'+catStr],"EWK","f")
@@ -628,8 +629,8 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandTot.SetPointEYhigh(binNo-1,totBkgTemp3[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandTot.SetPointEYlow(binNo-1,totBkgTemp3[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			if not doOneBand: pullUncBandTot.SetFillStyle(3004)
-			else: pullUncBandTot.SetFillStyle(3004)
+			if not doOneBand: pullUncBandTot.SetFillStyle(3002)
+			else: pullUncBandTot.SetFillStyle(3002)
 			pullUncBandTot.SetFillColor(14)
 			pullUncBandTot.SetLineColor(14)
 			pullUncBandTot.SetMarkerSize(0)
@@ -641,7 +642,7 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandNorm.SetPointEYhigh(binNo-1,totBkgTemp2[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			pullUncBandNorm.SetFillStyle(3004)
+			pullUncBandNorm.SetFillStyle(3002)
 			pullUncBandNorm.SetFillColor(2)
 			pullUncBandNorm.SetLineColor(2)
 			pullUncBandNorm.SetMarkerSize(0)
@@ -653,7 +654,7 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandStat.SetPointEYhigh(binNo-1,totBkgTemp1[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandStat.SetPointEYlow(binNo-1,totBkgTemp1[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			pullUncBandStat.SetFillStyle(3004)
+			pullUncBandStat.SetFillStyle(3002)
 			pullUncBandStat.SetFillColor(3)
 			pullUncBandStat.SetLineColor(3)
 			pullUncBandStat.SetMarkerSize(0)
@@ -866,7 +867,7 @@ for tag in tagList:
 	hDatamerged.SetLineColor(rt.kBlack)
 	if drawYields: hDatamerged.SetMarkerSize(4)
 
-	bkgHTgerrmerged.SetFillStyle(3004)
+	bkgHTgerrmerged.SetFillStyle(3002)
 	bkgHTgerrmerged.SetFillColor(rt.kBlack)
 	bkgHTgerrmerged.SetLineColor(rt.kBlack)
 	
@@ -992,13 +993,13 @@ for tag in tagList:
 	if not scaleSignals:
 		scaleFact1Str = ''
 		scaleFact2Str = ''
-	try: legmerged.AddEntry(bkghistsmerged['ttlfisL'+tagStr],"t#bar{t}+lf","f")
+	try: legmerged.AddEntry(bkghistsmerged['ttjjisL'+tagStr],"t#bar{t}+jj","f")
 	except: pass
  	legmerged.AddEntry(hsig1merged,sig1leg+scaleFact1Str,"l")
 	try: legmerged.AddEntry(bkghistsmerged['ttccisL'+tagStr],"t#bar{t}+c#bar{c}","f")
 	except: pass
 # 	legmerged.AddEntry(hsig2merged,sig2leg+scaleFact2Str,"l")
-	try: legmerged.AddEntry(bkghistsmerged['ttbisL'+tagStr],"t#bar{t}+b","f")
+	try: legmerged.AddEntry(bkghistsmerged['tt1bisL'+tagStr],"t#bar{t}+1b","f")
 	except: pass
 	try: legmerged.AddEntry(bkghistsmerged['topisL'+tagStr],"TOP","f")
 	except: pass
@@ -1061,8 +1062,8 @@ for tag in tagList:
 		if 'NBJets' in iPlot:
 			pullUncBandTotmerged.SetPointEYhigh(4,0)
 			pullUncBandTotmerged.SetPointEYlow(4,0)
-		if not doOneBand: pullUncBandTotmerged.SetFillStyle(3004)
-		else: pullUncBandTotmerged.SetFillStyle(3004)
+		if not doOneBand: pullUncBandTotmerged.SetFillStyle(3002)
+		else: pullUncBandTotmerged.SetFillStyle(3002)
 		pullUncBandTotmerged.SetFillColor(14)
 		pullUncBandTotmerged.SetLineColor(14)
 		pullUncBandTotmerged.SetMarkerSize(0)
@@ -1074,7 +1075,7 @@ for tag in tagList:
 			if bkgHTmerged.GetBinContent(binNo)!=0:
 				pullUncBandNormmerged.SetPointEYhigh(binNo-1,totBkgTemp2['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
 				pullUncBandNormmerged.SetPointEYlow(binNo-1, totBkgTemp2['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))			
-		pullUncBandNormmerged.SetFillStyle(3004)
+		pullUncBandNormmerged.SetFillStyle(3002)
 		pullUncBandNormmerged.SetFillColor(2)
 		pullUncBandNormmerged.SetLineColor(2)
 		pullUncBandNormmerged.SetMarkerSize(0)
@@ -1086,7 +1087,7 @@ for tag in tagList:
 			if bkgHTmerged.GetBinContent(binNo)!=0:
 				pullUncBandStatmerged.SetPointEYhigh(binNo-1,totBkgTemp1['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
 				pullUncBandStatmerged.SetPointEYlow(binNo-1, totBkgTemp1['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))			
-		pullUncBandStatmerged.SetFillStyle(3004)
+		pullUncBandStatmerged.SetFillStyle(3002)
 		pullUncBandStatmerged.SetFillColor(3)
 		pullUncBandStatmerged.SetLineColor(3)
 		pullUncBandStatmerged.SetMarkerSize(0)
