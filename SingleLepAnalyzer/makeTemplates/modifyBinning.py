@@ -40,14 +40,17 @@ saveKey = ''#'_50GeV_100GeVnB2'
 # if len(sys.argv)>1: iPlot=str(sys.argv[1])
 cutString = ''#'lep30_MET150_NJets4_DR1_1jet450_2jet150'
 lumiStr = str(targetlumi/1000).replace('.','p')+'fb' # 1/fb
-templateDir = 'templates_M500_2021_4_4_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_added_Sys'#'templates_M500_2021_3_10_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_XGBs_added_nosplit' 
+templateDir = 'templates_M500_2021_4_25_topPtRW_allweights_UL17_Reshape_ReNorm2D_HTnj_WJetsHTbinned_HTonly' 
 combinefile = 'templates_'+iPlot+'_'+lumiStr+'_wNegBinsCorrec_.root'
 
 quiet = True #if you don't want to see the warnings that are mostly from the stat. shape algorithm!
 rebinCombine = True #else rebins theta templates
 doStatShapes = False
+doSmoothing = True
+smoothingAlgo = 'lowess' #lowess, super, or kern
+symmetrizeSmoothing = True #Symmetrize up/down shifts around nominal before smoothing
 doPDF = True
-doMURF = True
+doMURF = False#True
 doPSWeights = True
 normalizeTheorySystSig = True #normalize renorm/fact, PDF and ISR/FSR systematics to nominal templates for signals
 normalizeTheorySystBkg = False #normalize renorm/fact, PDF and ISR/FSR systematics to nominal templates for backgrounds
@@ -59,7 +62,7 @@ if sigName=='tttt': sigProcList = [sigName]
 if sigName=='X53': 
 	sigProcList = [sigName+'LHM'+str(mass) for mass in [1100,1200,1400,1700]]
 	sigProcList+= [sigName+'RHM'+str(mass) for mass in range(900,1700+1,100)]
-ttProcList = ['ttnobb','ttbb'] # ['ttjj','ttcc','ttbb','ttbj']
+ttProcList = ['ttjj','ttcc','ttbb','tt1b','tt2b']#['ttnobb','ttbb'] # ['ttjj','ttcc','ttbb','ttbj']
 bkgProcList = ttProcList + ['top','ewk','qcd'] #put the most dominant process first
 removeSystFromYields = ['hdamp','ue','njet','njetsf'] #list of systematics to be removed from yield errors
 
@@ -67,7 +70,7 @@ minNbins=1 #min number of bins to be merged
 stat = 0.2 #statistical uncertainty requirement (enter >1.0 for no rebinning; i.g., "1.1")
 statThres = 0.05 #statistical uncertainty threshold on total background to assign BB nuisances -- enter 0.0 to assign BB for all bins
 #if len(sys.argv)>1: stat=float(sys.argv[1])
-singleBinCR = False
+singleBinCR = True
 symmetrizeTopPtShift = False
 scaleSignalsToXsec = False # !!!!!Make sure you know signal x-sec used in input files to this script. If this is True, it will scale signal histograms by x-sec in weights.py!!!!!
 zero = 1E-12
@@ -496,6 +499,31 @@ for rfile in rfiles:
 				pdfUpHist2.Write()
 				pdfDnHist2.Write()
 
+		if doSmoothing:
+                        binName = [k.GetName() for k in outputRfiles[iRfile].GetListOfKeys() if '_'+chn+'_' in k.GetName()][0].split('__')[0]
+                        procsOutput = list(set([k.GetName().split('__')[1] for k in outputRfiles[iRfile].GetListOfKeys() if '_'+chn+'_' in k.GetName()]))
+                        for proc in procsOutput:
+                                if proc==dataName: continue
+                                systsOutput = [k.GetName().split('__')[2][:-2] for k in outputRfiles[iRfile].GetListOfKeys() if '_'+chn+'_' in k.GetName() and upTag in k.GetName() and '__'+proc in k.GetName() and '_'+year not in k.GetName()]
+                                for syst in systsOutput:
+                                        if syst=='toppt' or syst=='ht': continue
+                                        hNm = outputRfiles[iRfile].Get(binName+'__'+proc)
+                                        hUp = outputRfiles[iRfile].Get(binName+'__'+proc+'__'+syst+upTag)
+                                        hDn = outputRfiles[iRfile].Get(binName+'__'+proc+'__'+syst+downTag)
+                                        hsUp,hsDn = smoothShape(hNm,hUp,hDn,smoothingAlgo,symmetrizeSmoothing)
+                                        hsUp.Write()
+                                        hsDn.Write()
+                                        yieldsAll[hsUp.GetName().replace('_sig','_'+rfile.split('_')[-2])] = hsUp.Integral()
+                                        yieldsAll[hsDn.GetName().replace('_sig','_'+rfile.split('_')[-2])] = hsDn.Integral()
+                                        #Add additional shift histograms to be able to uncorrelate them across years
+                                        newEnameUp = hsUp.GetName().replace(upTag,'_'+year+upTag).replace(downTag,'_'+year+downTag)
+                                        newEnameDn = hsDn.GetName().replace(upTag,'_'+year+upTag).replace(downTag,'_'+year+downTag)
+                                        hsEUp = hsUp.Clone(newEnameUp)
+                                        hsEDn = hsDn.Clone(newEnameDn)
+                                        hsEUp.Write()
+                                        hsEDn.Write()
+
+
 	tfiles[iRfile].Close()
 	outputRfiles[iRfile].Close()
 	iRfile+=1
@@ -551,6 +579,9 @@ for sig in sigProcList:
 print "List of systematics for "+bkgProcList[0]+" process and "+channels[0]+" channel:"
 print "        ",sorted([hist[hist.find(bkgProcList[0]+'__')+len(bkgProcList[0])+2:hist.find(upTag)] for hist in yieldsAll.keys() if channels[0] in hist and '__'+bkgProcList[0]+'__' in hist and upTag in hist])# and 'muRF' not in hist
 print "        following will be removed from yield errors:",sorted(removeSystFromYields)
+if doSmoothing: sorted([hist[hist.find(bkgProcList[0]+'__')+len(bkgProcList[0])+2:hist.find(upTag)] for hist in yieldsAll.keys() if channels[0] in hist and '__'+bkgProcList[0]+'__' in hist and upTag in hist and smoothingAlgo not in hist])
+else: print
+
 
 def getShapeSystUnc(proc,chn):
 	if not addShapes: return 0
@@ -560,7 +591,7 @@ def getShapeSystUnc(proc,chn):
 	histoPrefix = allhists[chn][0][:allhists[chn][0].find('__')+2]
 	nomHist = histoPrefix+proc
 	for syst in systematicList:
-		if syst in removeSystFromYields: continue
+		if syst in removeSystFromYields or (doSmoothing and smoothingAlgo not in syst): continue
 		for ud in [upTag,downTag]:
 			shpHist = histoPrefix+proc+'__'+syst+ud
 			shift = yieldsAll[shpHist]/(yieldsAll[nomHist]+zero)-1
