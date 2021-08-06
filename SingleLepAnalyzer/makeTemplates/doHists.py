@@ -20,7 +20,7 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_added_sys/nominal/'
+step1Dir = 'root://cmseos.fnal.gov//store/user/lpcbril/FWLJMET106X_1lep2017_UL_step2_b0_XGBs_added_sys_new/nominal/'
 
 """
 Note: 
@@ -38,8 +38,8 @@ bkgList = [
                   'QCDht500',
                   'QCDht700','QCDht1000','QCDht1500','QCDht2000',
 		  'Tt','Tbt','Ts','TtW','TbtW',
-                  'WJetsMG',
-		  #'WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800',
+                  #'WJetsMG',
+		  'WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200',
 		  #'WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5',
 		  #'WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5', 'WJetsMG2500_6',
 
@@ -76,7 +76,7 @@ isCategorized = False
 BDTSR_Merged = False
 if len(sys.argv)>4: isCategorized=int(sys.argv[4])
 doJetRwt= 0
-doAllSys= True
+doAllSys= True 
 cutList = {'metCut':30,'jet1PtCut':40,'jet2PtCut':40}
 
 cutString  = 'MET'+str(int(cutList['metCut']))
@@ -116,52 +116,6 @@ def readTree(file):
 	tFile = TFile.Open(file,'READ')
 	tTree = tFile.Get('ljmet')
 	return tFile, tTree 
-
-print "READING TREES"
-shapesFiles = ['jec','jer']
-tTreeData = {}
-tFileData = {}
-for data in dataList:
-	print "READING:", data
-	tFileData[data],tTreeData[data]=readTree(step1Dir+'/'+samples[data]+'_hadd.root')
-
-tTreeSig = {}
-tFileSig = {}
-for sig in sigList:
-	for decay in decays:
-		print "READING:", sig+decay
-		print "        nominal"
-		tFileSig[sig+decay],tTreeSig[sig+decay]=readTree(step1Dir+'/'+samples[sig+decay]+'_hadd.root')
-		if doAllSys:
-			for syst in shapesFiles:
-				for ud in ['Up','Down']:
-					print "        "+syst+ud
-					tFileSig[sig+decay+syst+ud],tTreeSig[sig+decay+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[sig+decay]+'_hadd.root')
-
-tTreeBkg = {}
-tFileBkg = {}
-for bkg in bkgList:
-	print "READING:",bkg
-	print "        nominal"
-        if 'TTTo' in bkg and len(ttFlvs)!=0:
-            for flv in ttFlvs:
-                tFileBkg[bkg+flv],tTreeBkg[bkg+flv] = readTree(step1Dir+'/'+samples[bkg]+flv+'_hadd.root')
-        else: 
-	    tFileBkg[bkg],tTreeBkg[bkg]=readTree(step1Dir+'/'+samples[bkg]+'_hadd.root')
-	if doAllSys:
-		if 'TTTo' in bkg and len(ttFlvs)!=0:
-			for flv in ttFlvs:
-				for syst in shapesFiles:
-					for ud in ['Up','Down']:
-						print "        "+bkg+flv+syst+ud
-						tFileBkg[bkg+flv+syst+ud],tTreeBkg[bkg+flv+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+flv+'_hadd.root')
-		else:
-			for syst in shapesFiles:
-				for ud in ['Up','Down']:
-					print "        "+bkg+syst+ud
-					tFileBkg[bkg+syst+ud],tTreeBkg[bkg+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+'_hadd.root')
-
-print "FINISHED READING"
 
 bigbins = [0,50,100,150,200,250,300,350,400,450,500,600,700,800,1000,1200,1500]
 
@@ -206,16 +160,16 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
         'HT_bjets':('HT_bjets',linspace(0, 1800, 101).tolist(),';HT(bjets) [GeV]'),
         'ratio_HTdHT4leadjets':('ratio_HTdHT4leadjets',linspace(0, 2.6, 51).tolist(),';HT/HT(4 leading jets)'),
        
-        'csvJet1':('csvJet1', linspace(-2.2, 1.2, 101).tolist(),';DeepCSV(1stPtJet)'),
-        'csvJet2':('csvJet2', linspace(-2.2, 1.2, 101).tolist(),';DeepCSV(2ndPtJet)'),
-        'csvJet3':('csvJet3', linspace(-2.2, 1.2, 101).tolist(),';DeepCSV(3rdPtJet)'),
-        'csvJet4':('csvJet4', linspace(-2.2, 1.2, 101).tolist(),';DeepCSV(4thPtJet)'),
+        'csvJet1':('csvJet1', linspace(-2.2, 1.2, 101).tolist(),';DeepJet(1stPtJet)'),
+        'csvJet2':('csvJet2', linspace(-2.2, 1.2, 101).tolist(),';DeepJet(2ndPtJet)'),
+        'csvJet3':('csvJet3', linspace(-2.2, 1.2, 101).tolist(),';DeepJet(3rdPtJet)'),
+        'csvJet4':('csvJet4', linspace(-2.2, 1.2, 101).tolist(),';DeepJet(4thPtJet)'),
         
         #Changed below here
-        'firstcsvb_bb':('firstcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepCSV(1stDeepCSVJet)'),
-        'secondcsvb_bb':('secondcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepCSV(2ndDeepCSVJet)'),
-        'thirdcsvb_bb':('thirdcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepCSV(3rdDeepCSVJet)'),
-        'fourthcsvb_bb':('fourthcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepCSV(4thDeepCSVJet)'),
+        'firstcsvb_bb':('firstcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepJet(1stDeepJet Jet)'),
+        'secondcsvb_bb':('secondcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepJet(2ndDeepJet Jet)'),
+        'thirdcsvb_bb':('thirdcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepJet(3rdDeepJet Jet)'),
+        'fourthcsvb_bb':('fourthcsvb_bb',linspace(-2, 1.5, 51).tolist(),';DeepJet(4thDeepJet Jet)'),
         'HT_2m':('HT_2m', linspace(-20, 5000, 201).tolist(),';HTwoTwoPtBjets [GeV]'),
         'Sphericity':('Sphericity',linspace(0, 1.0, 51).tolist(), ';Sphericity'),
         'Aplanarity':('Aplanarity',linspace(0, 0.5, 51).tolist(), ';Aplanarity'),
@@ -265,118 +219,95 @@ plotList = {#discriminantName:(discriminantLJMETName, binning, xAxisLabel)
 	'HT':('AK4HT',linspace(0, 5000, 101).tolist(),';H_{T} [GeV]'),
         'BestTop_Disc':('BestTop_Discriminator', linspace(0, 1, 20).tolist(),';Best Top Score'),
         'BestTop_Pt': ('BestTop_Pt', linspace(0, 800, 80).tolist(),';Best Top p_{T} [GeV]'),
-        'NoTop_Jet1_CSV': ('NoTop_Jet1_CSV', linspace(-2.2, 1, 30).tolist(),'; No-Top 1stDeepCSVJet, CSV'),
-        'NoTop_Jet1_Pt': ('NoTop_Jet1_Pt', linspace(0, 1000, 100).tolist(),'; No-Top 1stDeepCSVJet, p_{T} [GeV]'),
+        'NoTop_Jet1_CSV': ('NoTop_Jet1_CSV', linspace(-1.0, 1, 30).tolist(),'; No-Top 1stDeepJet Jet, DeepJet'),
+        'NoTop_Jet1_Pt': ('NoTop_Jet1_Pt', linspace(40, 1000, 100).tolist(),'; No-Top 1stDeepJet Jet, p_{T} [GeV]'),
         
-        'NoTop_Jet2_CSV': ('NoTop_Jet2_CSV', linspace(-2.2, 1, 30).tolist(),'; No-Top 2ndDeepCSVJet, CSV'),
-        'NoTop_Jet2_Pt': ('NoTop_Jet2_Pt', linspace(0, 1000, 100).tolist(),'; No-Top 2ndDeepCSVJet, p_{T} [GeV]'),
-
-        'XGB200' : ( 'XGB200', linspace(0, 1, 80).tolist(), '; XGB (200 GeV)'),
-        'XGB220' : ( 'XGB220', linspace(0, 1, 80).tolist(), '; XGB (220 GeV)'),
-        'XGB250' : ( 'XGB250', linspace(0, 1, 80).tolist(), '; XGB (250 GeV)'),
-        'XGB300' : ( 'XGB300', linspace(0, 1, 80).tolist(), '; XGB (300 GeV)'),
-        'XGB350' : ( 'XGB350', linspace(0, 1, 80).tolist(), '; XGB (350 GeV)'),
-        'XGB400' : ( 'XGB400', linspace(0, 1, 80).tolist(), '; XGB (400 GeV)'),
-        'XGB500' : ( 'XGB500', linspace(0, 1, 80).tolist(), '; XGB (500 GeV)'),
-        'XGB600' : ( 'XGB600', linspace(0, 1, 80).tolist(), '; XGB (600 GeV)'),
-        'XGB700' : ( 'XGB700', linspace(0, 1, 80).tolist(), '; XGB (700 GeV)'),
-        'XGB800' : ( 'XGB800', linspace(0, 1, 80).tolist(), '; XGB (800 GeV)'),
-        'XGB1000': ( 'XGB1000', linspace(0, 1, 80).tolist(), ';XGB (1000 GeV)'),
-        'XGB1250': ( 'XGB1250', linspace(0, 1, 80).tolist(), ';XGB (1250 GeV)'),
-        'XGB1500': ( 'XGB1500', linspace(0, 1, 80).tolist(), ';XGB (1500 GeV)'),
-        'XGB1750': ( 'XGB1750', linspace(0, 1, 80).tolist(), ';XGB (1750 GeV)'),
-        'XGB2000': ( 'XGB2000', linspace(0, 1, 80).tolist(), ';XGB (2000 GeV)'),
-        'XGB2500': ( 'XGB2500', linspace(0, 1, 80).tolist(), ';XGB (2500 GeV)'),
-        'XGB3000': ( 'XGB3000', linspace(0, 1, 80).tolist(), ';XGB (3000 GeV)'),
-
+        'NoTop_Jet2_CSV': ('NoTop_Jet2_CSV', linspace(-1.0, 1, 30).tolist(),'; No-Top 2ndDeepJet Jet, DeepJet'),
+        'NoTop_Jet2_Pt': ('NoTop_Jet2_Pt', linspace(40, 1000, 100).tolist(),'; No-Top 2ndDeepJet Jet, p_{T} [GeV]'),
+   
+        'recLeptonicTopJetCSV': ('recLeptonicTopJetCSV', linspace(-1.0, 1, 30).tolist(),';t_{lep} Jet DeepJet'),
+        'recLeptonicTopJetPt': ('recLeptonicTopJetPt', linspace(40, 1000, 100).tolist(),';t_{lep} Jet p_{T}[GeV]'),
         
-        'XGB200_SR1' : ( 'XGB200_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (200 GeV)'),
-        'XGB220_SR1' : ( 'XGB220_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (220 GeV)'),
-        'XGB250_SR1' : ( 'XGB250_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (250 GeV)'),
-        'XGB300_SR1' : ( 'XGB300_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (300 GeV)'),
-        'XGB350_SR1' : ( 'XGB350_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (350 GeV)'),
-        'XGB400_SR1' : ( 'XGB400_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (400 GeV)'),
-        'XGB500_SR1' : ( 'XGB500_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (500 GeV)'),
-        'XGB600_SR1' : ( 'XGB600_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (600 GeV)'),
-        'XGB700_SR1' : ( 'XGB700_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (700 GeV)'),
-        'XGB800_SR1' : ( 'XGB800_SR1', linspace(0, 1, 80).tolist(), '; XGB SR1 (800 GeV)'),
-        'XGB1000_SR1': ( 'XGB1000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1000 GeV)'),
-        'XGB1250_SR1': ( 'XGB1250_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1250 GeV)'),
-        'XGB1500_SR1': ( 'XGB1500_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1500 GeV)'),
-        'XGB1750_SR1': ( 'XGB1750_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (1750 GeV)'),
-        'XGB2000_SR1': ( 'XGB2000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (2000 GeV)'),
-        'XGB2500_SR1': ( 'XGB2500_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (2500 GeV)'),
-        'XGB3000_SR1': ( 'XGB3000_SR1', linspace(0, 1, 80).tolist(), ';XGB SR1 (3000 GeV)'),
+        'LeptonicTB1_M': ('LeptonicTB1_M', linspace(40, 2000, 100).tolist(),';M(t_{lep}, b_{1}^{non-top})[GeV]'),
+        'LeptonicTB2_M': ('LeptonicTB2_M', linspace(40, 2000, 100).tolist(),';M(t_{lep}, b_{2}^{non-top})[GeV]'),
 
-        'XGB200_SR2' : ( 'XGB200_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (200 GeV)'),
-        'XGB220_SR2' : ( 'XGB220_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (220 GeV)'),
-        'XGB250_SR2' : ( 'XGB250_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (250 GeV)'),
-        'XGB300_SR2' : ( 'XGB300_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (300 GeV)'),
-        'XGB350_SR2' : ( 'XGB350_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (350 GeV)'),
-        'XGB400_SR2' : ( 'XGB400_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (400 GeV)'),
-        'XGB500_SR2' : ( 'XGB500_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (500 GeV)'),
-        'XGB600_SR2' : ( 'XGB600_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (600 GeV)'),
-        'XGB700_SR2' : ( 'XGB700_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (700 GeV)'),
-        'XGB800_SR2' : ( 'XGB800_SR2', linspace(0, 1, 80).tolist(), '; XGB SR2 (800 GeV)'),
-        'XGB1000_SR2': ( 'XGB1000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1000 GeV)'),
-        'XGB1250_SR2': ( 'XGB1250_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1250 GeV)'),
-        'XGB1500_SR2': ( 'XGB1500_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1500 GeV)'),
-        'XGB1750_SR2': ( 'XGB1750_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (1750 GeV)'),
-        'XGB2000_SR2': ( 'XGB2000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (2000 GeV)'),
-        'XGB2500_SR2': ( 'XGB2500_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (2500 GeV)'),
-        'XGB3000_SR2': ( 'XGB3000_SR2', linspace(0, 1, 80).tolist(), ';XGB SR2 (3000 GeV)'),
+        'HadronicTB1_M': ('HadronicTB1_M', linspace(40, 2000, 100).tolist(),';M(t_{had}, b_{1}^{non-top})[GeV]'),
+        'HadronicTB2_M': ('HadronicTB2_M', linspace(40, 2000, 100).tolist(),';M(t_{had}, b_{2}^{non-top})[GeV]'),
 
-        'XGB200_SR3' : ( 'XGB200_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (200 GeV)'),
-        'XGB220_SR3' : ( 'XGB220_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (220 GeV)'),
-        'XGB250_SR3' : ( 'XGB250_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (250 GeV)'),
-        'XGB300_SR3' : ( 'XGB300_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (300 GeV)'),
-        'XGB350_SR3' : ( 'XGB350_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (350 GeV)'),
-        'XGB400_SR3' : ( 'XGB400_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (400 GeV)'),
-        'XGB500_SR3' : ( 'XGB500_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (500 GeV)'),
-        'XGB600_SR3' : ( 'XGB600_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (600 GeV)'),
-        'XGB700_SR3' : ( 'XGB700_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (700 GeV)'),
-        'XGB800_SR3' : ( 'XGB800_SR3', linspace(0, 1, 80).tolist(), '; XGB SR3 (800 GeV)'),
-        'XGB1000_SR3': ( 'XGB1000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1000 GeV)'),
-        'XGB1250_SR3': ( 'XGB1250_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1250 GeV)'),
-        'XGB1500_SR3': ( 'XGB1500_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1500 GeV)'),
-        'XGB1750_SR3': ( 'XGB1750_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (1750 GeV)'),
-        'XGB2000_SR3': ( 'XGB2000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (2000 GeV)'),
-        'XGB2500_SR3': ( 'XGB2500_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (2500 GeV)'),
-        'XGB3000_SR3': ( 'XGB3000_SR3', linspace(0, 1, 80).tolist(), ';XGB SR3 (3000 GeV)'),
-
-
-        #'XGB300_RS': ('XGB300_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (300 GeV)'),
-
-        #'XGB300_3b6j': ('XGB300_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (300 GeV)'), 
-        ##'XGB300_3b6j_RS': ('XGB300_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (300 GeV)'),
-   
-        #'XGB500': ('XGB500', linspace(0, 1, 80).tolist(), '; XGB (500 GeV)'),
-        ##'XGB500_RS': ('XGB500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (500 GeV)'),
-
-        #'XGB500_3b6j': ('XGB500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (500 GeV)'),
-        ##'XGB500_3b6j_RS': ('XGB500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (500 GeV)'),
-   
-        #'XGB800': ('XGB800', linspace(0, 1, 80).tolist(), '; XGB (800 GeV)'),
-        ##'XGB800_RS': ('XGB800_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (800 GeV)'),
-
-        #'XGB800_3b6j': ('XGB800_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (800 GeV)'),
-        ##'XGB800_3b6j_RS': ('XGB800_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (800 GeV)'),
-   
-        #'XGB1000': ('XGB1000', linspace(0, 1, 80).tolist(), '; XGB (1000 GeV)'),
-        ##'XGB1000_RS': ('XGB1000_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1000 GeV)'),
-
-        #'XGB1000_3b6j': ('XGB1000_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1000 GeV)'),
-        ##'XGB1000_3b6j_RS': ('XGB1000_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1000 GeV)'),
-   
-       
-        #'XGB1500': ('XGB1500', linspace(0, 1, 80).tolist(), '; XGB (1500 GeV)'),
-        ##'XGB1500_RS': ('XGB1500_RS', linspace(0, 1, 80).tolist(), '; XGB Reshaped (1500 GeV)'),
-
-        #'XGB1500_3b6j': ('XGB1500_3b6j', linspace(0, 1, 80).tolist(), '; XGB 3b6j  (1500 GeV)'),
-        ##'XGB1500_3b6j_RS': ('XGB1500_3b6j_RS', linspace(0, 1, 80).tolist(), '; XGB 3b6j Reshaped (1500 GeV)'),
-   
+        'XGB200' : ( 'XGB200', linspace(0, 1, 40).tolist(), '; XGB (200 GeV)'),
+        'XGB220' : ( 'XGB220', linspace(0, 1, 40).tolist(), '; XGB (220 GeV)'),
+        'XGB250' : ( 'XGB250', linspace(0, 1, 40).tolist(), '; XGB (250 GeV)'),
+        'XGB300' : ( 'XGB300', linspace(0, 1, 40).tolist(), '; XGB (300 GeV)'),
+        'XGB350' : ( 'XGB350', linspace(0, 1, 40).tolist(), '; XGB (350 GeV)'),
+        'XGB400' : ( 'XGB400', linspace(0, 1, 40).tolist(), '; XGB (400 GeV)'),
+        'XGB500' : ( 'XGB500', linspace(0, 1, 40).tolist(), '; XGB (500 GeV)'),
+        'XGB600' : ( 'XGB600', linspace(0, 1, 40).tolist(), '; XGB (600 GeV)'),
+        'XGB700' : ( 'XGB700', linspace(0, 1, 40).tolist(), '; XGB (700 GeV)'),
+        'XGB800' : ( 'XGB800', linspace(0, 1, 40).tolist(), '; XGB (800 GeV)'),
+        'XGB1000': ( 'XGB1000', linspace(0, 1, 40).tolist(), ';XGB (1000 GeV)'),
+        'XGB1250': ( 'XGB1250', linspace(0, 1, 40).tolist(), ';XGB (1250 GeV)'),
+        'XGB1500': ( 'XGB1500', linspace(0, 1, 40).tolist(), ';XGB (1500 GeV)'),
+        'XGB1750': ( 'XGB1750', linspace(0, 1, 40).tolist(), ';XGB (1750 GeV)'),
+        'XGB2000': ( 'XGB2000', linspace(0, 1, 40).tolist(), ';XGB (2000 GeV)'),
+        'XGB2500': ( 'XGB2500', linspace(0, 1, 40).tolist(), ';XGB (2500 GeV)'),
+        'XGB3000': ( 'XGB3000', linspace(0, 1, 40).tolist(), ';XGB (3000 GeV)'),
 
         
+        'XGB200_SR1' : ( 'XGB200_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (200 GeV)'),
+        'XGB220_SR1' : ( 'XGB220_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (220 GeV)'),
+        'XGB250_SR1' : ( 'XGB250_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (250 GeV)'),
+        'XGB300_SR1' : ( 'XGB300_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (300 GeV)'),
+        'XGB350_SR1' : ( 'XGB350_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (350 GeV)'),
+        'XGB400_SR1' : ( 'XGB400_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (400 GeV)'),
+        'XGB500_SR1' : ( 'XGB500_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (500 GeV)'),
+        'XGB600_SR1' : ( 'XGB600_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (600 GeV)'),
+        'XGB700_SR1' : ( 'XGB700_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (700 GeV)'),
+        'XGB800_SR1' : ( 'XGB800_SR1', linspace(0, 1, 40).tolist(), '; XGB SR1 (800 GeV)'),
+        'XGB1000_SR1': ( 'XGB1000_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (1000 GeV)'),
+        'XGB1250_SR1': ( 'XGB1250_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (1250 GeV)'),
+        'XGB1500_SR1': ( 'XGB1500_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (1500 GeV)'),
+        'XGB1750_SR1': ( 'XGB1750_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (1750 GeV)'),
+        'XGB2000_SR1': ( 'XGB2000_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (2000 GeV)'),
+        'XGB2500_SR1': ( 'XGB2500_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (2500 GeV)'),
+        'XGB3000_SR1': ( 'XGB3000_SR1', linspace(0, 1, 40).tolist(), ';XGB SR1 (3000 GeV)'),
+
+        'XGB200_SR2' : ( 'XGB200_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (200 GeV)'),
+        'XGB220_SR2' : ( 'XGB220_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (220 GeV)'),
+        'XGB250_SR2' : ( 'XGB250_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (250 GeV)'),
+        'XGB300_SR2' : ( 'XGB300_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (300 GeV)'),
+        'XGB350_SR2' : ( 'XGB350_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (350 GeV)'),
+        'XGB400_SR2' : ( 'XGB400_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (400 GeV)'),
+        'XGB500_SR2' : ( 'XGB500_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (500 GeV)'),
+        'XGB600_SR2' : ( 'XGB600_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (600 GeV)'),
+        'XGB700_SR2' : ( 'XGB700_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (700 GeV)'),
+        'XGB800_SR2' : ( 'XGB800_SR2', linspace(0, 1, 40).tolist(), '; XGB SR2 (800 GeV)'),
+        'XGB1000_SR2': ( 'XGB1000_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (1000 GeV)'),
+        'XGB1250_SR2': ( 'XGB1250_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (1250 GeV)'),
+        'XGB1500_SR2': ( 'XGB1500_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (1500 GeV)'),
+        'XGB1750_SR2': ( 'XGB1750_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (1750 GeV)'),
+        'XGB2000_SR2': ( 'XGB2000_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (2000 GeV)'),
+        'XGB2500_SR2': ( 'XGB2500_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (2500 GeV)'),
+        'XGB3000_SR2': ( 'XGB3000_SR2', linspace(0, 1, 40).tolist(), ';XGB SR2 (3000 GeV)'),
+
+        'XGB200_SR3' : ( 'XGB200_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (200 GeV)'),
+        'XGB220_SR3' : ( 'XGB220_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (220 GeV)'),
+        'XGB250_SR3' : ( 'XGB250_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (250 GeV)'),
+        'XGB300_SR3' : ( 'XGB300_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (300 GeV)'),
+        'XGB350_SR3' : ( 'XGB350_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (350 GeV)'),
+        'XGB400_SR3' : ( 'XGB400_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (400 GeV)'),
+        'XGB500_SR3' : ( 'XGB500_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (500 GeV)'),
+        'XGB600_SR3' : ( 'XGB600_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (600 GeV)'),
+        'XGB700_SR3' : ( 'XGB700_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (700 GeV)'),
+        'XGB800_SR3' : ( 'XGB800_SR3', linspace(0, 1, 40).tolist(), '; XGB SR3 (800 GeV)'),
+        'XGB1000_SR3': ( 'XGB1000_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (1000 GeV)'),
+        'XGB1250_SR3': ( 'XGB1250_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (1250 GeV)'),
+        'XGB1500_SR3': ( 'XGB1500_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (1500 GeV)'),
+        'XGB1750_SR3': ( 'XGB1750_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (1750 GeV)'),
+        'XGB2000_SR3': ( 'XGB2000_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (2000 GeV)'),
+        'XGB2500_SR3': ( 'XGB2500_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (2500 GeV)'),
+        'XGB3000_SR3': ( 'XGB3000_SR3', linspace(0, 1, 40).tolist(), ';XGB SR3 (3000 GeV)'),
+
+
         
         'HTpt40':('HT_pt40', linspace(0, 5000, 101).tolist(),';H_{T} (pt>40) [GeV]'),
 	'HTpBDT':('AK4HT',linspace(0, 5000, 126).tolist(),';H_{T} [GeV]','BDT'+sigTrained,linspace(-1, 1, 126).tolist(),';BDT'),
@@ -397,99 +328,152 @@ runBkgs = True
 runSigs = True#False
 nCats  = len(catList)
 
-print "Keys: ", tTreeBkg.keys()
 
 catInd = 1
-for cat in catList:
- 	if not runData: break
- 	if skip(cat[4],cat[3]) and isCategorized: continue #DO YOU WANT TO HAVE THIS??
- 	catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
- 	datahists = {}
- 	if len(sys.argv)>1: outDir=sys.argv[1]
- 	else: 
-		outDir = os.getcwd()
-		outDir+='/'+pfix
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+cutString
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+catDir
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
- 	category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
- 	for data in dataList:
-		print "*****"*20
-		print "*****"*20
- 		print "[data] : ", category,region,isCategorized
- 		datahists.update(analyze(tTreeData,data,data,cutList,False,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
- 		if catInd==nCats: del tFileData[data]
- 	pickle.dump(datahists,open(outDir+'/datahists_'+iPlot+'.p','wb'))
- 	catInd+=1
 
-catInd = 1
-for cat in catList:
- 	if not runBkgs: break
- 	if skip(cat[4],cat[3]) and isCategorized: continue #DO YOU WANT TO HAVE THIS??
- 	catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
- 	bkghists  = {}
- 	if len(sys.argv)>1: outDir=sys.argv[1]
- 	else: 
-		outDir = os.getcwd()
-		outDir+='/'+pfix
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+cutString
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+catDir
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
- 	category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
-        print "Keys: ", tTreeBkg.keys()
- 	for bkg in bkgList: 
-		print "*****"*20
-		print "*****"*20
- 		print "[bkg] : ", category,region,isCategorized
- 		if 'TTTo' in bkg and len(ttFlvs)!=0:
- 			for flv in ttFlvs: 
-				bkghists.update(analyze(tTreeBkg,bkg+flv,bkg+flv,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
- 	    			if catInd==nCats: del tFileBkg[bkg+flv]
- 	    			if doAllSys and catInd==nCats:
- 	    				for syst in shapesFiles:
- 	    					for ud in ['Up','Down']: del tFileBkg[bkg+flv+syst+ud]
-		else:
- 			bkghists.update(analyze(tTreeBkg,bkg,bkg,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
- 	    		if catInd==nCats: del tFileBkg[bkg]
- 	    		if doAllSys and catInd==nCats:
- 	    			for syst in shapesFiles:
- 	    				for ud in ['Up','Down']: del tFileBkg[bkg+syst+ud]
-	pickle.dump(bkghists,open(outDir+'/bkghists_'+iPlot+'.p','wb'))
- 	catInd+=1
+print "READING TREES"
+shapesFiles = ['jec','jer']
+tTreeData = {}
+tFileData = {}
 
-catInd = 1
 for cat in catList:
- 	if not runSigs: break
- 	if skip(cat[4],cat[3]) and isCategorized: continue #DO YOU WANT TO HAVE THIS??
- 	catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
- 	sighists  = {}
- 	if len(sys.argv)>1: outDir=sys.argv[1]
- 	else: 
-		outDir = os.getcwd()
-		outDir+='/'+pfix
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+cutString
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
-		outDir+='/'+catDir
-		if not os.path.exists(outDir): os.system('mkdir '+outDir)
- 	category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
- 	for sig in sigList: 
- 		for decay in decays: 
-			print "*****"*20
-			print "*****"*20
- 			print "[Sig] : ", category,region,isCategorized
- 			sighists.update(analyze(tTreeSig,sig+decay,sig+decay,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
- 			if catInd==nCats: del tFileSig[sig+decay]
- 			if doAllSys and catInd==nCats:
- 				for syst in shapesFiles:
- 					for ud in ['Up','Down']: del tFileSig[sig+decay+syst+ud]
-	print "sigHist dictionary : ",sighists
-	pickle.dump(sighists,open(outDir+'/sighists_'+iPlot+'.p','wb'))
- 	catInd+=1
+	if not runData: break
+        catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
+        datahists = {}
+        if len(sys.argv)>1: outDir=sys.argv[1]
+        else:
+                outDir = os.getcwd()
+                outDir+='/'+pfix
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+cutString
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+catDir
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+        category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
+
+	for data in dataList:
+		print "READING:", data
+		tFileData[data],tTreeData[data]=readTree(step1Dir+'/'+samples[data]+'_hadd.root')
+		datahists.update(analyze(tTreeData,data,data,cutList,False,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
+                if catInd==nCats:
+                        del tFileData[data]
+                        del tTreeData[data]
+        pickle.dump(datahists,open(outDir+'/datahists_'+iPlot+'.p','wb'))
+        catInd+=1
+
+
+tTreeSig = {}
+tFileSig = {}
+catInd=1
+
+
+for cat in catList:
+        if not runSigs: break
+        catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
+        sighists  = {}
+        if len(sys.argv)>1: outDir=sys.argv[1]
+        else:
+                outDir = os.getcwd()
+                outDir+='/'+pfix
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+cutString
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+catDir
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+        category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
+
+	for sig in sigList:
+                #if isCategorized and ("XGB" in iPlot):
+                #            sigmass = sig.lstrip("Hptb")
+                #            XGBmass = iPlot.split("_")[0].lstrip("XGB")
+                #            if (int(sigmass)!=int(XGBmass)): continue
+
+		for decay in decays:
+			print "READING:", sig+decay
+			print "        nominal"
+			tFileSig[sig+decay],tTreeSig[sig+decay]=readTree(step1Dir+'/'+samples[sig+decay]+'_hadd.root')
+			if doAllSys:
+				for syst in shapesFiles:
+					for ud in ['Up','Down']:
+						print "        "+syst+ud
+						tFileSig[sig+decay+syst+ud],tTreeSig[sig+decay+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[sig+decay]+'_hadd.root')
+			sighists.update(analyze(tTreeSig,sig+decay,sig+decay,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
+                        if catInd==nCats:
+                                del tFileSig[sig+decay]
+                                del tTreeSig[sig+decay]
+                        if doAllSys and catInd==nCats:
+                                for syst in shapesFiles:
+                                        for ud in ['Up','Down']:
+                                                del tFileSig[sig+decay+syst+ud]
+                                                del tTreeSig[sig+decay+syst+ud]
+        pickle.dump(sighists,open(outDir+'/sighists_'+iPlot+'.p','wb'))
+        catInd+=1
+
+
+tTreeBkg = {}
+tFileBkg = {}
+catInd=1
+
+
+for cat in catList:
+        if not runBkgs: break
+        catDir = cat[0]+'_nT'+cat[1]+'_nW'+cat[2]+'_nB'+cat[3]+'_nJ'+cat[4]
+        bkghists  = {}
+        if len(sys.argv)>1: outDir=sys.argv[1]
+        else:
+                outDir = os.getcwd()
+                outDir+='/'+pfix
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+cutString
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+                outDir+='/'+catDir
+                if not os.path.exists(outDir): os.system('mkdir '+outDir)
+        category = {'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4]}
+
+	for bkg in bkgList:
+		print "READING:",bkg
+		print "        nominal"
+	        if 'TTTo' in bkg and len(ttFlvs)!=0:
+	            for flv in ttFlvs:
+	                tFileBkg[bkg+flv],tTreeBkg[bkg+flv] = readTree(step1Dir+'/'+samples[bkg]+flv+'_hadd.root')
+	        else: 
+		    tFileBkg[bkg],tTreeBkg[bkg]=readTree(step1Dir+'/'+samples[bkg]+'_hadd.root')
+		if doAllSys:
+			if 'TTTo' in bkg and len(ttFlvs)!=0:
+				for flv in ttFlvs:
+					for syst in shapesFiles:
+						for ud in ['Up','Down']:
+							print "        "+bkg+flv+syst+ud
+							tFileBkg[bkg+flv+syst+ud],tTreeBkg[bkg+flv+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+flv+'_hadd.root')
+			else:
+				for syst in shapesFiles:
+					for ud in ['Up','Down']:
+						print "        "+bkg+syst+ud
+						tFileBkg[bkg+syst+ud],tTreeBkg[bkg+syst+ud]=readTree(step1Dir.replace('nominal',syst.upper()+ud.lower())+'/'+samples[bkg]+'_hadd.root')
+
+                if 'TTTo' in bkg and len(ttFlvs)!=0:
+                        for flv in ttFlvs:
+                                bkghists.update(analyze(tTreeBkg,bkg+flv,bkg+flv,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
+                                if catInd==nCats: del tFileBkg[bkg+flv]
+                                if doAllSys and catInd==nCats:
+                                        for syst in shapesFiles:
+                                                for ud in ['Up','Down']:
+                                                        del tFileBkg[bkg+flv+syst+ud]
+                                                        del tTreeBkg[bkg+flv+syst+ud]
+                else:
+                        bkghists.update(analyze(tTreeBkg,bkg,bkg,cutList,doAllSys,doJetRwt,iPlot,plotList[iPlot],category,region,isCategorized))
+                        if catInd==nCats: del tFileBkg[bkg]
+                        if doAllSys and catInd==nCats:
+                                for syst in shapesFiles:
+                                        for ud in ['Up','Down']:
+                                                del tFileBkg[bkg+syst+ud]
+                                                del tTreeBkg[bkg+syst+ud]
+        pickle.dump(bkghists,open(outDir+'/bkghists_'+iPlot+'.p','wb'))
+        catInd+=1
+
+
 
 print("--- %s minutes ---" % (round((time.time() - start_time)/60,2)))
+
+
 
