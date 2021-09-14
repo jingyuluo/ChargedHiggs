@@ -3461,36 +3461,40 @@ double HardcodedConditions::GetMuonIdSF2016(double pt, double eta)
 
 double HardcodedConditions::GetMuonIdSF2017(double pt, double eta)
 {
-	// Cut based tight id
-	// Scale Factor 3: https://twiki.cern.ch/twiki/pub/CMS/MuonReferenceEffs2017/RunBCDEF_SF_ID.json
+	// Cut based UL17 tight id
+	// https://gitlab.cern.ch/cms-muonPOG/muonefficiencies/-/blob/master/Run2/UL/2017/2017_Z/Efficiencies_muon_generalTracks_Z_Run2017_UL_ID.json
 	if (fabs(eta) < 0.90) {
-	    if (pt < 25.0) return 0.9910777627756951;
-	    else if (pt < 30.0) return 0.987410468262084;
-	    else if (pt < 40.0) return 0.9907753279135898;
-	    else if (pt < 50.0) return 0.9892483588952047;
-	    else if (pt < 60.0) return 0.9855545160334763;
-	    else return 0.9898057377093389; }
+            if(pt<20) return 0.988973745094469;
+            else if(pt<25) return 0.9901639639283745;
+            else if(pt<30) return 0.9894505622634719;
+            else if(pt<40) return 0.9890587934386978;
+            else if(pt<50) return 0.988569587464391;
+            else if(pt<60) return 0.9881735800442727;
+            else return 0.9871638011006827;}
 	else if (fabs(eta) < 1.20) {
-	    if (pt < 25.0) return 0.9927389275515244;
-	    else if (pt < 30.0) return 0.985063939762512;
-	    else if (pt < 40.0) return 0.9865359464182247;
-	    else if (pt < 50.0) return 0.984913093101493;
-	    else if (pt < 60.0) return 0.9839056384760008;
-	    else return 0.984060403143468; }  
+            if(pt<20) return 0.9838660835619908;  
+            else if(pt<25) return 0.9820592893628324;
+            else if(pt<30) return 0.9816256211978136;
+            else if(pt<40) return 0.9826795261832795;
+            else if(pt<50) return 0.9832114785473719;
+            else if(pt<60) return 0.9824017821465342;
+            else return 0.9826989601771537;}
 	else if (fabs(eta) < 2.10) {
-	    if (pt < 25.0) return 0.9924252719877384;
-	    else if (pt < 30.0) return 0.9890884461284933;
-	    else if (pt < 40.0) return 0.9946469069883841;
-	    else if (pt < 50.0) return 0.9926528825155183;
-	    else if (pt < 60.0) return 0.9906364222943529;
-	    else return 0.9920464322143979; }
+            if(pt<20) return 0.9897274594905875;
+            else if(pt<25) return 0.9894166761673087;
+            else if(pt<30) return 0.9908099250187937;
+            else if(pt<40) return 0.9909172603300768;
+            else if(pt<50) return 0.9913614742306379;
+            else if(pt<60) return 0.9901265754533497;
+            else return 0.9893528963937902;}
 	else {
-	    if (pt < 25.0) return 0.9758095839531763;
-	    else if (pt < 30.0) return 0.9745153594179884;
-	    else if (pt < 40.0) return 0.9787410500158746;
-	    else if (pt < 50.0) return 0.978189122919501;
-	    else if (pt < 60.0) return 0.9673568416097894;
-	    else return 0.9766311856731202; }
+            if(pt<20) return 0.9729565235238601;
+            else if(pt<25) return 0.9740614475300607;
+            else if(pt<30) return 0.9760309076915114;
+            else if(pt<40) return 0.9753358818465124;
+            else if(pt<50) return 0.9752601512900863;
+            else if(pt<60) return 0.970358299873981;
+            else return 0.9677621936001002;}
 
 }
 
@@ -4777,6 +4781,143 @@ float HardcodedConditions::GetTtHfSF(bool isTT, bool isTTHF, bool isTTLF)
     if (isTTHF) return 4.7/3.9; 
     if (isTTLF) return 0.989;
   }
+  return 1.0;
+
+}
+
+
+
+
+float HardcodedConditions::GetCSVRenormSF(int year, int isE, int njet, std::string sampleType) {
+
+  if (sampleType == "")
+    return 1.0;
+
+  std::unordered_map<string, std::vector<float>> wgt2017_E = { // { type, { nj4, nj5, nj6p}}
+      {"tttt", {0.9226035838, 0.9340754278, 0.9178683544}},
+      {"ttjj", {0.9952321401, 0.9678148547, 0.916412004}},//{1.0150106608, 1.0158690852, 0.9984062267}}, 
+      {"ttcc", {0.9952321401, 0.9678148547, 0.916412004}}, 
+      {"ttbb", {0.9586652314, 0.9435930048, 0.8944224401}}, 
+      {"tt1b", {0.9952321401, 0.9678148547, 0.916412004}},
+      {"tt2b", {0.9952321401, 0.9678148547, 0.916412004}}, 
+      {"T",    {0.9933786006, 0.9646801108, 0.9143510121}},    
+      {"TTV",  {0.9933786006, 0.9646801108, 0.9143510121}},   
+      {"TTXY", {0.9649570916, 0.9760667136, 0.9668860438}},
+      {"WJets", {0.8826404583, 0.8583431706, 0.8123368769}},
+      {"ZJets", {0.8826404583, 0.8583431706, 0.8123368769}},   
+      {"VV",   {0.8826404583, 0.8583431706, 0.8123368769}}, 
+      {"qcd",  {0.9844800159, 0.8744057182, 0.7953136397}}  
+  }; 
+           
+  std::unordered_map<string, std::vector<float>> wgt2017_M = {
+      {"tttt", {0.9433598986, 0.9272944126, 0.9110504508}},
+      {"ttjj", {0.9962244676, 0.9667166631, 0.9186391487}},
+      {"ttcc", {0.9962244676, 0.9667166631, 0.9186391487}},    
+      {"ttbb", {0.9595725455, 0.9438734429, 0.9030468218}},   
+      {"tt1b", {0.9962244676, 0.9667166631, 0.9186391487}},   
+      {"tt2b", {0.9962244676, 0.9667166631, 0.9186391487}},
+      {"T",    {0.9942103098, 0.9613614481, 0.9144844627}},   
+      {"TTV",  {0.9942103098, 0.9613614481, 0.9144844627}}, 
+      {"TTXY", {0.9755792626, 0.9659806557, 0.9643891245}},
+      {"WJets", {0.9044615563, 0.9076278828, 0.7916357948}},
+      {"ZJets", {0.9044615563, 0.9076278828, 0.7916357948}},
+      {"VV",   {0.9044615563, 0.9076278828, 0.7916357948}}, 
+      {"qcd",  {0.940833989, 0.9788744589, 0.9195875563}} 
+  };                       
+
+  std::unordered_map<string, std::vector<float>> wgt2018_E = { // { type, { nj4, nj5, nj6p}}
+      {"tttt", {0.9279750194, 0.9479727174, 0.9191942033}},
+      {"ttjj", {0.9923480750, 1.0057580471, 1.0011944434}},
+      {"ttcc", {1.0050957838, 1.0047475902, 0.9982370828}},    
+      {"ttbb", {0.9666382033, 0.9559780476, 0.9556587079}},   
+      {"tt1b", {0.9692647427, 0.9778219595, 0.9722511777}},   
+      {"tt2b", {0.9956445718, 0.9975362672, 0.9905346602}},
+      {"T",    {0.9779770577, 0.9856033892, 0.9726416567}},   
+      {"TTV",  {0.9597092704, 0.9660527988, 0.9585140872}}, 
+      {"TTXY", {0.9502030288, 0.9594360242, 0.9608876848}},
+      {"WJets", {0.8720559924, 0.8777058190, 0.8538766506}},
+      {"ZJets", {0.8274565677, 0.8184282280, 0.7902021407}},
+      {"VV",   {0.9808907637, 0.8806614835, 0.9322116757}}, 
+      {"qcd",  {0.9317167909, 0.9550869373, 0.7593072727}} 
+  };  
+
+  std::unordered_map<string, std::vector<float>> wgt2018_M = {
+      {"tttt", {0.9598061229, 0.9385816479, 0.9242174919}},
+      {"ttjj", {0.9943568547, 1.0037506677, 0.9982871601}},
+      {"ttcc", {0.9967671200, 0.9995292499, 0.9998498201}},
+      {"ttbb", {0.9569457644, 0.9636918215, 0.9661412214}},
+      {"tt1b", {0.9715690171, 0.9751878298, 0.9663625408}},
+      {"tt2b", {0.9873304461, 0.9937619408, 0.9917692476}},
+      {"T",    {0.9813194258, 0.9931216192, 0.9812484650}},
+      {"TTV",  {0.9556623113, 0.9660025586, 0.9641271023}},
+      {"TTXY", {0.9472739920, 0.9562394387, 0.9650080939}},
+      {"WJets", {0.8705578922, 0.8711052889, 0.8521469129}},
+      {"ZJets", {0.8628752440, 0.8546751993, 0.8152587307}},
+      {"VV",   {0.8593916158, 0.8730070208, 0.9085752620}},
+      {"qcd",  {0.8931172211, 1.0248316102, 0.9197058065}}
+  };
+
+  if (wgt2017_E.find(sampleType) ==  wgt2017_E.end()) {
+    cout << " GetCSVRenormSF() ---- CHECK sample process type! \n";
+    return 1.0;
+  }
+
+  if (year == 2017) {
+
+      if (isE == 1) {
+        if (njet == 4) {
+          return wgt2017_E.at(sampleType)[0];
+        }
+        if (njet == 5) {
+          return wgt2017_E.at(sampleType)[1];
+        }
+        if (njet >= 6) {
+          return wgt2017_E.at(sampleType)[2];
+        }
+      }
+
+      else {
+        if (njet == 4) {
+          return wgt2017_M.at(sampleType)[0];
+        }
+        if (njet == 5) {
+          return wgt2017_M.at(sampleType)[1];
+        }
+        if (njet >= 6) {
+          return wgt2017_M.at(sampleType)[2];
+        }
+      }
+
+  }
+ 
+  else if (year == 2018) {
+
+      if (isE == 1) {
+        if (njet == 4) {
+          return wgt2018_E.at(sampleType)[0];
+        }
+        if (njet == 5) {
+          return wgt2018_E.at(sampleType)[1];
+        }
+        if (njet >= 6) {
+          return wgt2018_E.at(sampleType)[2];
+        }
+      }
+
+      else {
+        if (njet == 4) {
+          return wgt2018_M.at(sampleType)[0];
+        }
+        if (njet == 5) {
+          return wgt2018_M.at(sampleType)[1];
+        }
+        if (njet >= 6) {
+          return wgt2018_M.at(sampleType)[2];
+        }
+      }
+
+  }
+
   return 1.0;
 
 }
