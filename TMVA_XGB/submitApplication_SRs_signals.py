@@ -11,7 +11,7 @@ runDir = os.getcwd()
 start_time = time.time()
 shift = sys.argv[1]
 
-inputDir='/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
+inputDir='/isilon/hadoop/store/group/bruxljmFWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
 outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/'+shift+'/' # or 2018
 condorDir= runDir+'/condor_logs_XGBSRs_sys_added_'+shift+'/'
 

@@ -1,7 +1,6 @@
 import os,shutil,datetime,time
 import getpass
 import varsList
-import sys
 from ROOT import *
 from XRootD import client
 
@@ -9,11 +8,10 @@ from XRootD import client
 
 runDir = os.getcwd()
 start_time = time.time()
-shift = sys.argv[1]
 
-inputDir='/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
-outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/'+shift+'/' # or 2018
-condorDir= runDir+'/condor_logs_XGBSRs_sys_added_'+shift+'/'
+inputDir='/isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_CSV/SR1'#'/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_CSV_SR1_added'
+outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SR1' 
+condorDir= runDir+'/condor_logs_CSVtoXGB_SR1_added_new/'
 
 print 'Starting submission'
 count=0
@@ -30,34 +28,34 @@ os.system('mkdir -p '+condorDir)
 #eosoutdir = outputDir[outputDir.find("/store"):]
 #eosoutdir = "root://cmseos.fnal.gov/"+eosoutdir
 
-for file in rootfiles:
-    if 'root' not in file: continue
+Masses = [200, 220, 250, 300, 350, 400, 500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
+#Masses = [500]#[800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
+
+for mass in Masses:
     #if not 'TTToSemiLeptonic' in file: continue
     #if not 'ttjj' in file: continue
 #    if 'TTTo' in file: continue
-    rawname = file[:-6]
-    count+=1
-    dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'INPUTDIR':inputDir, 'FILENAME':rawname, 'OUTPUTDIR':outputDir}
-    jdfName=condorDir+'/%(FILENAME)s.job'%dict
+    dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'INPUTDIR':inputDir, 'MASS':mass, 'OUTPUTDIR':outputDir}
+    jdfName=condorDir+'/M%(MASS)s.job'%dict
     print jdfName
     jdf=open(jdfName,'w')
     jdf.write(
 """universe = vanilla
-Executable = %(RUNDIR)s/submitApplication_SRs.sh
+Executable = %(RUNDIR)s/submitCSVXGB.sh
 Request_memory = 8000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Transfer_Input_Files = %(RUNDIR)s/XGBApply_SRs.py, %(RUNDIR)s/varsList.py 
-Output = %(FILENAME)s.out
-Error = %(FILENAME)s.err
-Log = %(FILENAME)s.log
+Transfer_Input_Files = %(RUNDIR)s/CSVXGB_SR1.py
+Output = M%(MASS)s.out
+Error = M%(MASS)s.err
+Log = M%(MASS)s.log
 Notification = Never
-Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar_added    
+Arguments =  %(INPUTDIR)s   %(OUTPUTDIR)s  %(MASS)s      
 
 Queue 1"""%dict)
     jdf.close()
     os.chdir('%s/'%(condorDir))
-    os.system('condor_submit %(FILENAME)s.job'%dict)
+    os.system('condor_submit M%(MASS)s.job'%dict)
     os.system('sleep 0.5')
     os.chdir('%s'%(runDir))
     print count, "jobs submitted!!!"

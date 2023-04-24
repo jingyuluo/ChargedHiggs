@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 varListKey = args.varListKey
 varList = varsList.varList[varListKey]
-inputDir = varsList.inputDir
+inputDir = varsList.bkginputDir
 infname = args.file
 
 def Reshape(x):
@@ -421,7 +421,8 @@ iev=0
 
 print "Compute XGB"
 
-for chunk in sig_tree.iterate("*", entrysteps=1000, namedecode="utf-8"):
+#for chunk in sig_tree.iterate("*", entrysteps=1000, namedecode="utf-8"):
+for chunk in sig_tree.iterate("*", entrysteps=1000):
     array_var=[]
     for var in train_var:
         array_var.append(chunk[var])
