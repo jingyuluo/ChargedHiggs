@@ -10,7 +10,7 @@ runDir = os.getcwd()
 start_time = time.time()
 
 inputDir='/isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_CSV/SR1'#'/eos/uscms/store/user/lpcbril/MC_test/FWLJMET106X_1lep2017_UL_step2_CSV_SR1_added'
-outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SR1' 
+outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/XBG_models/SR1/' 
 condorDir= runDir+'/condor_logs_CSVtoXGB_SR1_added_new/'
 
 print 'Starting submission'
@@ -41,7 +41,7 @@ for mass in Masses:
     jdf=open(jdfName,'w')
     jdf.write(
 """universe = vanilla
-Executable = %(RUNDIR)s/submitCSVXGB.sh
+Executable = %(RUNDIR)s/submitCSVXGB_SR1.sh
 Request_memory = 8000
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
