@@ -22,23 +22,23 @@ export PATH=$PATH:$macroDir
 #source /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/6.16.00/x86_64-centos7-gcc48-opt/bin/thisroot.sh
 #xrdcp -f ${haddFile} root://cmseos.fnal.gov/${outputDir//$NOM/$SHIFT}/${haddFile//${SHIFT}_hadd/} 2>&1
 
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M200_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M220_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M250_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M300_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M350_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M400_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M500_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M600_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M700_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M800_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1000_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1250_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1500_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1750_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M2000_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M2500_SRAll.model .
-cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M3000_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M200_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M220_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M250_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M300_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M350_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M400_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M500_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M600_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M700_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M800_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1000_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1250_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1500_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M1750_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M2000_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M2500_SRAll.model .
+#cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SRAll/XGB_M3000_SRAll.model .
 
 cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SR1/XGB_M200_SR1.model .
 cp /isilon/hadoop/users/jluo48/CHiggs/UL17/XGB_models/SR1/XGB_M220_SR1.model .
