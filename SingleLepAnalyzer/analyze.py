@@ -63,11 +63,11 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 
 	#cut += ' && (MCWeight_MultiLepCalc>0)'
 
-	if isEM=='E' and isCR(njets,nbtag): cut += ' && (minDPhi_MetJet>0.05)'
+	#if isEM=='E' and isCR(njets,nbtag): cut += ' && (minDPhi_MetJet>0.05)'
 
-	cut += ' && DataPastTrigger == 1 && MCPastTrigger == 1'
+	cut += ' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))' #' && DataPastTrigger == 1 && MCPastTrigger == 1'
 	# Define weights
-	TrigEff = 'triggerSF'
+	TrigEff = 'triggerXSF * triggerSF'
 	jetSFstr = '1'
 
 	#if doJetRwt and ('WJetsMG' in process or 'QCD' in process) and 'JSF' in process: jetSFstr= 'JetSF_80X'
@@ -97,8 +97,8 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 ############################  BDT FLIP BINNING BUILDING############## ############## ############## 
  	if ('XGB' in plotTreeName) and (process.startswith('Hptb') or ('TTToSemiLeptonic' in process) ): #Add "or 'TTJetsPH' in process" here
  		cut += ' && (isTraining == 3)'
- 		weightStr = '3'
- 		weightStrBase = '3'
+ 		weightStr = '5'
+ 		weightStrBase = '5'
 # 	elif not 'Hptb' in process and not 'TTJets' in process and not 'Data' in process:
 # 		cut += ' && (isTraining == 3)'
 # 		weightStr = '3'
@@ -115,11 +115,13 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	HTweightStrUp = '1'
 	HTweightStrDn = '1'
         DJweightStr = ' btagDeepJetWeight * btagDeepJet2DWeight_HTnj '
+
+        
       
-	if 'WJetsMG' in process:
-		HTweightStr   = 'HTSF_Pol'
-		HTweightStrUp = 'HTSF_PolUp'
-		HTweightStrDn = 'HTSF_PolDown'
+	#if 'WJetsMG' in process:
+	#	HTweightStr   = 'HTSF_Pol'
+	#	HTweightStrUp = 'HTSF_PolUp'
+	#	HTweightStrDn = 'HTSF_PolDown'
 #
 # 		HTweightStr = str(genHTweight[process])
 # 		HTweightStr   = 'HTSF_Pol'
@@ -135,7 +137,7 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	if 'Data' not in process:
 		#weightStr          += ' * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF * btagDeepJetWeight * btagDeepJet2DWeight_Pt120 * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
 #ltiLepCalc))  *'+str(weight[process])
-                weightStr          += ' * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF *'+DJweightStr+'* EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
+                weightStr          += ' * pileupWeight * L1NonPrefiringProb_CommonCalc * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF *'+DJweightStr+'* isoSF * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
 ltiLepCalc))  *'+str(weight[process]) 
                 #weightTrigEffUpStr  = weightStr.replace(TrigEff,'('+TrigEff+'+'+TrigEff+'Uncert)')
                 #weightTrigEffDownStr= weightStr.replace(TrigEff,'('+TrigEff+'-'+TrigEff+'Uncert)')

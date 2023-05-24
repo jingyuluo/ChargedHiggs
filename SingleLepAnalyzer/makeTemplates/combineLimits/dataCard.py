@@ -81,11 +81,16 @@ def add_standard_systematics(cb):
 	cb.cp().process(signal + allbkgs).channel(chnsM).AddSyst(cb, 'SFmu_$ERA', 'lnN', ch.SystMap('era')(['R16'], 1.03)(['R17'], 1.03)(['R18'], 1.03)) # 1% mu id/iso + 2.5% trigger ~ 3%
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'jec_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0)) # This one is being studied in B2G-19-001/AN2018_322_v7 (take the uncorrelated one to be conservative!)
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'jer_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0)) # Uncorrelated; Ex: B2G-19-001/AN2018_322_v7
+	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'pileup_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0)) # Uncorrelated; Ex: B2G-19-001/AN2018_322_v7
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'LF_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0)) # B-tagging reweighting systematics, LF
         cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'HF_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0)) #B-tagging reweighting systematics, HF
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'LFstat1_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
+	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'LFstat2_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'HFstat1_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
+	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'HFstat2_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
 	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'CFerr1_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
+	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'CFerr2_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
+	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'DJjes_$ERA', 'shape', ch.SystMap('era')(['R16'], 1.0)(['R17'], 1.0)(['R18'], 1.0))
         
 	#if era=='R17':
 	#	cb.cp().process(signal + allbkgs).channel(chns).AddSyst(cb, 'prefire', 'shape', ch.SystMap()(1.0))
@@ -208,14 +213,14 @@ if __name__ == '__main__':
 	if era=='R18': lumiStr = '59p97fb'
 	tag = '_wNegBinsCorrec_'#'_50GeV_100GeVnB2'
 	saveKey = '_'+iPlot#'_Njet50pct_centValSF'
-	fileDir = '/uscms_data/d3/jluo/work/CMSSW_dir/CMSSW_10_2_10/src/NewCHiggs_UL/SingleLepAnalyzer/makeTemplates/'
+	fileDir = '/home/jluo48/ChargedHiggs/CMSSW_10_2_10/src/ChargedHiggs/SingleLepAnalyzer/makeTemplates/'#templates_M500_2023_5_1_topPtRW_NOHTWeight_Full_FixTrig_forlimit#'/uscms_data/d3/jluo/work/CMSSW_dir/CMSSW_10_2_10/src/NewCHiggs_UL/SingleLepAnalyzer/makeTemplates/'
 	#template = 'M500_2020_11_23_topPtRW_NC_allweights_DJ'#era+'_'+sys.argv[3]#nonjetsf_lepPt20_2020_9_3'
 	if not os.path.exists('./limits_'+signal+'_'+template+saveKey): os.system('mkdir ./limits_'+signal+'_'+template+saveKey)
 	os.system('cp '+fileDir+'templates_'+template+'/templates_'+iPlot+'_'+lumiStr+tag+'_rebinned_stat0p2.root ./limits_'+signal+'_'+template+saveKey+'/')
 	rfile = './limits_'+signal+'_'+template+saveKey+'/templates_'+iPlot+'_'+lumiStr+tag+'_rebinned_stat0p2.root'
 	
 	ttbkgs = ['ttnobb','ttbb'] # ['ttjj','ttcc','ttbb','ttbj']
-	allbkgs = ttbkgs + ['top','ewk']
+	allbkgs = ttbkgs + ['top','ewk', 'qcd']
 	dataName = 'data_obs'
 	tfile = TFile(rfile)
 	allHistNames = [k.GetName() for k in tfile.GetListOfKeys() if not (k.GetName().endswith('Up') or k.GetName().endswith('Down'))]
@@ -229,9 +234,9 @@ if __name__ == '__main__':
 	bkg_procs = {chn:[hist.split('__')[-1] for hist in allHistNames if '_'+chn+'_' in hist and not (hist.endswith('Up') or hist.endswith('Down') or hist.endswith(dataName) or hist.find('Hptb')!=-1)] for chn in chns}
 	for cat in sorted(bkg_procs.keys()):
 		print cat,bkg_procs[cat]
-		if 'qcd' in bkg_procs[cat]:
-			print '		Removing qcd ...'
-			bkg_procs[cat]=bkg_procs[cat][:-1]
+		#if 'qcd' in bkg_procs[cat]:
+		#	print '		Removing qcd ...'
+		#	bkg_procs[cat]=bkg_procs[cat][:-1]
 # 	if era=='R18':
 # 		bkg_procs['isSR_isE_nHOT1p_nT0p_nW0p_nB4p_nJ9']=['ttbb', 'ttcc', 'ttjj', 'top']
 	

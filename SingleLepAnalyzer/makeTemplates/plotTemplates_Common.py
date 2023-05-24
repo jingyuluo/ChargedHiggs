@@ -60,6 +60,7 @@ if splitTTbar:
 
     bkgTTBarList = ['ttnobb','ttbb'] 
     bkgProcList = bkgTTBarList+['top','ewk','qcd']
+    #bkgProcList = ['ewk','top', 'ttnobb', 'ttbb','qcd']
     #    bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
     #    bkgProcList = ['ttb','ttcc','ttlf','top','ewk','qcd']
 else: 
@@ -78,14 +79,16 @@ if plotqcd:
 
 bkgHistColors = {'tt2b':rt.kRed+3,'ttbb':rt.kRed,'tt1b':rt.kRed-3,'ttcc':rt.kRed-5,'ttjj':rt.kRed-7,'top':rt.kBlue,'ewk':rt.kGreen-8,'qcd':rt.kOrange+5,'ttbar':rt.kRed,'ttnobb':rt.kRed-7} #HTB
 systematicList = [
-'CMS_scale_j'       , 'CMS_HPTB_mcreweight_ewk', 'CMS_res_j'        , 'muR_ttbar', 'muF_ttbar',
-'CMS_btag_LF'       , 'CMS_pileup'             , 'CMS_btag_HF'      , 'muR_top'  , 'muF_top'  , 
-'CMS_topreweight' ,
-'CMS_btag_LFstat1'  , 'CMS_btag_CFerr1'        , 'CMS_btag_HFstat1' ,  #'QCDscaleHptb'    , 
-'CMS_btag_LFstat2'  , 'CMS_btag_CFerr2'        , 'CMS_btag_HFstat2' , 'muR_ewk'  , 'muF_ewk'   
+'pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2', 'DJjes'
+
+#'CMS_scale_j'       , 'CMS_HPTB_mcreweight_ewk', 'CMS_res_j'        , 'muR_ttbar', 'muF_ttbar',
+#'CMS_btag_LF'       , 'CMS_pileup'             , 'CMS_btag_HF'      , 'muR_top'  , 'muF_top'  , 
+#'CMS_topreweight' ,
+#'CMS_btag_LFstat1'  , 'CMS_btag_CFerr1'        , 'CMS_btag_HFstat1' ,  #'QCDscaleHptb'    , 
+#'CMS_btag_LFstat2'  , 'CMS_btag_CFerr2'        , 'CMS_btag_HFstat2' , 'muR_ewk'  , 'muF_ewk'   
 ]
 
-doAllSys = False
+doAllSys = True#False
 doQ2sys  = False
 if not doAllSys: doQ2sys = False
 addCRsys = False
@@ -265,8 +268,8 @@ blindGlob = blind
 for tag in tagList:
 	tagStr='nT'+tag[0]+'_nW'+tag[1]+'_nB'+tag[2]+'_nJ'+tag[3]
 	if isCR(tag[3],tag[2]): 
-		#postTag = 'isCR_'
-		postTag = 'isSR_'
+		postTag = 'isCR_'
+		#postTag = 'isSR_'
                 blind = False
 	else: 
 		postTag = 'isSR_'
@@ -438,8 +441,8 @@ for tag in tagList:
 		hData.SetLineColor(rt.kBlack)
 		if drawYields: hData.SetMarkerSize(4)
 
-		bkgHTgerr.SetFillStyle(3004)
-		bkgHTgerr.SetFillColor(rt.kBlack)
+		#bkgHTgerr.SetFillStyle(3002)
+		bkgHTgerr.SetFillColorAlpha(rt.kBlack, 0.5)
 		bkgHTgerr.SetLineColor(rt.kBlack)
 
 		c1 = rt.TCanvas("c1","c1",50,50,W,H)
@@ -628,8 +631,8 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandTot.SetPointEYhigh(binNo-1,totBkgTemp3[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandTot.SetPointEYlow(binNo-1,totBkgTemp3[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			if not doOneBand: pullUncBandTot.SetFillStyle(3004)
-			else: pullUncBandTot.SetFillStyle(3004)
+			if not doOneBand: pullUncBandTot.SetFillStyle(3002)
+			else: pullUncBandTot.SetFillStyle(3002)
 			pullUncBandTot.SetFillColor(14)
 			pullUncBandTot.SetLineColor(14)
 			pullUncBandTot.SetMarkerSize(0)
@@ -641,7 +644,7 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandNorm.SetPointEYhigh(binNo-1,totBkgTemp2[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			pullUncBandNorm.SetFillStyle(3004)
+			pullUncBandNorm.SetFillStyle(3002)
 			pullUncBandNorm.SetFillColor(2)
 			pullUncBandNorm.SetLineColor(2)
 			pullUncBandNorm.SetMarkerSize(0)
@@ -653,7 +656,7 @@ for tag in tagList:
 				if bkgHT.GetBinContent(binNo)!=0:
 					pullUncBandStat.SetPointEYhigh(binNo-1,totBkgTemp1[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
 					pullUncBandStat.SetPointEYlow(binNo-1,totBkgTemp1[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))			
-			pullUncBandStat.SetFillStyle(3004)
+			pullUncBandStat.SetFillStyle(3002)
 			pullUncBandStat.SetFillColor(3)
 			pullUncBandStat.SetLineColor(3)
 			pullUncBandStat.SetMarkerSize(0)
@@ -866,7 +869,7 @@ for tag in tagList:
 	hDatamerged.SetLineColor(rt.kBlack)
 	if drawYields: hDatamerged.SetMarkerSize(4)
 
-	bkgHTgerrmerged.SetFillStyle(3004)
+	bkgHTgerrmerged.SetFillStyle(3002)
 	bkgHTgerrmerged.SetFillColor(rt.kBlack)
 	bkgHTgerrmerged.SetLineColor(rt.kBlack)
 	
@@ -1061,8 +1064,8 @@ for tag in tagList:
 		if 'NBJets' in iPlot:
 			pullUncBandTotmerged.SetPointEYhigh(4,0)
 			pullUncBandTotmerged.SetPointEYlow(4,0)
-		if not doOneBand: pullUncBandTotmerged.SetFillStyle(3004)
-		else: pullUncBandTotmerged.SetFillStyle(3004)
+		if not doOneBand: pullUncBandTotmerged.SetFillStyle(3002)
+		else: pullUncBandTotmerged.SetFillStyle(3002)
 		pullUncBandTotmerged.SetFillColor(14)
 		pullUncBandTotmerged.SetLineColor(14)
 		pullUncBandTotmerged.SetMarkerSize(0)
@@ -1074,7 +1077,7 @@ for tag in tagList:
 			if bkgHTmerged.GetBinContent(binNo)!=0:
 				pullUncBandNormmerged.SetPointEYhigh(binNo-1,totBkgTemp2['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
 				pullUncBandNormmerged.SetPointEYlow(binNo-1, totBkgTemp2['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))			
-		pullUncBandNormmerged.SetFillStyle(3004)
+		pullUncBandNormmerged.SetFillStyle(3002)
 		pullUncBandNormmerged.SetFillColor(2)
 		pullUncBandNormmerged.SetLineColor(2)
 		pullUncBandNormmerged.SetMarkerSize(0)
@@ -1086,7 +1089,7 @@ for tag in tagList:
 			if bkgHTmerged.GetBinContent(binNo)!=0:
 				pullUncBandStatmerged.SetPointEYhigh(binNo-1,totBkgTemp1['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
 				pullUncBandStatmerged.SetPointEYlow(binNo-1, totBkgTemp1['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))			
-		pullUncBandStatmerged.SetFillStyle(3004)
+		pullUncBandStatmerged.SetFillStyle(3002)
 		pullUncBandStatmerged.SetFillColor(3)
 		pullUncBandStatmerged.SetLineColor(3)
 		pullUncBandStatmerged.SetMarkerSize(0)

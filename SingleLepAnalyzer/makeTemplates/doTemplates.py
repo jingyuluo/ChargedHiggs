@@ -35,18 +35,19 @@ pfix = args.directory#'templates_M500_2020_11_23_topPtRW_NC_allweights_DJ'#'kine
 outDir = os.getcwd()+'/'+pfix+'/'+cutString
 
 scaleSignalXsecTo1pb = True # this has to be "True" if you are making templates for limit calculation!!!!!!!!
-doAllSys = False
+doAllSys = True
 doQ2sys  = False
 doPDFsys = False
 if not doAllSys: doQ2sys = False
 addCRsys = False
-systematicList = ['trigeff','pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2']
+#systematicList = ['trigeff','pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2']
+systematicList = ['pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2', 'DJjes']
 systList_jsf = ['jsfJES','jsfJESAbsoluteMPFBias', 'jsfJESAbsoluteScale', 'jsfJESAbsoluteStat', 'jsfJESFlavorQCD', 'jsfJESFragmentation', 'jsfJESPileUpDataMC',
 'jsfJESPileUpPtBB', 'jsfJESPileUpPtEC1', 'jsfJESPileUpPtEC2', 'jsfJESPileUpPtHF', 'jsfJESPileUpPtRef', 'jsfJESRelativeBal', 'jsfJESRelativeFSR',
 'jsfJESRelativeJEREC1', 'jsfJESRelativeJEREC2', 'jsfJESRelativeJERHF', 'jsfJESRelativeJERHF', 'jsfJESRelativePtBB', 'jsfJESRelativePtEC1',
 'jsfJESRelativePtEC2', 'jsfJESRelativePtHF', 'jsfJESRelativeStatEC', 'jsfJESRelativeStatFSR', 'jsfJESRelativeStatHF', 'jsfJESSinglePionECAL',
 'jsfJESSinglePionHCAL', 'jsfJESTimePtEta']
-systematicList += systList_jsf
+#systematicList += systList_jsf
 normalizeRENORM_PDF = False #normalize the renormalization/pdf uncertainties to nominal templates --> normalizes signal processes only !!!!
 rebinBy = -1#4#performs a regular rebinning with "Rebin(rebinBy)", put -1 if rebinning is not wanted
 
@@ -70,19 +71,20 @@ else:
 	#bkgGrupList = ['ttbar','top','ewk','qcd']
 	bkgProcList = ['TTJets','T','WJets','ZJets','VV','qcd'] #TTV
 bkgProcs = {}
-bkgProcs['WJets']  = ['WJetsMG']#['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800']
+bkgProcs['WJets']  =  ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200']
+#bkgProcs['WJets']  =  ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200', 'WJetsMG2500']
 #bkgProcs['WJets'] += ['WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5']
 #bkgProcs['WJets'] += ['WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5']#,'WJetsMG2500_6']
 
-bkgProcs['ZJets'] = ['DYMG']#['DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500']
+bkgProcs['ZJets'] = ['DYMG200','DYMG400','DYMG600','DYMG800','DYMG1200','DYMG2500']
 
 bkgProcs['VV']    = ['WW','WZ','ZZ']
 
 bkgProcs['T']     = ['Tt','Tbt','Ts','TtW','TbtW',]
 #bkgProcs['TTV'] = []
 #bkgProcs['TTV']   = ['TTWl','TTWq','TTZl']
-bkgProcs['TTV']   = ['TTWl','TTZl']
-#bkgProcs['OtherT']= ['TTHB','TTHnoB', 'TTTT']
+bkgProcs['TTV']   = ['TTWl','TTWq','TTZlM10', 'TTZlM1to10']
+bkgProcs['OtherT']= ['TTTT', 'TTHH', 'TTWH', 'TTWW', 'TTWZ', 'TTZH', 'TTZZ', 'TTHB', 'TTHnoB']#['TTHB','TTHnoB', 'TTTT']
 
 #bkgProcs['TTTo2L2Nu'] = ['TTTo2L2Nu_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
 #bkgProcs['TTToHadronic'] = ['TTToHadronic_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
@@ -96,16 +98,35 @@ bkgProcs['TTJets'] += ['TTToSemiLeptonic']
 #bkgProcs['TTJets'] += ['TTJetsSemiLepbin1','TTJetsSemiLepbin2','TTJetsSemiLepbin3']#,'TTJetsSemiLep4','TTJetsSemiLep5']#,'TTJetsSemiLep6']
 #bkgProcs['TTJets'] += ['TTJets700mtt','TTJets1000mtt']
 
-bkgProcs['tt2b']  = [tt+'_tt2b' for tt in bkgProcs['TTJets']]
-bkgProcs['ttbb']  = [tt+'_ttbb' for tt in bkgProcs['TTJets']]
-bkgProcs['tt1b']   = [tt+'_tt1b' for tt in bkgProcs['TTJets']]
-bkgProcs['ttcc']  = [tt+'_ttcc' for tt in bkgProcs['TTJets']]
-bkgProcs['ttjj']  = [tt+'_ttjj' for tt in bkgProcs['TTJets']]
+#bkgProcs['tt2b']  = [tt+'_tt2b' for tt in bkgProcs['TTJets']]
+bkgProcs['tt2b']  = [tt+'_tt2b' for tt in ['TTTo2L2Nu', 'TTToHadronic']]
+bkgProcs['tt2b'] += ['TTToSemiLeptonic_HT500Njet9_tt2b']
+bkgProcs['tt2b'] += ['TTToSemiLeptonic_HT0Njet0_tt2b']
+
+#bkgProcs['ttbb']  = [tt+'_ttbb' for tt in bkgProcs['TTJets']]
+bkgProcs['ttbb']  = [tt+'_ttbb' for tt in ['TTTo2L2Nu', 'TTToHadronic']]
+bkgProcs['ttbb'] += ['TTToSemiLeptonic_HT500Njet9_ttbb']
+bkgProcs['ttbb'] += ['TTToSemiLeptonic_HT0Njet0_ttbb']
+
+#bkgProcs['tt1b']   = [tt+'_tt1b' for tt in bkgProcs['TTJets']]
+bkgProcs['tt1b']   = [tt+'_tt1b' for tt in ['TTTo2L2Nu', 'TTToHadronic']]
+bkgProcs['tt1b'] += ['TTToSemiLeptonic_HT500Njet9_tt1b']
+bkgProcs['tt1b'] += ['TTToSemiLeptonic_HT0Njet0_tt1b']
+
+#bkgProcs['ttcc']  = [tt+'_ttcc' for tt in bkgProcs['TTJets']]
+bkgProcs['ttcc']  = [tt+'_ttcc' for tt in ['TTTo2L2Nu', 'TTToHadronic']]
+bkgProcs['ttcc'] += ['TTToSemiLeptonic_HT500Njet9_ttcc']
+bkgProcs['ttcc'] += ['TTToSemiLeptonic_HT0Njet0_ttcc']
+
+#bkgProcs['ttjj']  = [tt+'_ttjj' for tt in bkgProcs['TTJets']]
+bkgProcs['ttjj'] = [tt+'_ttjj' for tt in ['TTTo2L2Nu', 'TTToHadronic']]
+bkgProcs['ttjj'] += ['TTToSemiLeptonic_HT500Njet9_ttjj']
+bkgProcs['ttjj'] += ['TTToSemiLeptonic_HT0Njet0_'+str(i)+'_ttjj' for i in range(1, 11)]
 
 bkgProcs['ttnobb']  = bkgProcs['ttjj'] + bkgProcs['ttcc'] + bkgProcs['tt1b'] + bkgProcs['tt2b']
 
 bkgProcs['qcd']   = ['QCDht200','QCDht300','QCDht500','QCDht700','QCDht1000','QCDht1500','QCDht2000']
-bkgProcs['top']   = bkgProcs['TTV']+bkgProcs['T']#+bkgProcs['OtherT']
+bkgProcs['top']   = bkgProcs['TTV']+bkgProcs['T']+bkgProcs['OtherT']
 bkgProcs['ewk']   = bkgProcs['WJets']+bkgProcs['ZJets']+bkgProcs['VV']
 #bkgProcs['ttbb']  = bkgProcs['TTBB']
 #bkgProcs['ttcc']  = bkgProcs['TTCC']
@@ -145,7 +166,9 @@ if not doBRScan: nBRconf=1
 isEMlist =['E','M']
 nttaglist = ['0p']
 nWtaglist = ['0p']
-nbtaglist = ['1','2','3p']
+nbtaglist = ['1', '2', '3p']
+
+#nbtaglist = ['1','2','3p']
 njetslist = ['3','4','5','6p']
 # njetslist = ['3','4','5','6','7','8','9','10','11']
 if not isCategorized: 
@@ -217,9 +240,9 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 
         #get signal
  			for signal in sigList:
- 				print "histoPrefix ", histoPrefix
- 				print "signal+decays[0]", signal+decays[0]
- 				print sighists
+ 				#print "histoPrefix ", histoPrefix
+ 				#print "signal+decays[0]", signal+decays[0]
+ 				#print sighists
                                 hists[signal+i] = sighists[histoPrefix+'_'+signal+decays[0]].Clone(histoPrefix+'__sig')
  				for decay in decays:
  					if decay!=decays[0]:
@@ -389,7 +412,7 @@ def makeThetaCats(datahists,sighists,bkghists,discriminant,categor):
 		i=cat
                 print cat
                 print "=============================================="
-		if '_nB1_' in cat or '_nB2p_' in cat or '_nB2_nJ4' in cat: postTag = 'isCR_'
+		if '_nB1_' in cat or '_nB2p_' in cat or '_nB2_nJ4' in cat or 'nB1p_' in cat: postTag = 'isCR_'
 		else: postTag = 'isSR_'
                 for signal in sigList:
                         mass = [str(mass) for mass in massList if signal.endswith(str(mass))][0]
@@ -721,7 +744,7 @@ def rundoTemp(category):
                 #'deltaR_minBB', ##TODO
                 ##'deltaR',  ##TODO
                 #'MTlmet',
-                #'HT',
+                ##'HT',
                 #'hemiout',
                 #'theLeadJetPt',
                 #'MET',
@@ -759,30 +782,30 @@ def rundoTemp(category):
                 #'HT_2m',
                 #'Sphericity',
                 #'Aplanarity',
-                'BestTop_Disc',
-                'BestTop_Pt', 
-                #'NoTop_Jet1_CSV', 
-                'NoTop_Jet1_Pt', 
-                'NoTop_Jet2_CSV',
-                'NoTop_Jet2_Pt',
+                #'BestTop_Disc',
+                #'BestTop_Pt', 
+                ##'NoTop_Jet1_CSV', 
+                #'NoTop_Jet1_Pt', 
+                #'NoTop_Jet2_CSV',
+                #'NoTop_Jet2_Pt',
 
-                'XGB200', 
-                'XGB220', 
-                'XGB250', 
-                'XGB300', 
-                'XGB350', 
-                'XGB400', 
-                'XGB500', 
-                'XGB600', 
-                'XGB700', 
-                'XGB800', 
-                'XGB1000',  
-                'XGB1250',
-                'XGB1500',
-                'XGB1750',
-                'XGB2000',
-                'XGB2500',
-                'XGB3000',
+                #'XGB200', 
+                #'XGB220', 
+                #'XGB250', 
+                #'XGB300', 
+                #'XGB350', 
+                #'XGB400', 
+                #'XGB500', 
+                #'XGB600', 
+                #'XGB700', 
+                #'XGB800', 
+                #'XGB1000',  
+                #'XGB1250',
+                #'XGB1500',
+                #'XGB1750',
+                #'XGB2000',
+                #'XGB2500',
+                #'XGB3000',
                 
                 'XGB200_SR1', 
                 'XGB220_SR1', 
