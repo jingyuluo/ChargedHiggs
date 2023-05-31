@@ -6,8 +6,8 @@ parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
 from numpy import linspace
 import argparse
-from weights import *
-from analyze import *
+from weights_UL18 import *
+from analyze_UL18 import *
 from samples import *
 from utils import *
 
@@ -20,7 +20,7 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = '/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/' 
+#step1Dir = '/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/' 
 ntupleDir = '/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/nominal/'
 
 

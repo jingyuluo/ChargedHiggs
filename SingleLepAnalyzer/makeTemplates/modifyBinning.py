@@ -4,7 +4,7 @@ import os,sys,time,math,fnmatch
 parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
 from array import array
-from weights import *
+#from weights import *
 from modSyst import *
 from utils_rebin import *
 from ROOT import *
@@ -30,10 +30,10 @@ start_time = time.time()
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 year=sys.argv[1]
-#if year=='R17':
-#	from weights17 import *
-#else:
-#	from weights18 import *
+if year=='R17':
+	from weights17 import *
+else:
+	from weights_UL18 import *
 #
 #iPlot=sys.argv[2]
 saveKey = ''#'_50GeV_100GeVnB2'

@@ -55,7 +55,7 @@ samples = {
 'TTWq':'TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8',
 'TTZlM10':'TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8',
 "TTZlM1to10": "TTZToLL_M-1to10_TuneCP5_13TeV-amcatnlo-pythia8",
-'TTTT': 'TTTT_TuneCP5_13TeV-amcatnlo-pythia8',
+#'TTTT': 'TTTT_TuneCP5_13TeV-amcatnlo-pythia8',
 "TTHH": "TTHH_TuneCP5_13TeV-madgraph-pythia8",
 "TTWH": "TTWH_TuneCP5_13TeV-madgraph-pythia8",
 "TTWW": "TTWW_TuneCP5_13TeV-madgraph-pythia8",

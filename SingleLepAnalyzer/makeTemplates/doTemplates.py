@@ -4,7 +4,7 @@ import argparse
 from ROOT import gROOT,TFile,TH1F
 parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
-from weights import *
+#from weights import *
 from modSyst import *
 from utils import *
 
@@ -12,7 +12,15 @@ from utils import *
 parser = argparse.ArgumentParser(description="template building for the charged Higgs analysis")
 parser.add_argument("-d", "--directory", help="the directory to be processed")
 parser.add_argument("-c", "--Categorized", default=False, action="store_true", help="Categorize or not")
+parser.add_argument("-y", "--year", default="17", help="The data taking year")
 args = parser.parse_args()
+
+
+if args.year=="17":
+    from weights import *
+if args.year=="18":
+    from weights_UL18 import *
+
 
 gROOT.SetBatch(1)
 start_time = time.time()
@@ -84,7 +92,7 @@ bkgProcs['T']     = ['Tt','Tbt','Ts','TtW','TbtW',]
 #bkgProcs['TTV'] = []
 #bkgProcs['TTV']   = ['TTWl','TTWq','TTZl']
 bkgProcs['TTV']   = ['TTWl','TTWq','TTZlM10', 'TTZlM1to10']
-bkgProcs['OtherT']= ['TTTT', 'TTHH', 'TTWH', 'TTWW', 'TTWZ', 'TTZH', 'TTZZ', 'TTHB', 'TTHnoB']#['TTHB','TTHnoB', 'TTTT']
+bkgProcs['OtherT']= ['TTHH', 'TTWH', 'TTWW', 'TTWZ', 'TTZH', 'TTZZ', 'TTHB', 'TTHnoB']#['TTHB','TTHnoB', 'TTTT']
 
 #bkgProcs['TTTo2L2Nu'] = ['TTTo2L2Nu_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
 #bkgProcs['TTToHadronic'] = ['TTToHadronic_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
@@ -720,74 +728,74 @@ def findfiles(path, filtre):
 def rundoTemp(category):
 	#iPlotList = ['HT''minBBdr','aveBBdr','deltaEta_maxBB','FW_momentum_2','centrality','aveCSVpt','HT','minMlb','Bjet1Pt','mass_maxJJJpt','MTlmet','lepDR_minBBdr','MET']
         iPlotList = [
+                'HT',
+                'HTpt40',
+                'ST',
+                'minMlb',
+                'mass_minBBdr',
+                'deltaR_lepBJet_maxpt',
+                'lepDR_minBBdr',
+                'centrality',
+                'deltaEta_maxBB',
+                'aveCSVpt',
+                'aveBBdr',
+                #'topPt',
+                #'FW_momentum_0',
+                #'FW_momentum_1', ##TODO
+                #'FW_momentum_2', ##TODO
+                #'FW_momentum_3',
+                #'FW_momentum_4',
+                #'FW_momentum_5',
+                #'FW_momentum_6',
+                'mass_maxJJJpt',
+                'Bjet1Pt',
+                'deltaR_minBB', ##TODO
+                #'deltaR',  ##TODO
+                'MTlmet',
                 #'HT',
-                #'HTpt40',
-                #'ST',
-                #'minMlb',
-                #'mass_minBBdr',
-                #'deltaR_lepBJet_maxpt',
-                #'lepDR_minBBdr',
-                #'centrality',
-                #'deltaEta_maxBB',
-                #'aveCSVpt',
-                #'aveBBdr',
-                ##'topPt',
-                ##'FW_momentum_0',
-                ##'FW_momentum_1', ##TODO
-                ##'FW_momentum_2', ##TODO
-                ##'FW_momentum_3',
-                ##'FW_momentum_4',
-                ##'FW_momentum_5',
-                ##'FW_momentum_6',
-                #'mass_maxJJJpt',
-                #'Bjet1Pt',
-                #'deltaR_minBB', ##TODO
-                ##'deltaR',  ##TODO
-                #'MTlmet',
-                ##'HT',
-                #'hemiout',
-                #'theLeadJetPt',
-                #'MET',
-                #'lepPt',
-                #'masslepJets0',
-                #'masslepJets1',
-                #'masslepJets2',
+                'hemiout',
+                'theLeadJetPt',
+                'MET',
+                'lepPt',
+                'masslepJets0',
+                'masslepJets1',
+                'masslepJets2',
                 #'MT2bb',
                 #'masslepBJets0',
-                #'mass_lepBJet_mindr',
-                # 
-                ##'secondJetPt',
-                ##'fifthJetPt',  ## TODO
-                ##'sixthJetPt', ##TODO
-#               # 'PtFifthJet', ## TODO
-                #'mass_minLLdr',
-                #'mass_maxBBmass',
-                #'deltaR_lepJetInMinMljet',
-                #'deltaPhi_lepJetInMinMljet',
-                #'deltaR_lepbJetInMinMlb',
-                #'deltaPhi_lepbJetInMinMlb',
-                #'M_allJet_W',
-                #'HT_bjets',
-                #'ratio_HTdHT4leadjets',
-                #'csvJet1',
-                #'csvJet2',
-                #'csvJet3',
-                #'csvJet4',
-                #'firstcsvb_bb',
-                #'secondcsvb_bb',
-                #'thirdcsvb_bb',
-                #'fourthcsvb_bb',
-                #'NBJets',
-                #'NJets',
-                #'HT_2m',
-                #'Sphericity',
-                #'Aplanarity',
-                #'BestTop_Disc',
-                #'BestTop_Pt', 
-                ##'NoTop_Jet1_CSV', 
-                #'NoTop_Jet1_Pt', 
-                #'NoTop_Jet2_CSV',
-                #'NoTop_Jet2_Pt',
+                'mass_lepBJet_mindr',
+                 
+                #'secondJetPt',
+                #'fifthJetPt',  ## TODO
+                #'sixthJetPt', ##TODO
+#                'PtFifthJet', ## TODO
+                'mass_minLLdr',
+                'mass_maxBBmass',
+                'deltaR_lepJetInMinMljet',
+                'deltaPhi_lepJetInMinMljet',
+                'deltaR_lepbJetInMinMlb',
+                'deltaPhi_lepbJetInMinMlb',
+                'M_allJet_W',
+                'HT_bjets',
+                'ratio_HTdHT4leadjets',
+                'csvJet1',
+                'csvJet2',
+                'csvJet3',
+                'csvJet4',
+                'firstcsvb_bb',
+                'secondcsvb_bb',
+                'thirdcsvb_bb',
+                'fourthcsvb_bb',
+                'NBJets',
+                'NJets',
+                'HT_2m',
+                'Sphericity',
+                'Aplanarity',
+                'BestTop_Disc',
+                'BestTop_Pt', 
+                #'NoTop_Jet1_CSV', 
+                'NoTop_Jet1_Pt', 
+                'NoTop_Jet2_CSV',
+                'NoTop_Jet2_Pt',
 
                 #'XGB200', 
                 #'XGB220', 
@@ -807,60 +815,60 @@ def rundoTemp(category):
                 #'XGB2500',
                 #'XGB3000',
                 
-                'XGB200_SR1', 
-                'XGB220_SR1', 
-                'XGB250_SR1', 
-                'XGB300_SR1', 
-                'XGB350_SR1', 
-                'XGB400_SR1', 
-                'XGB500_SR1', 
-                'XGB600_SR1', 
-                'XGB700_SR1', 
-                'XGB800_SR1', 
-                'XGB1000_SR1', 
-                'XGB1250_SR1',
-                'XGB1500_SR1',
-                'XGB1750_SR1',
-                'XGB2000_SR1',
-                'XGB2500_SR1',
-                'XGB3000_SR1',
-                
-                'XGB200_SR2', 
-                'XGB220_SR2', 
-                'XGB250_SR2', 
-                'XGB300_SR2', 
-                'XGB350_SR2', 
-                'XGB400_SR2', 
-                'XGB500_SR2', 
-                'XGB600_SR2', 
-                'XGB700_SR2', 
-                'XGB800_SR2', 
-                'XGB1000_SR2', 
-                'XGB1250_SR2',
-                'XGB1500_SR2',
-                'XGB1750_SR2',
-                'XGB2000_SR2',
-                'XGB2500_SR2',
-                'XGB3000_SR2',
-                
-                
-                'XGB200_SR3', 
-                'XGB220_SR3', 
-                'XGB250_SR3', 
-                'XGB300_SR3', 
-                'XGB350_SR3', 
-                'XGB400_SR3', 
-                'XGB500_SR3', 
-                'XGB600_SR3', 
-                'XGB700_SR3', 
-                'XGB800_SR3', 
-                'XGB1000_SR3', 
-                'XGB1250_SR3',
-                'XGB1500_SR3',
-                'XGB1750_SR3',
-                'XGB2000_SR3',
-                'XGB2500_SR3',
-                'XGB3000_SR3',
+                #'XGB200_SR1', 
+                #'XGB220_SR1', 
+                #'XGB250_SR1', 
+                #'XGB300_SR1', 
+                #'XGB350_SR1', 
+                #'XGB400_SR1', 
+                #'XGB500_SR1', 
+                #'XGB600_SR1', 
+                #'XGB700_SR1', 
+                #'XGB800_SR1', 
+                #'XGB1000_SR1', 
+                #'XGB1250_SR1',
+                #'XGB1500_SR1',
+                #'XGB1750_SR1',
+                #'XGB2000_SR1',
+                #'XGB2500_SR1',
+                #'XGB3000_SR1',
+                #
+                #'XGB200_SR2', 
+                #'XGB220_SR2', 
+                #'XGB250_SR2', 
+                #'XGB300_SR2', 
+                #'XGB350_SR2', 
+                #'XGB400_SR2', 
+                #'XGB500_SR2', 
+                #'XGB600_SR2', 
+                #'XGB700_SR2', 
+                #'XGB800_SR2', 
+                #'XGB1000_SR2', 
+                #'XGB1250_SR2',
+                #'XGB1500_SR2',
+                #'XGB1750_SR2',
+                #'XGB2000_SR2',
+                #'XGB2500_SR2',
+                #'XGB3000_SR2',
+                #
+                #
+                #'XGB200_SR3', 
+                #'XGB220_SR3', 
+                #'XGB250_SR3', 
+                #'XGB300_SR3', 
+                #'XGB350_SR3', 
+                #'XGB400_SR3', 
+                #'XGB500_SR3', 
+                #'XGB600_SR3', 
+                #'XGB700_SR3', 
+                #'XGB800_SR3', 
+                #'XGB1000_SR3', 
+                #'XGB1250_SR3',
+                #'XGB1500_SR3',
+                #'XGB1750_SR3',
+                #'XGB2000_SR3',
+                #'XGB2500_SR3',
+                #'XGB3000_SR3',
 
 
 

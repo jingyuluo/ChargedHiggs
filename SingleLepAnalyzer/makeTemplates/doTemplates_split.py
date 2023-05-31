@@ -4,7 +4,7 @@ import argparse
 from ROOT import gROOT,TFile,TH1F
 parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
-from weights import *
+#from weights import *
 from modSyst import *
 from utils import *
 
@@ -27,7 +27,15 @@ parser = argparse.ArgumentParser(description="template building for the charged 
 parser.add_argument("-d", "--directory", help="the directory to be processed")
 parser.add_argument("-c", "--Categorized", default=False, action="store_true", help="Categorize or not")
 parser.add_argument("-s", "--sys", default=False, action="store_true", help="build the systematic uncertainty templates")
+parser.add_argument("-y", "--year", default="17", help="The data taking year")
 args = parser.parse_args()
+
+if args.year=="17":
+    from weights import *
+if args.year=="18":
+    from weights_UL18 import *
+
+
 
 gROOT.SetBatch(1)
 start_time = time.time()
@@ -97,7 +105,7 @@ bkgProcs['T']     = ['Tt','Tbt','Ts','TtW','TbtW',]
 #bkgProcs['TTV'] = []
 #bkgProcs['TTV']   = ['TTWl','TTWq','TTZl']
 bkgProcs['TTV']   = ['TTWl','TTWq','TTZlM10', 'TTZlM1to10']
-bkgProcs['OtherT']= ['TTTT', 'TTHH', 'TTWH', 'TTWW', 'TTWZ', 'TTZH', 'TTZZ', 'TTHB', 'TTHnoB']#['TTHB','TTHnoB', 'TTTT']
+bkgProcs['OtherT']= ['TTHH', 'TTWH', 'TTWW', 'TTWZ', 'TTZH', 'TTZZ', 'TTHB', 'TTHnoB']#['TTHB','TTHnoB', 'TTTT']
 
 #bkgProcs['TTTo2L2Nu'] = ['TTTo2L2Nu_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
 #bkgProcs['TTToHadronic'] = ['TTToHadronic_'+flavor for flavor in ['tt1b', 'tt2b', 'ttbb', 'ttcc', 'ttjj']]
