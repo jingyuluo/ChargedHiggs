@@ -65,7 +65,7 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 
 	#if isEM=='E' and isCR(njets,nbtag): cut += ' && (minDPhi_MetJet>0.05)'
 
-	cut += ' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))' #' && DataPastTrigger == 1 && MCPastTrigger == 1'
+	cut += ' && DataPastTriggerX == 1 && MCPastTriggerX == 1 && AK4HT>350'#' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))' #' && DataPastTrigger == 1 && MCPastTrigger == 1'
 	# Define weights
 	TrigEff = 'triggerXSF * triggerSF'
 	jetSFstr = '1'
@@ -118,12 +118,12 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 
         
       
-	#if 'WJetsMG' in process:
+	if 'WJetsMG' in process:
 	#	HTweightStr   = 'HTSF_Pol'
 	#	HTweightStrUp = 'HTSF_PolUp'
 	#	HTweightStrDn = 'HTSF_PolDown'
 #
-# 		HTweightStr = str(genHTweight[process])
+ 		HTweightStr = str(genHTweight[process])
 # 		HTweightStr   = 'HTSF_Pol'
 # 		HTweightStrUp = 'HTSF_PolUp'
 # 		HTweightStrDn = 'HTSF_PolDn'

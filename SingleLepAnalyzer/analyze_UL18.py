@@ -55,7 +55,8 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	ljmetCalc = 'JetSubCalc' #JetSubCalc/singleLepCalc switch
 
 	# Define general cuts
-	cut  = '((leptonPt_MultiLepCalc > 35 && isElectron) || (leptonPt_MultiLepCalc > 30 && isMuon))'
+        cut  = '((leptonPt_MultiLepCalc > 35 && isElectron) || (leptonPt_MultiLepCalc > 30 && isMuon))'
+	#cut  = '((leptonPt_MultiLepCalc > 20 && isElectron) || (leptonPt_MultiLepCalc > 20 && isMuon))'
 	cut += ' && (corr_met_MultiLepCalc > '+str(cutList['metCut'])+')'
 	cut += ' && (theJetPt_'+ljmetCalc+'_PtOrdered[0] > '+str(cutList['jet1PtCut'])+')'
 	cut += ' && (theJetPt_'+ljmetCalc+'_PtOrdered[1] > '+str(cutList['jet2PtCut'])+')'
@@ -64,8 +65,8 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 	#cut += ' && (MCWeight_MultiLepCalc>0)'
 
 	#if isEM=='E' and isCR(njets,nbtag): cut += ' && (minDPhi_MetJet>0.05)'
-
-	cut += ' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))' #' && DataPastTrigger == 1 && MCPastTrigger == 1'
+        #cut += ' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))'
+	cut += ' && DataPastTriggerX == 1 && MCPastTriggerX == 1 && AK4HT>350' #' && (DataLepPastTrigger == 1 || (DataPastTriggerX==1 && AK4HT>500)) && (MCLepPastTrigger == 1 || (MCPastTriggerX ==1 && AK4HT>500))' #' && DataPastTrigger == 1 && MCPastTrigger == 1'
 	# Define weights
 	TrigEff = 'triggerXSF * triggerSF'
 	jetSFstr = '1'
@@ -118,12 +119,16 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 
         
       
-	#if 'WJetsMG' in process:
+	if 'WJetsMG' in process: #or ('DYMG' in process):
 	#	HTweightStr   = 'HTSF_Pol'
 	#	HTweightStrUp = 'HTSF_PolUp'
 	#	HTweightStrDn = 'HTSF_PolDown'
 #
-# 		HTweightStr = str(genHTweight[process])
+ 		HTweightStr = str(genHTweight[process])
+ 		#HTweightStrUp = str(genHTweight[process])
+ 		#HTweightStrDn = str(genHTweight[process])
+ 
+                
 # 		HTweightStr   = 'HTSF_Pol'
 # 		HTweightStrUp = 'HTSF_PolUp'
 # 		HTweightStrDn = 'HTSF_PolDn'
@@ -139,6 +144,8 @@ def analyze(tTree,tTreePkey,process,cutList,doAllSys,doJetRwt,iPlot,plotDetails,
 #ltiLepCalc))  *'+str(weight[process])
                 weightStr          += ' * pileupWeight * L1NonPrefiringProb_CommonCalc * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF *'+DJweightStr+'* isoSF * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
 ltiLepCalc))  *'+str(weight[process]) 
+                #weightStr          += ' * pileupWeight * L1NonPrefiringProb_CommonCalc * '+topPt13TeVstr+' * '+HTweightStr+' * '+TrigEff+'  * lepIdSF * isoSF * EGammaGsfSF*(MCWeight_MultiLepCalc/abs(MCWeight_Mu\
+#ltiLepCalc))  *'+str(weight[process]) 
                 #weightTrigEffUpStr  = weightStr.replace(TrigEff,'('+TrigEff+'+'+TrigEff+'Uncert)')
                 #weightTrigEffDownStr= weightStr.replace(TrigEff,'('+TrigEff+'-'+TrigEff+'Uncert)')
                 weightPileupUpStr   = weightStr.replace('pileupWeight','pileupWeightUp')

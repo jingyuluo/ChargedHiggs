@@ -42,45 +42,45 @@ iPlotList = [#distribution name as defined in "doHists.py"
 'theLeadJetPt',
 'MET',
 'lepPt',
-'masslepJets0',
-'masslepJets1',
-'masslepJets2',
-'MT2bb',
-'masslepBJets0',
-'mass_lepBJet_mindr',
-'secondJetPt',
-'fifthJetPt',
-'sixthJetPt',
-'PtFifthJet',
-'mass_minLLdr',
-'mass_maxBBmass',
-'deltaR_lepJetInMinMljet',
-'deltaPhi_lepJetInMinMljet',
-'deltaR_lepbJetInMinMlb',
-'deltaPhi_lepbJetInMinMlb',
-'M_allJet_W',
-'HT_bjets',
-'HTpt40',
-'ratio_HTdHT4leadjets',
-'csvJet1',
-'csvJet2',
-'csvJet3',
-'csvJet4',
-'firstcsvb_bb',
-'secondcsvb_bb',
-'thirdcsvb_bb',
-'fourthcsvb_bb',
-'NJets',
-'NBJets',
-'HT_2m',
-'Sphericity',
-'Aplanarity',
-'BestTop_Disc', 
-'BestTop_Pt', 
-'NoTop_Jet1_CSV', 
-'NoTop_Jet1_Pt', 
-'NoTop_Jet2_CSV', 
-'NoTop_Jet2_Pt',
+#'masslepJets0',
+#'masslepJets1',
+#'masslepJets2',
+#'MT2bb',
+#'masslepBJets0',
+#'mass_lepBJet_mindr',
+#'secondJetPt',
+#'fifthJetPt',
+#'sixthJetPt',
+#'PtFifthJet',
+#'mass_minLLdr',
+#'mass_maxBBmass',
+#'deltaR_lepJetInMinMljet',
+#'deltaPhi_lepJetInMinMljet',
+#'deltaR_lepbJetInMinMlb',
+#'deltaPhi_lepbJetInMinMlb',
+#'M_allJet_W',
+#'HT_bjets',
+#'HTpt40',
+#'ratio_HTdHT4leadjets',
+#'csvJet1',
+#'csvJet2',
+#'csvJet3',
+#'csvJet4',
+#'firstcsvb_bb',
+#'secondcsvb_bb',
+#'thirdcsvb_bb',
+#'fourthcsvb_bb',
+#'NJets',
+#'NBJets',
+#'HT_2m',
+#'Sphericity',
+#'Aplanarity',
+#'BestTop_Disc', 
+#'BestTop_Pt', 
+#'NoTop_Jet1_CSV', 
+#'NoTop_Jet1_Pt', 
+#'NoTop_Jet2_CSV', 
+#'NoTop_Jet2_Pt',
 
 'XGB200_SR1',
 'XGB220_SR1',
@@ -191,7 +191,7 @@ count=0
 for sigTrained in sigTrainedList:
 	pfix='templates'
 	if not categorize: pfix='kinematics_'+region
-	pfix+='_M'+sigTrained+'_'+date+"_topPtRW_NOHTWeight_Full_FixTrig_forlimit_UL18"#+'_'+time
+	pfix+='_M'+sigTrained+'_'+date+"_topPtRW_BReweight_withHTWeight_Full_FixTrig_forlimit_UL18"#+'_'+time
 	outDir = outputDir+pfix
 	if not os.path.exists(outDir): os.system('mkdir '+outDir)
 	os.chdir(outputDir)
@@ -200,7 +200,7 @@ for sigTrained in sigTrainedList:
         shutil.copy('doHists_UL18.py', outDir+'/')
         shutil.copy('../utils.py', outDir+'/')
         shutil.copy('../weights_UL18.py', outDir+'/')
-        shutil.copy('../samples.py', outDir+'/')
+        shutil.copy('../samples_UL18.py', outDir+'/')
 	os.chdir(outDir)
 
 	for iplot in iPlotList:
@@ -215,7 +215,7 @@ for sigTrained in sigTrainedList:
                         shutil.copy('../doHists_UL18.py', './')
                         shutil.copy('../utils.py', './')
                         shutil.copy('../weights_UL18.py', './')
-                        shutil.copy('../samples.py', '.')						
+                        shutil.copy('../samples_UL18.py', '.')						
 	                #os.system('cp ../analyze.py ../doHists.py ../utils.py ../weights.py ../samples.py '+outDir+'/'+catDir+'/')
 			dict={'dir':outputDir,'iPlot':iplot,'region':region,'isCategorized':categorize,
 			      'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4],
@@ -227,7 +227,7 @@ for sigTrained in sigTrainedList:
 Executable = %(isEM)sT%(nttag)sW%(nWtag)sB%(nbtag)sJ%(njets)s%(iPlot)s.sh
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
-Transfer_Input_Files = analyze_UL18.py,doHists_UL18.py,utils.py,weights_UL18.py,samples.py
+Transfer_Input_Files = analyze_UL18.py,doHists_UL18.py,utils.py,weights_UL18.py,samples_UL18.py
 request_memory = 3072
 Output = condor_%(iPlot)s.out
 Error = condor_%(iPlot)s.err

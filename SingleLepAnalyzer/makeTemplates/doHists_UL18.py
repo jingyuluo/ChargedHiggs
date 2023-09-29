@@ -8,7 +8,7 @@ from numpy import linspace
 import argparse
 from weights_UL18 import *
 from analyze_UL18 import *
-from samples import *
+from samples_UL18 import *
 from utils import *
 
 gROOT.SetBatch(1)
@@ -21,7 +21,7 @@ start_time = time.time()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
 #step1Dir = '/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/' 
-ntupleDir = '/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/nominal/'
+ntupleDir = '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/UL18/nominal/'#'/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2018UL_RunIISummer20_3t_step2/nominal/'#'/isilon/hadoop/store/group/bruxljm/jingyu/FWLJMET106XUL_singleLep2018UL_RunIISummer20_3t_step2_new/nominal' #'/isilon/hadoop/store/group/bruxljm/trussel1/UL18/step3_XGB/nominal'#'/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/nominal/'
 
 
 """
@@ -67,8 +67,8 @@ whichSignal = 'Hptb' #Hptb,HTB, TTM, BBM, or X53X53M
 massList = [200, 220, 250, 300, 350, 400, 500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]#[1000]#[250,500,1000]
 #massList = [300] 
 
-sigList = [whichSignal+str(mass) for mass in massList]
-#sigList = []
+#sigList = [whichSignal+str(mass) for mass in massList]
+sigList = []
 if whichSignal=='Hptb': decays = ['']
 
 sigTrained = 'Low1'
@@ -83,7 +83,7 @@ BDTSR_Merged = False
 if len(sys.argv)>4: isCategorized=int(sys.argv[4])
 doJetRwt= 0
 doAllSys= True 
-cutList = {'metCut':30,'jet1PtCut':40,'jet2PtCut':40}
+cutList = {'metCut':30,'jet1PtCut':30,'jet2PtCut':30}
 
 cutString  = 'MET'+str(int(cutList['metCut']))
 cutString += '_1jet'+str(int(cutList['jet1PtCut']))+'_2jet'+str(int(cutList['jet2PtCut']))

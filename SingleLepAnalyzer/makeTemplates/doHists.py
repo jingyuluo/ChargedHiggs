@@ -83,7 +83,7 @@ BDTSR_Merged = False
 if len(sys.argv)>4: isCategorized=int(sys.argv[4])
 doJetRwt= 0
 doAllSys= True 
-cutList = {'metCut':30,'jet1PtCut':40,'jet2PtCut':40}
+cutList = {'metCut':30,'jet1PtCut':30,'jet2PtCut':30}
 
 cutString  = 'MET'+str(int(cutList['metCut']))
 cutString += '_1jet'+str(int(cutList['jet1PtCut']))+'_2jet'+str(int(cutList['jet2PtCut']))

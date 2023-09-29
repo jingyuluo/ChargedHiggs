@@ -1,0 +1,11 @@
+universe = vanilla
+Executable = comb.sh
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+request_memory = 3072
+Output = combine_M400.out
+Error = combine_M400.err
+Log = combine_M400.log
+Notification = Error
+Arguments = 400
+Queue

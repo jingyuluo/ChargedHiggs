@@ -79,7 +79,7 @@ else:
 	#bkgGrupList = ['ttbar','top','ewk','qcd']
 	bkgProcList = ['TTJets','T','WJets','ZJets','VV','qcd'] #TTV
 bkgProcs = {}
-bkgProcs['WJets']  =  ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200']
+bkgProcs['WJets']  =  ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200', 'WJetsMG2500']
 #bkgProcs['WJets']  =  ['WJetsMG200','WJetsMG400','WJetsMG600','WJetsMG800', 'WJetsMG1200', 'WJetsMG2500']
 #bkgProcs['WJets'] += ['WJetsMG1200_1','WJetsMG1200_2','WJetsMG1200_3','WJetsMG1200_4','WJetsMG1200_5']
 #bkgProcs['WJets'] += ['WJetsMG2500_1','WJetsMG2500_2','WJetsMG2500_3','WJetsMG2500_4','WJetsMG2500_5']#,'WJetsMG2500_6']
@@ -160,7 +160,8 @@ whichSignal = 'Hptb' #Hptb,HTB, TTM, BBM, or X53X53M
 massList = [200, 220, 250, 300, 400,  500, 600, 700, 800, 1000, 1250, 1500, 1750, 2000, 2500, 3000]
 #if massPt not in massList:    MICHAEL COMMENTED OUT THESE TWO LINES
 #	massList.append(massPt)
-sigList = [whichSignal+str(mass) for mass in massList]
+#sigList = [whichSignal+str(mass) for mass in massList]
+sigList = [] 
 if whichSignal=='Hptb' or whichSignal == 'Hptb1000': decays = ['']
 
 doBRScan = False
@@ -171,7 +172,8 @@ BRs['TZ']=[0.5,0.25,1.0,0.8,0.6,0.4,0.2,0.0,0.8,0.6,0.4,0.2,0.0,0.6,0.4,0.2,0.0,
 nBRconf=len(BRs['BW'])
 if not doBRScan: nBRconf=1
 
-isEMlist =['E','M']
+#isEMlist =['E','M']
+isEMlist =['E', 'M']
 nttaglist = ['0p']
 nWtaglist = ['0p']
 nbtaglist = ['1', '2', '3p']
@@ -729,17 +731,17 @@ def rundoTemp(category):
 	#iPlotList = ['HT''minBBdr','aveBBdr','deltaEta_maxBB','FW_momentum_2','centrality','aveCSVpt','HT','minMlb','Bjet1Pt','mass_maxJJJpt','MTlmet','lepDR_minBBdr','MET']
         iPlotList = [
                 'HT',
-                'HTpt40',
+                #'HTpt40',
                 'ST',
                 'minMlb',
-                'mass_minBBdr',
-                'deltaR_lepBJet_maxpt',
-                'lepDR_minBBdr',
-                'centrality',
-                'deltaEta_maxBB',
-                'aveCSVpt',
-                'aveBBdr',
-                #'topPt',
+                #'mass_minBBdr',
+                #'deltaR_lepBJet_maxpt',
+                #'lepDR_minBBdr',
+                #'centrality',
+                #'deltaEta_maxBB',
+                #'aveCSVpt',
+                #'aveBBdr',
+                ##'topPt',
                 #'FW_momentum_0',
                 #'FW_momentum_1', ##TODO
                 #'FW_momentum_2', ##TODO
@@ -747,55 +749,55 @@ def rundoTemp(category):
                 #'FW_momentum_4',
                 #'FW_momentum_5',
                 #'FW_momentum_6',
-                'mass_maxJJJpt',
-                'Bjet1Pt',
+                #'mass_maxJJJpt',
+                #'Bjet1Pt',
                 'deltaR_minBB', ##TODO
-                #'deltaR',  ##TODO
-                'MTlmet',
-                #'HT',
-                'hemiout',
-                'theLeadJetPt',
-                'MET',
+                ##'deltaR',  ##TODO
+                #'MTlmet',
+                ##'HT',
+                #'hemiout',
+                #'theLeadJetPt',
+                #'MET',
                 'lepPt',
-                'masslepJets0',
-                'masslepJets1',
-                'masslepJets2',
-                #'MT2bb',
-                #'masslepBJets0',
-                'mass_lepBJet_mindr',
-                 
-                #'secondJetPt',
-                #'fifthJetPt',  ## TODO
-                #'sixthJetPt', ##TODO
-#                'PtFifthJet', ## TODO
-                'mass_minLLdr',
-                'mass_maxBBmass',
-                'deltaR_lepJetInMinMljet',
-                'deltaPhi_lepJetInMinMljet',
-                'deltaR_lepbJetInMinMlb',
-                'deltaPhi_lepbJetInMinMlb',
-                'M_allJet_W',
-                'HT_bjets',
-                'ratio_HTdHT4leadjets',
-                'csvJet1',
-                'csvJet2',
-                'csvJet3',
-                'csvJet4',
-                'firstcsvb_bb',
-                'secondcsvb_bb',
-                'thirdcsvb_bb',
-                'fourthcsvb_bb',
-                'NBJets',
-                'NJets',
-                'HT_2m',
-                'Sphericity',
-                'Aplanarity',
-                'BestTop_Disc',
-                'BestTop_Pt', 
-                #'NoTop_Jet1_CSV', 
-                'NoTop_Jet1_Pt', 
-                'NoTop_Jet2_CSV',
-                'NoTop_Jet2_Pt',
+                #'masslepJets0',
+                #'masslepJets1',
+                #'masslepJets2',
+                ##'MT2bb',
+                ##'masslepBJets0',
+                #'mass_lepBJet_mindr',
+                # 
+                ##'secondJetPt',
+                ##'fifthJetPt',  ## TODO
+                ##'sixthJetPt', ##TODO
+#               # 'PtFifthJet', ## TODO
+                #'mass_minLLdr',
+                #'mass_maxBBmass',
+                #'deltaR_lepJetInMinMljet',
+                #'deltaPhi_lepJetInMinMljet',
+                #'deltaR_lepbJetInMinMlb',
+                #'deltaPhi_lepbJetInMinMlb',
+                #'M_allJet_W',
+                #'HT_bjets',
+                #'ratio_HTdHT4leadjets',
+                #'csvJet1',
+                #'csvJet2',
+                #'csvJet3',
+                #'csvJet4',
+                #'firstcsvb_bb',
+                #'secondcsvb_bb',
+                #'thirdcsvb_bb',
+                #'fourthcsvb_bb',
+                #'NBJets',
+                #'NJets',
+                #'HT_2m',
+                #'Sphericity',
+                #'Aplanarity',
+                #'BestTop_Disc',
+                #'BestTop_Pt', 
+                ##'NoTop_Jet1_CSV', 
+                #'NoTop_Jet1_Pt', 
+                #'NoTop_Jet2_CSV',
+                #'NoTop_Jet2_Pt',
 
                 #'XGB200', 
                 #'XGB220', 
@@ -815,60 +817,60 @@ def rundoTemp(category):
                 #'XGB2500',
                 #'XGB3000',
                 
-                #'XGB200_SR1', 
-                #'XGB220_SR1', 
-                #'XGB250_SR1', 
-                #'XGB300_SR1', 
-                #'XGB350_SR1', 
-                #'XGB400_SR1', 
-                #'XGB500_SR1', 
-                #'XGB600_SR1', 
-                #'XGB700_SR1', 
-                #'XGB800_SR1', 
-                #'XGB1000_SR1', 
-                #'XGB1250_SR1',
-                #'XGB1500_SR1',
-                #'XGB1750_SR1',
-                #'XGB2000_SR1',
-                #'XGB2500_SR1',
-                #'XGB3000_SR1',
-                #
-                #'XGB200_SR2', 
-                #'XGB220_SR2', 
-                #'XGB250_SR2', 
-                #'XGB300_SR2', 
-                #'XGB350_SR2', 
-                #'XGB400_SR2', 
-                #'XGB500_SR2', 
-                #'XGB600_SR2', 
-                #'XGB700_SR2', 
-                #'XGB800_SR2', 
-                #'XGB1000_SR2', 
-                #'XGB1250_SR2',
-                #'XGB1500_SR2',
-                #'XGB1750_SR2',
-                #'XGB2000_SR2',
-                #'XGB2500_SR2',
-                #'XGB3000_SR2',
-                #
-                #
-                #'XGB200_SR3', 
-                #'XGB220_SR3', 
-                #'XGB250_SR3', 
-                #'XGB300_SR3', 
-                #'XGB350_SR3', 
-                #'XGB400_SR3', 
-                #'XGB500_SR3', 
-                #'XGB600_SR3', 
-                #'XGB700_SR3', 
-                #'XGB800_SR3', 
-                #'XGB1000_SR3', 
-                #'XGB1250_SR3',
-                #'XGB1500_SR3',
-                #'XGB1750_SR3',
-                #'XGB2000_SR3',
-                #'XGB2500_SR3',
-                #'XGB3000_SR3',
+                'XGB200_SR1', 
+                'XGB220_SR1', 
+                'XGB250_SR1', 
+                'XGB300_SR1', 
+                'XGB350_SR1', 
+                'XGB400_SR1', 
+                'XGB500_SR1', 
+                'XGB600_SR1', 
+                'XGB700_SR1', 
+                'XGB800_SR1', 
+                'XGB1000_SR1', 
+                'XGB1250_SR1',
+                'XGB1500_SR1',
+                'XGB1750_SR1',
+                'XGB2000_SR1',
+                'XGB2500_SR1',
+                'XGB3000_SR1',
+                
+                'XGB200_SR2', 
+                'XGB220_SR2', 
+                'XGB250_SR2', 
+                'XGB300_SR2', 
+                'XGB350_SR2', 
+                'XGB400_SR2', 
+                'XGB500_SR2', 
+                'XGB600_SR2', 
+                'XGB700_SR2', 
+                'XGB800_SR2', 
+                'XGB1000_SR2', 
+                'XGB1250_SR2',
+                'XGB1500_SR2',
+                'XGB1750_SR2',
+                'XGB2000_SR2',
+                'XGB2500_SR2',
+                'XGB3000_SR2',
+                
+                
+                'XGB200_SR3', 
+                'XGB220_SR3', 
+                'XGB250_SR3', 
+                'XGB300_SR3', 
+                'XGB350_SR3', 
+                'XGB400_SR3', 
+                'XGB500_SR3', 
+                'XGB600_SR3', 
+                'XGB700_SR3', 
+                'XGB800_SR3', 
+                'XGB1000_SR3', 
+                'XGB1250_SR3',
+                'XGB1500_SR3',
+                'XGB1750_SR3',
+                'XGB2000_SR3',
+                'XGB2500_SR3',
+                'XGB3000_SR3',
 
 
 

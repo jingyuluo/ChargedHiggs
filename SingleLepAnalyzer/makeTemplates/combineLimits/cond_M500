@@ -1,0 +1,11 @@
+universe = vanilla
+Executable = comb.sh
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+request_memory = 3072
+Output = combine_M500.out
+Error = combine_M500.err
+Log = combine_M500.log
+Notification = Error
+Arguments = 500
+Queue

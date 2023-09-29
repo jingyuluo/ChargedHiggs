@@ -1,0 +1,11 @@
+universe = vanilla
+Executable = comb.sh
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+request_memory = 3072
+Output = combine_M700.out
+Error = combine_M700.err
+Log = combine_M700.log
+Notification = Error
+Arguments = 700
+Queue
