@@ -7,10 +7,8 @@ import varsList
 import numpy as np
 import uproot 
 import pandas as pd
-import root_pandas
-from root_pandas import to_root
 from ROOT import TMVA
-from ROOT import RDataFrame
+#from ROOT import RDataFrame
 import xgboost as xgb
 from xgboost import XGBClassifier
 import sklearn 
@@ -19,7 +17,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler 
 
 parser = argparse.ArgumentParser(description='Convert pandas dataframe to libsvm')
-parser.add_argument("-k", "--varListKey", default="NewVar", help="Input variable list")
+parser.add_argument("-k", "--varListKey", default="NewVar_reduced", help="Input variable list")
 parser.add_argument("-l", "--label", default="", help="label for output file")
 parser.add_argument("-m", "--mass", default="500", help="The signal mass point")
 
@@ -31,13 +29,14 @@ selList = [["NJetsCSV_JetSubCalc", ""],["NJets_JetSubCalc", ""], ["leptonPt_Mult
 weightList = [["pileupWeight", ""], ["lepIdSF", ""], ["EGammaGsfSF", ""], ["MCWeight_MultiLepCalc", ""]] 
 varListKey = args.varListKey
 varList = varsList.varList[varListKey]
-inputDir = varsList.inputDir
+siginputDir = varsList.siginputDir
+bkginputDir = varsList.bkginputDir
 infname = "ChargedHiggs_HplusTB_HplusToTB_M-"+str(args.mass)+"_TuneCP5_13TeV_amcatnlo_pythia8_hadd.root"
 
-print "Loading Signal Sample"
+print("Loading Signal Sample")
 
-sig_tree = uproot.open(inputDir+infname)["ljmet"]
-sig_df = sig_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList), entrystop=-1)
+sig_tree = uproot.open(siginputDir+infname)["ljmet"]
+sig_df = sig_tree.arrays((iVar[0] for iVar in varList+selList+weightList), library="pd")
 
 #Event Selection
  
@@ -45,18 +44,18 @@ sig_selected = ((sig_df["isTraining"]==1)|(sig_df["isTraining"]==2))&(sig_df["NJ
 
 sig_df = sig_df[sig_selected]
 
-print "Loading Background Samples"
+print("Loading Background Samples")
 back_dfs = []
 
 bkgList = varsList.bkg
 for ibkg in bkgList:
-    print ibkg
-    bkg_tree = uproot.open(inputDir+ibkg)["ljmet"]
-    bkg_df = bkg_tree.pandas.df(branches=(iVar[0] for iVar in varList+selList+weightList), entrystop=-1)
-    print bkg_df
-    bkg_selected = ((bkg_df["isTraining"]==1)|(bkg_df["isTraining"]==2))&(bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True)))
+    print(ibkg)
+    bkg_tree = uproot.open(bkginputDir+ibkg)["ljmet"]
+    bkg_df = bkg_tree.arrays((iVar[0] for iVar in varList+selList+weightList), library="pd")
+    print(bkg_df)
+    bkg_selected = ((bkg_df["isTraining"]==1)|(bkg_df["isTraining"]==2))&(bkg_df["NJets_JetSubCalc"]>4)&(bkg_df["NJetsCSV_JetSubCalc"]>1)&( ((bkg_df["leptonPt_MultiLepCalc"]>35)&(bkg_df["isElectron"]==True))|((bkg_df["leptonPt_MultiLepCalc"]>30)&(bkg_df["isMuon"]==True))) 
     bkg_df = bkg_df[bkg_selected]
-    print bkg_df
+    print(bkg_df)
     back_dfs.append(bkg_df)
 
 #print back_dfs
@@ -70,12 +69,12 @@ weightBkg = bkgall_df['pileupWeight']*bkgall_df['lepIdSF']*bkgall_df['EGammaGsfS
 sigtotalWeight = np.sum(weightSig)
 bkgtotalWeight = np.sum(weightBkg)
 
-print "Signal Weights:", weightSig
-print "Background Weights:", weightBkg
+print("Signal Weights:", weightSig)
+print("Background Weights:", weightBkg)
 #compute the weight ratio to balance the training for XGBoost
 scale = float(bkgtotalWeight)/float(sigtotalWeight)
 
-print "SCALE", scale
+print("SCALE", scale)
 
 randnum = np.random.rand(sig_df.shape[0]+bkgall_df.shape[0])
 isTrain = randnum>0.2
@@ -86,7 +85,10 @@ bkgall_df.loc[:, "isSignal"] = np.zeros(bkgall_df.shape[0])
 
 dfall = pd.concat([sig_df, bkgall_df])
 
-weightall = np.append(weightSig, weightBkg)
+weightall = np.append(weightSig*scale, weightBkg)
+
+dfweightall = pd.DataFrame(weightall, columns=['weight'])
+
 
 
 
@@ -97,12 +99,26 @@ varList.sort()
 for ivar in varList:
     train_var.append(ivar[0])
 #train_var.append("isSignal")
+
+print(train_var)
+
+
 dfall_var = dfall.loc[:, train_var]
 
-print dfall_var
+print(dfall_var)
 
 dfall_train = dfall_var[isTrain]
 dfall_test = dfall_var[isTrain==False]
+
+
+dfweight_train = dfweightall[isTrain]
+dfweight_test = dfweightall[isTrain==False]
+
+weightfile = open("weight_M"+args.mass+".txt", "w")
+
+weightfile.write(str(scale))
+weightfile.close()
+
 
 #print "Columns:", dfall.columns
 #print "dfall_var cloumns:", dfall_var.columns
@@ -114,10 +130,9 @@ dfall_test = dfall_var[isTrain==False]
 #labels_test = dfall_test['isSignal']
 dfall_train.to_csv("dtrainM"+args.mass+".csv", index=False)
 dfall_test.to_csv("dtestM"+args.mass+".csv", index=False)
+dfweight_train.to_csv("dtrainM"+args.mass+".csv.weight", index=False)
+dfweight_test.to_csv("dtestM"+args.mass+".csv.weight", index=False)
 
-
-#dump_svmlight_file(d_train,labels_train, './dtrainM'+args.mass+'.dat')
-#dump_svmlight_file(d_test, labels_test, './dtestM'+args.mass+'.dat')
 
 #
 #NDIM = len(dfall_var.columns)

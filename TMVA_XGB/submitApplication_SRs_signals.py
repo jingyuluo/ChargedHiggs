@@ -11,9 +11,10 @@ runDir = os.getcwd()
 start_time = time.time()
 shift = sys.argv[1]
 
-inputDir='/isilon/hadoop/store/group/bruxljmFWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
-outputDir= '/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/'+shift+'/' # or 2018
-condorDir= runDir+'/condor_logs_XGBSRs_sys_added_'+shift+'/'
+#inputDir='/isilon/hadoop/store/group/bruxljmFWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
+inputDir='/isilon/hadoop/store/group/bruxljm/FWLJMET106XUL_singleLep2016APVUL_RunIISummer20_3t_step2/'+shift+'/'
+outputDir= '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_reduced/UL16APV/'+shift+'/' # or 2017
+condorDir= runDir+'/condor_logs_XGBSRs_signal_UL16APV_reduced_'+shift+'/'
 
 print 'Starting submission'
 count=0
@@ -52,7 +53,7 @@ Output = %(FILENAME)s.out
 Error = %(FILENAME)s.err
 Log = %(FILENAME)s.log
 Notification = Never
-Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar_added    
+Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar_reduced 
 
 Queue 1"""%dict)
     jdf.close()
@@ -66,7 +67,7 @@ print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
 
 
 #BDTlist = ['BDT']
-#varListKeys = ['NewVar']#['2016AN']
+#varListKeys = ['NewVar']#['2017AN']
 #massList = ['200','250','300','350','400','500','800','1000','1500','2000','2500','3000']
 ##massList = ['200','500','2000']
 #nIts = '100'

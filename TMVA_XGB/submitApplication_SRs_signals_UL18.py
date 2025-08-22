@@ -11,9 +11,10 @@ runDir = os.getcwd()
 start_time = time.time()
 shift = sys.argv[1]
 
-inputDir='/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2016APVUL_RunIISummer20_3t_step2/'+shift+'/'
-outputDir= '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_reduced/UL16APV/'+shift+'/' # or 2016APV
-condorDir= runDir+'/condor_logs_XGBSRs_UL16APV_sys_reduced_'+shift+'/'
+#inputDir='/isilon/hadoop/store/group/bruxljmFWLJMET106XUL_singleLep2018UL_RunIISummer20_3t_step2/'+shift+'/'
+inputDir='/isilon/hadoop/store/group/bruxljm/FWLJMET106XUL_singleLep2018UL_RunIISummer20_3t_step2/'+shift+'/'
+outputDir= '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_reduced/UL18/'+shift+'/' # or 2018
+condorDir= runDir+'/condor_logs_XGBSRs_signal_UL18_reduced_'+shift+'/'
 
 print 'Starting submission'
 count=0
@@ -66,7 +67,7 @@ print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
 
 
 #BDTlist = ['BDT']
-#varListKeys = ['NewVar']#['2016APVAN']
+#varListKeys = ['NewVar']#['2018AN']
 #massList = ['200','250','300','350','400','500','800','1000','1500','2000','2500','3000']
 ##massList = ['200','500','2000']
 #nIts = '100'

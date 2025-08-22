@@ -11,11 +11,11 @@ runDir = os.getcwd()
 start_time = time.time()
 shift = sys.argv[1]
 
-inputDir='/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2016APVUL_RunIISummer20_3t_step2/'+shift+'/'
-outputDir= '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_reduced/UL16APV/'+shift+'/' # or 2016APV
-condorDir= runDir+'/condor_logs_XGBSRs_UL16APV_sys_reduced_'+shift+'/'
+inputDir='/isilon/hadoop/store/group/bruxljm/jingyu/FWLJMET106XUL_singleLep2018UL_RunIISummer20v2PUupdated__step2/'+shift+'/' #'/isilon/hadoop/store/user/fsimpson/FWLJMET106XUL_singleLep2017UL_RunIISummer20v2_step2/'+shift+'/' #'/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/'+shift+'/'
+outputDir= '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_test_new/UL18/'+shift+'/' # or 2017APV
+condorDir= runDir+'/condor_logs_XGBSRs_UL18_NEWNEWTEST_'+shift+'/'
 
-print 'Starting submission'
+print('Starting submission')
 count=0
 
 #inDir=inputDir[10:]
@@ -24,6 +24,11 @@ count=0
 rootfiles = os.popen('ls '+inputDir)
 os.system('mkdir -p '+outputDir)
 os.system('mkdir -p '+condorDir)
+os.system('cp XGBApply_SRs.py '+condorDir)
+os.system('cp varsList.py '+condorDir)
+os.system('cp submitApplication_SRs.sh '+condorDir)
+
+
 #eosindir = inputDir[inputDir.find("/store"):]
 #eosindir = "root://cmseos.fnal.gov/"+eosindir
 
@@ -32,14 +37,18 @@ os.system('mkdir -p '+condorDir)
 
 for file in rootfiles:
     if 'root' not in file: continue
+    #if '2000' not in file: continue
+    if 'PairVLQ' in file: continue
     #if not 'TTToSemiLeptonic' in file: continue
     #if not 'ttjj' in file: continue
 #    if 'TTTo' in file: continue
     rawname = file[:-6]
     count+=1
     dict={'RUNDIR':runDir, 'CONDORDIR':condorDir, 'INPUTDIR':inputDir, 'FILENAME':rawname, 'OUTPUTDIR':outputDir}
-    jdfName=condorDir+'/%(FILENAME)s.job'%dict
-    print jdfName
+    subdir = condorDir+'/%(FILENAME)s'%dict
+    os.system('mkdir -p '+subdir)
+    jdfName=condorDir+'/%(FILENAME)s/%(FILENAME)s.job'%dict
+    print(jdfName)
     jdf=open(jdfName,'w')
     jdf.write(
 """universe = vanilla
@@ -56,17 +65,20 @@ Arguments =  %(INPUTDIR)s/%(FILENAME)s.root  %(OUTPUTDIR)s  %(FILENAME)s  NewVar
 
 Queue 1"""%dict)
     jdf.close()
-    os.chdir('%s/'%(condorDir))
+    os.system('cp XGBApply_SRs.py '+subdir)
+    os.system('cp varsList.py '+subdir)
+    os.system('cp submitApplication_SRs.sh '+subdir)
+    os.chdir('%s/'%(subdir))
     os.system('condor_submit %(FILENAME)s.job'%dict)
     os.system('sleep 0.5')
     os.chdir('%s'%(runDir))
-    print count, "jobs submitted!!!"
+    print(count, "jobs submitted!!!")
 
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
 
 
 #BDTlist = ['BDT']
-#varListKeys = ['NewVar']#['2016APVAN']
+#varListKeys = ['NewVar']#['2017APVAN']
 #massList = ['200','250','300','350','400','500','800','1000','1500','2000','2500','3000']
 ##massList = ['200','500','2000']
 #nIts = '100'

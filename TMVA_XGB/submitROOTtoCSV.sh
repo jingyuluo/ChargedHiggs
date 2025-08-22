@@ -7,23 +7,33 @@ scratch=${PWD}
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 
-export SCRAM_ARCH=slc7_amd64_gcc820
+export SCRAM_ARCH=el9_amd64_gcc12
 
-scramv1 project CMSSW CMSSW_11_1_0_pre7
-cd CMSSW_11_1_0_pre7
+scramv1 project CMSSW CMSSW_14_0_19
+cd CMSSW_14_0_19/src
 eval `scramv1 runtime -sh`
 cd -
 
 macroDir=${PWD}
+
+export HOME=${PWD}
+
 export PATH=$PATH:$macroDir
 
 #source /cvmfs/sft.cern.ch/lcg/contrib/gcc/7.3.0/x86_64-centos7-gcc7-opt/setup.sh
 #source /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/6.16.00/x86_64-centos7-gcc48-opt/bin/thisroot.sh
 #xrdcp -f ${haddFile} root://cmseos.fnal.gov/${outputDir//$NOM/$SHIFT}/${haddFile//${SHIFT}_hadd/} 2>&1
 
-python UpROOTtoCSV.py  -k $vListKey -m ${mass} 
+python3 UpROOTtoCSV.py  -k $vListKey -m ${mass} 
 
-xrdcp -f dtrainM${mass}.csv $outputDir/
-xrdcp -f dtestM${mass}.csv $outputDir/
+cp  dtrainM${mass}.csv $outputDir/
+cp  dtestM${mass}.csv $outputDir/
+cp  *weight $outputDir/
+cp  *txt $outputDir/
+
+
+rm -r CMSSW_14_0_19
 
 rm *csv
+rm *weight
+rm *txt
