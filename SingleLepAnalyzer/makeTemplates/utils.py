@@ -1,14 +1,13 @@
 #!/usr/bin/python
 
 import sys,math
-from ROOT import *
 
 def skip_atlas(njets,nbjets): # function to skip certain categories in atlas categorization
- 	if njets=='4':
- 		if nbjets=='3' or nbjets=='4p': return True
-  	if njets=='5' or njets=='6p':
- 		if nbjets=='3p': return True
- 	return False
+    if njets=='4':
+ 	    if nbjets=='3' or nbjets=='4p': return True
+    if njets=='5' or njets=='6p':
+ 	    if nbjets=='3p': return True
+    return False
 
 def skip(njets,nbjets): # function to skip certain categories in final categorization
 # 	return False #uncomment and make it False for Kinematics and totBkg
@@ -152,12 +151,12 @@ def printTable(table,out=sys.stdout):
     for row in table:
         # left col
         if row[0]=='break': row[0]='-'*(sum(col_paddings)+(2*len(col_paddings)))
-        print >> out, format(row[0]).ljust(col_paddings[0] + 1),
+        print(format(row[0]).ljust(col_paddings[0] + 1), end=' ', file=out)
         # rest of the cols
         for i in range(1, len(row)):
             col = format(row[i]).ljust(col_paddings[i] + 2)
-            print >> out, col,
-        print >> out
+            print(col, end=' ', file=out)
+        print(file=out)
 
 ##############################################################################
 

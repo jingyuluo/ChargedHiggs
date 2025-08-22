@@ -6,9 +6,9 @@ parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
 from numpy import linspace
 import argparse
-from weights import *
-from analyze import *
-from samples import *
+from weights_UL16 import *
+from analyze_UL16 import *
+from samples_UL16 import *
 from utils import *
 
 gROOT.SetBatch(1)
@@ -20,8 +20,8 @@ start_time = time.time()
 # args = parser.parse_args()
 
 lumiStr = str(targetlumi/1000).replace('.','p') # 1/fb
-step1Dir = '/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/' 
-ntupleDir = '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_test_new/UL17/nominal/'#'/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_NEWRED/UL17/nominal/'#'/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/nominal/'#'/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/nominal/'
+step1Dir = '/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2016UL_RunIISummer20_3t_step1hadds/' 
+ntupleDir = '/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_test_new/UL16/nominal/'#'/isilon/hadoop/store/group/bruxljm/jluo48/CHiggs_XGB/XGB_NEWRED/UL17/nominal/'#'/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step2/nominal/'#'/isilon/hadoop/users/jluo48/CHiggs/UL17/step3_XGB/nominal/'
 
 
 """
@@ -325,6 +325,7 @@ if not isCategorized:
     
         }
 
+
 else:
 
     plotList = {
@@ -405,8 +406,6 @@ else:
 
 
             }
-
-
 print("PLOTTING:",iPlot)
 print("         LJMET Variable:",plotList[iPlot][0])
 print("         X-AXIS TITLE  :",plotList[iPlot][2])

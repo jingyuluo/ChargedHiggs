@@ -4,7 +4,7 @@ import os,sys,time,math,pickle,itertools
 parent = os.path.dirname(os.getcwd())
 sys.path.append(parent)
 import ROOT as rt
-from weights_UL16APV import *
+from weights_UL16 import *
 from modSyst import *
 from utils import *
 import CMS_lumi, tdrstyle
@@ -12,7 +12,7 @@ import CMS_lumi, tdrstyle
 rt.gROOT.SetBatch(1)
 start_time = time.time()
 
-lumi=19.52 #for plots
+lumi=59.83 #for plots
 lumiInTemplates= str(targetlumi/1000).replace('.','p') # 1/fb
 
 plottop = False
@@ -220,7 +220,7 @@ tdrstyle.setTDRStyle()
 #change the CMS_lumi variables (see CMS_lumi.py)
 CMS_lumi.lumi_7TeV = "4.8 fb^{-1}"
 CMS_lumi.lumi_8TeV = "18.3 fb^{-1}"
-CMS_lumi.lumi_13TeV= "19.52 fb^{-1}"
+CMS_lumi.lumi_13TeV= "16.7 fb^{-1}"
 CMS_lumi.writeExtraText = 1
 CMS_lumi.extraText = "Preliminary"
 CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)

@@ -1,67 +1,66 @@
 #!/usr/bin/python
 
 import sys,math
-from ROOT import *
 
 def skip_atlas(njets,nbjets): # function to skip certain categories in atlas categorization
- 	if njets=='4':
- 		if nbjets=='3' or nbjets=='4p': return True
-  	if njets=='5' or njets=='6p':
- 		if nbjets=='3p': return True
- 	return False
+    if njets=='4':
+        if nbjets=='3' or nbjets=='4p': return True
+    if njets=='5' or njets=='6p':
+        if nbjets=='3p': return True
+    return False
 
 def skip(njets,nbjets): # function to skip certain categories in final categorization
-# 	return False #uncomment and make it False for Kinematics and totBkg
- 	CRcats = [
- 			  nbjets=='2p' and njets=='5p',
- 			  nbjets=='1p' and njets=='3p',
- 			  nbjets=='1' and njets=='4',
- 			  nbjets=='1' and njets=='5',
- 			  nbjets=='1' and njets=='6p',
- 			  nbjets=='2' and njets=='4'
- 			  ]
- 	SRcats = [
- 			  nbjets=='2p' and njets=='5p', 	
- 			  nbjets=='1p' and njets=='3p',
- 			  nbjets=='2' and njets=='5',
- 			  nbjets=='2' and njets=='6p',
- 			  nbjets=='2' and njets=='6',
- 			  nbjets=='2' and njets=='7',
- 			  nbjets=='2' and njets=='8',
- 			  nbjets=='2' and njets=='9',
- 			  nbjets=='2' and njets=='10',
- 			  nbjets=='2' and njets=='11',
- 			  nbjets=='3p' and njets=='4',
- 			  nbjets=='3p' and njets=='5',
- 			  nbjets=='3p' and njets=='6p',
- 			  ]
- 	if any(CRcats) or any(SRcats): return False
- 	else: return True
+#     return False #uncomment and make it False for Kinematics and totBkg
+    CRcats = [
+               nbjets=='2p' and njets=='5p',
+               nbjets=='1p' and njets=='3p',
+               nbjets=='1' and njets=='4',
+               nbjets=='1' and njets=='5',
+               nbjets=='1' and njets=='6p',
+               nbjets=='2' and njets=='4'
+               ]
+    SRcats = [
+               nbjets=='2p' and njets=='5p',     
+               nbjets=='1p' and njets=='3p',
+               nbjets=='2' and njets=='5',
+               nbjets=='2' and njets=='6p',
+               nbjets=='2' and njets=='6',
+               nbjets=='2' and njets=='7',
+               nbjets=='2' and njets=='8',
+               nbjets=='2' and njets=='9',
+               nbjets=='2' and njets=='10',
+               nbjets=='2' and njets=='11',
+               nbjets=='3p' and njets=='4',
+               nbjets=='3p' and njets=='5',
+               nbjets=='3p' and njets=='6p',
+               ]
+    if any(CRcats) or any(SRcats): return False
+    else: return True
 
 def isCR(njets,nbjets): # definition of CR categories
- 	CRcats = [
- 			  nbjets=='2p' and njets=='5p', 	
- 			  nbjets=='1p' and njets=='3p',
- 			  nbjets=='1' and njets=='4',
- 			  nbjets=='1' and njets=='5',
- 			  nbjets=='1' and njets=='6p',
-#   			  nbjets=='1' and njets=='4p',
- 			  nbjets=='2' and njets=='4']
- 	if any(CRcats): return True
- 	else: return False
+    CRcats = [
+               nbjets=='2p' and njets=='5p',     
+               nbjets=='1p' and njets=='3p',
+               nbjets=='1' and njets=='4',
+               nbjets=='1' and njets=='5',
+               nbjets=='1' and njets=='6p',
+#                 nbjets=='1' and njets=='4p',
+               nbjets=='2' and njets=='4']
+    if any(CRcats): return True
+    else: return False
 
 def isSR(njets,nbjets): # definition of SR categories
- 	SRcats = [
-#  			  nbjets=='1p' and njets=='3p',
- 			  nbjets=='2' and njets=='5',
- 			  nbjets=='2' and njets=='6p',
- 			  nbjets=='3p' and njets=='4',
- 			  nbjets=='3p' and njets=='5',
- 			  nbjets=='3p' and njets=='6p',
+    SRcats = [
+#                nbjets=='1p' and njets=='3p',
+               nbjets=='2' and njets=='5',
+               nbjets=='2' and njets=='6p',
+               nbjets=='3p' and njets=='4',
+               nbjets=='3p' and njets=='5',
+               nbjets=='3p' and njets=='6p',
 
- 			  ]
- 	if any(SRcats): return True
- 	else: return False
+               ]
+    if any(SRcats): return True
+    else: return False
 
 ##############################################################################
 
@@ -80,36 +79,36 @@ def contains(a, b):
 ##############################################################################
 
 def normByBinWidth(h):
-	h.SetBinContent(0,0)
-	h.SetBinContent(h.GetNbinsX()+1,0)
-	h.SetBinError(0,0)
-	h.SetBinError(h.GetNbinsX()+1,0)
-	
-	for bin in range(1,h.GetNbinsX()+1):
-		width=h.GetBinWidth(bin)
-		content=h.GetBinContent(bin)
-		error=h.GetBinError(bin)
-		
-		h.SetBinContent(bin, content/width)
-		h.SetBinError(bin, error/width)
+    h.SetBinContent(0,0)
+    h.SetBinContent(h.GetNbinsX()+1,0)
+    h.SetBinError(0,0)
+    h.SetBinError(h.GetNbinsX()+1,0)
+    
+    for bin in range(1,h.GetNbinsX()+1):
+        width=h.GetBinWidth(bin)
+        content=h.GetBinContent(bin)
+        error=h.GetBinError(bin)
+        
+        h.SetBinContent(bin, content/width)
+        h.SetBinError(bin, error/width)
 
 def negBinCorrection(h): #set negative bin contents to zero and adjust the normalization
-	norm0=h.Integral()
-	for iBin in range(0,h.GetNbinsX()+2):
-		if h.GetBinContent(iBin)<0: 
-			h.SetBinContent(iBin,0)
-			h.SetBinError(iBin,0)
-	if h.Integral()!=0 and norm0>0: h.Scale(norm0/h.Integral())
+    norm0=h.Integral()
+    for iBin in range(0,h.GetNbinsX()+2):
+        if h.GetBinContent(iBin)<0: 
+            h.SetBinContent(iBin,0)
+            h.SetBinError(iBin,0)
+    if h.Integral()!=0 and norm0>0: h.Scale(norm0/h.Integral())
 
 def overflow(h):
-	nBinsX=h.GetXaxis().GetNbins()
-	content=h.GetBinContent(nBinsX)+h.GetBinContent(nBinsX+1)
-	error=math.sqrt(h.GetBinError(nBinsX)**2+h.GetBinError(nBinsX+1)**2)
-	h.SetBinContent(nBinsX,content)
-	h.SetBinError(nBinsX,error)
-	h.SetBinContent(nBinsX+1,0)
-	h.SetBinError(nBinsX+1,0)
-	    
+    nBinsX=h.GetXaxis().GetNbins()
+    content=h.GetBinContent(nBinsX)+h.GetBinContent(nBinsX+1)
+    error=math.sqrt(h.GetBinError(nBinsX)**2+h.GetBinError(nBinsX+1)**2)
+    h.SetBinContent(nBinsX,content)
+    h.SetBinError(nBinsX,error)
+    h.SetBinContent(nBinsX+1,0)
+    h.SetBinError(nBinsX+1,0)
+        
 ##############################################################################
 #Printing tables
 
@@ -152,12 +151,12 @@ def printTable(table,out=sys.stdout):
     for row in table:
         # left col
         if row[0]=='break': row[0]='-'*(sum(col_paddings)+(2*len(col_paddings)))
-        print >> out, format(row[0]).ljust(col_paddings[0] + 1),
+        print(format(row[0]).ljust(col_paddings[0] + 1), end=' ', file=out)
         # rest of the cols
         for i in range(1, len(row)):
             col = format(row[i]).ljust(col_paddings[i] + 2)
-            print >> out, col,
-        print >> out
+            print(col, end=' ', file=out)
+        print(file=out)
 
 ##############################################################################
 

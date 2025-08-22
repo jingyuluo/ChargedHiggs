@@ -34,4 +34,4 @@ export PATH=$PATH:$macroDir
 
 
 
-python3 doHists_UL18.py ./ $iPlot $region $isCategorized $isEM $nttag $nWtag $nbtag $njets $sigTrained
+python3 doHists_UL16.py ./ $iPlot $region $isCategorized $isEM $nttag $nWtag $nbtag $njets $sigTrained

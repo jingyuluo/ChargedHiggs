@@ -9,8 +9,8 @@ from samples import *
 parser = argparse.ArgumentParser(description="Print out the number of events for each sample")
 
 #parser.add_argument("-f", "--file", default="", help="The path to the input file")
-parser.add_argument("-i", "--inputdir", default="/isilon/hadoop/store/user/dali/FWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/nominal", help="The path to the step1hadds directory (background samples)")
-parser.add_argument("-s", "--sigdir", default="/isilon/hadoop/store/group/bruxljmFWLJMET106XUL_singleLep2017UL_RunIISummer20_3t_step1hadds/nominal", help="The path to the step1hadds directory (signal samples)")
+parser.add_argument("-i", "--inputdir", default="/isilon/hadoop/store/user/fsimpson/FWLJMET106XUL_singleLep2017UL_RunIISummer20v2_step1hadds/nominal", help="The path to the step1hadds directory (background samples)")
+parser.add_argument("-s", "--sigdir", default="/isilon/hadoop/store/group/bruxljm/FWLJMET106XUL_singleLep2017UL_RunIISummer20v2_PUupdated_step1hadds/nominal", help="The path to the step1hadds directory (signal samples)")
 parser.add_argument("-y", "--year", default="17")
 
 args = parser.parse_args()
@@ -20,7 +20,7 @@ nRun_dict = {}
 flavs = ["_tt1b", "_tt2b", "_ttbb", "_ttcc", "_ttjj"]
 N = 10
 
-keys = samples.keys()
+keys = list(samples.keys())
 keys.sort() 
 
 for key in keys:
@@ -51,7 +51,7 @@ for key in keys:
             #            NevtHist = tfile_HT0Njet0.Get("NumTrueHist")
             #            nRun_total+=NevtHist.Integral()
             nRun_dict[key] = nRun_total
-            print(key, nRun_dict[key])
+            print((key, nRun_dict[key]))
 
         else:
             nRun_total=0
@@ -61,14 +61,14 @@ for key in keys:
             NevtHist = tfile.Get("NumTrueHist")
             nRun_total+=NevtHist.Integral()
             nRun_dict[key] = nRun_total
-            print(key, nRun_dict[key])
+            print((key, nRun_dict[key]))
             
     if "Hptb" in key:
         inputfile = args.sigdir+"/"+samples[key]+"_hadd.root"
         tfile = ROOT.TFile(inputfile)
         NevtHist = tfile.Get("NumTrueHist")
         nRun_dict[key] = NevtHist.Integral()
-        print(key, nRun_dict[key])
+        print((key, nRun_dict[key]))
 
                 
             
@@ -78,22 +78,22 @@ for key in keys:
         tfile = ROOT.TFile(inputfile)
         NevtHist = tfile.Get("NumTrueHist")
         nRun_dict[key] = NevtHist.Integral()
-        print(key, nRun_dict[key])
+        print((key, nRun_dict[key]))
         
 
 
 
-nRunfile = open("nRun_UL"+args.year+".py", "w")
-
-nRunfile.write("#!/usr/bin/python\n")
-
-keys = nRun_dict.keys()
-
-keys.sort()
-
-for key in keys:
-
-    nRunfile.write('nRun_origin["'+key+'"] = '+str(nRun_dict[key])+'\n')
+#nRunfile = open("nRun_UL"+args.year+".py", "w")
+#
+#nRunfile.write("#!/usr/bin/python\n")
+#
+#keys = list(nRun_dict.keys())
+#
+#keys.sort()
+#
+#for key in keys:
+#
+#    nRunfile.write('nRun_origin["'+key+'"] = '+str(nRun_dict[key])+'\n')
 
 
 

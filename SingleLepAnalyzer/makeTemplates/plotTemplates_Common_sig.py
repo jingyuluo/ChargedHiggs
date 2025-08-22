@@ -19,7 +19,7 @@ plottop = False
 plotewk = False
 plotqcd = False
 region='CR' #SR,PS
-isCategorized=True#False
+isCategorized=False #False
 iPlot='thirdcsvb_bb'
 if len(sys.argv)>2: iPlot=str(sys.argv[2])
 cutString=''#'E_nT0p_nW0p_nB2_nJ4'#'lep50_MET30_DR0_1jet50_2jet40'
@@ -32,12 +32,11 @@ if len(sys.argv)>3: massPt=str(sys.argv[3])
 # /user_data/jlee/chargedHiggs/2017Data/CMSSW_10_2_10/src/SingleLepAnalyzer/makeTemplates/v1/templates_M250_2019_11_18
 if len(sys.argv)>1: templateDir=os.getcwd()+'/'+str(sys.argv[1])+'/'
 else:
-    templateDir=os.getcwd()+'/kinematics_CR_M500_2020_11_3_topPtRW/'
+    templateDir=os.getcwd()+'/kinematics_CR_M500_2020_11_18_topPtRW_NC/'
 #templateDir2=os.getcwd()+'/v1/templates_M250_2019_12_16/'
 
 splitTTbar = True
-#isRebinned= '_wNegBinsCorrec_'#_killFirstBins_syFist' #post for ROOT file names
-isRebinned= '_wNegBinsCorrec__rebinned_stat0p2'#_killFirstBins_syFist' #post for ROOT file names
+isRebinned= '_wNegBinsCorrec_'#_killFirstBins_syFist' #post for ROOT file names
 saveKey = '' # tag for plot names
 
 sig1='Hptb'+massPt # choose the 1st signal to plot
@@ -59,9 +58,10 @@ if iPlot=='YLD': tempsig='templates_'+iPlot+'_'+sig1+'_'+lumiInTemplates+'fb'+is
 print("tempsig : ",tempsig)
 if splitTTbar: 
 
-    bkgTTBarList = ['ttnobb','ttbb'] 
-    bkgProcList = bkgTTBarList+['top','ewk','qcd']
-    #bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
+    bkgTTBarList = ['ttbb','ttnobb'] 
+    bkgProcList = ['ewk','qcd', 'top']+bkgTTBarList
+    #bkgProcList = ['ewk','top', 'ttnobb', 'ttbb','qcd']
+    #    bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
     #    bkgProcList = ['ttb','ttcc','ttlf','top','ewk','qcd']
 else: 
     bkgProcList = ['ttbar','top','ewk','qcd']
@@ -80,6 +80,7 @@ if plotqcd:
 bkgHistColors = {'tt2b':rt.kRed+3,'ttbb':rt.kRed,'tt1b':rt.kRed-3,'ttcc':rt.kRed-5,'ttjj':rt.kRed-7,'top':rt.kBlue,'ewk':rt.kGreen-8,'qcd':rt.kOrange+5,'ttbar':rt.kRed,'ttnobb':rt.kRed-7} #HTB
 systematicList = [
 'pileup','muRFcorrd','muR','muF','toppt','jec','jer','ht','LF','LFstat1', 'LFstat2','HF','HFstat1','HFstat2','CFerr1','CFerr2', 'DJjes'
+
 #'CMS_scale_j'       , 'CMS_HPTB_mcreweight_ewk', 'CMS_res_j'        , 'muR_ttbar', 'muF_ttbar',
 #'CMS_btag_LF'       , 'CMS_pileup'             , 'CMS_btag_HF'      , 'muR_top'  , 'muF_top'  , 
 #'CMS_topreweight' ,
@@ -87,15 +88,15 @@ systematicList = [
 #'CMS_btag_LFstat2'  , 'CMS_btag_CFerr2'        , 'CMS_btag_HFstat2' , 'muR_ewk'  , 'muF_ewk'   
 ]
 
-doAllSys = True
+doAllSys = True#False
 doQ2sys  = False
 if not doAllSys: doQ2sys = False
 addCRsys = False
 doNormByBinWidth=False
 #set true, to see the actual shape of the distributions when the binning is not uniform, e.g binning with 0.3
-doOneBand = True
+doOneBand = False
 if not doAllSys: doOneBand = True # Don't change this!
-blind = False#True
+blind = False
 blindYLD = False
 yLog  = True
 doRealPull = False
@@ -133,7 +134,6 @@ for tag in tagList:
 	tagStr='nT'+tag[0]+'_nW'+tag[1]+'_nB'+tag[2]+'_nJ'+tag[3]
 	modTag = tagStr[tagStr.find('nT'):tagStr.find('nJ')-3]
 	print(tagStr)
-        print(modTag)
 	modelingSys['data_'+modTag] = 0.
 	for proc in bkgProcList:
 		if proc in ['ttbar','ttbb','tt1b','ttcc','ttjj','tt2b']: 
@@ -329,7 +329,7 @@ for tag in tagList:
 			for proc in bkgProcList:
 				try: normByBinWidth(bkghists[proc+catStr])
 				except: pass
-# 			normByBinWidth(hsig1)
+ 			normByBinWidth(hsig1)
 # 			normByBinWidth(hsig2)
 			normByBinWidth(hData)
 
@@ -440,8 +440,8 @@ for tag in tagList:
 		hData.SetLineColor(rt.kBlack)
 		if drawYields: hData.SetMarkerSize(4)
 
-		bkgHTgerr.SetFillStyle(3002)
-		bkgHTgerr.SetFillColor(rt.kBlack)
+		#bkgHTgerr.SetFillStyle(3002)
+		bkgHTgerr.SetFillColorAlpha(rt.kBlack, 0.5)
 		bkgHTgerr.SetLineColor(rt.kBlack)
 
 		c1 = rt.TCanvas("c1","c1",50,50,W,H)
@@ -449,8 +449,8 @@ for tag in tagList:
 		c1.SetBorderMode(0)
 		c1.SetFrameFillStyle(0)
 		c1.SetFrameBorderMode(0)
-		c1.SetTickx()
-		c1.SetTicky()
+		c1.SetTickx(0)
+		c1.SetTicky(0)
 	
 		yDiv=0.35
 		if blind == True: yDiv=0.0
@@ -466,8 +466,8 @@ for tag in tagList:
 		uPad.SetBorderMode(0)
 		uPad.SetFrameFillStyle(0)
 		uPad.SetFrameBorderMode(0)
-		uPad.SetTickx()
-		uPad.SetTicky()
+		uPad.SetTickx(0)
+		uPad.SetTicky(0)
 		uPad.Draw()
 		if blind == False:
 			lPad=rt.TPad("lPad","",0,0,1,yDiv) #for sigma runner
@@ -568,19 +568,19 @@ for tag in tagList:
 		if not scaleSignals:
 			scaleFact1Str = ''
 			scaleFact2Str = ''
-		try: leg.AddEntry(bkghists['ttjj'+catStr],"t#bar{t}+jj","f")
+		try: leg.AddEntry(bkghists['ttlf'+catStr],"t#bar{t}+lf","f")
 		except: pass
  		leg.AddEntry(hsig1,sig1leg+scaleFact1Str,"l")
 		try: leg.AddEntry(bkghists['ttcc'+catStr],"t#bar{t}+c#bar{c}","f")
 		except: pass
 # 		leg.AddEntry(hsig2,sig2leg+scaleFact2Str,"l")
-		try: leg.AddEntry(bkghists['tt1b'+catStr],"t#bar{t}+1b","f")
+		try: leg.AddEntry(bkghists['ttb'+catStr],"t#bar{t}+b","f")
 		except: pass
 		try: leg.AddEntry(bkghists['top'+catStr],"TOP","f")
 		except: pass
                 try: leg.AddEntry(bkghists['tt2b'+catStr],"t#bar{t}+2b","f")
 		except: pass
-                #print bkghists['ttnobb'+catStr]
+                print(bkghists['ttnobb'+catStr])
                 try: leg.AddEntry(bkghists['ttnobb'+catStr],"t#bar{t}+!b#bar{b}","f")
                 except: pass
 		try: leg.AddEntry(bkghists['ewk'+catStr],"EWK","f")
@@ -757,12 +757,12 @@ for tag in tagList:
  		hsig1merged.Add(RFile1.Get(histPrefixM+'__sig').Clone())
 # 		hsig2merged.Add(RFile2.Get(histPrefixM+'__sig').Clone())
  	hsig1merged.Scale(xsec[sig1])
-# 	hsig2merged.Scale(xsec[sig2])
+# 	#hsig2merged.Scale(xsec[sig2])
 	if doNormByBinWidth:
 		for proc in bkgProcList:
 			try: normByBinWidth(bkghistsmerged[proc+'isL'+tagStr])
 			except: pass
-# 		normByBinWidth(hsig1merged)
+ 		normByBinWidth(hsig1merged)
 # 		normByBinWidth(hsig2merged)
 		normByBinWidth(hDatamerged)
 
@@ -823,7 +823,7 @@ for tag in tagList:
 	errorDnT = 0.	
 	bkgHTgerrmerged = totBkgTemp3['isL'+tagStr].Clone()
 
- 	if scaleFact1merged==0: scaleFact1merged=int((bkgHTmerged.GetMaximum()/hsig1merged.GetMaximum())*0.5)
+ 	#if scaleFact1merged==0: scaleFact1merged=int((bkgHTmerged.GetMaximum()/hsig1merged.GetMaximum())*0.5)
 # 	if scaleFact2merged==0: scaleFact2merged=int((bkgHTmerged.GetMaximum()/hsig2merged.GetMaximum())*0.5)
 	if scaleFact1merged==0: scaleFact1merged=1
 	if scaleFact2merged==0: scaleFact2merged=1
@@ -994,13 +994,13 @@ for tag in tagList:
 	if not scaleSignals:
 		scaleFact1Str = ''
 		scaleFact2Str = ''
-	try: legmerged.AddEntry(bkghistsmerged['ttjjisL'+tagStr],"t#bar{t}+jj","f")
+	try: legmerged.AddEntry(bkghistsmerged['ttlfisL'+tagStr],"t#bar{t}+lf","f")
 	except: pass
  	legmerged.AddEntry(hsig1merged,sig1leg+scaleFact1Str,"l")
 	try: legmerged.AddEntry(bkghistsmerged['ttccisL'+tagStr],"t#bar{t}+c#bar{c}","f")
 	except: pass
 # 	legmerged.AddEntry(hsig2merged,sig2leg+scaleFact2Str,"l")
-	try: legmerged.AddEntry(bkghistsmerged['tt1bisL'+tagStr],"t#bar{t}+1b","f")
+	try: legmerged.AddEntry(bkghistsmerged['ttbisL'+tagStr],"t#bar{t}+b","f")
 	except: pass
 	try: legmerged.AddEntry(bkghistsmerged['topisL'+tagStr],"TOP","f")
 	except: pass

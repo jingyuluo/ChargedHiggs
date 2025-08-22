@@ -9,9 +9,9 @@ from samples import *
 parser = argparse.ArgumentParser(description="Print out the number of events for each sample")
 
 #parser.add_argument("-f", "--file", default="", help="The path to the input file")
-parser.add_argument("-i", "--inputdir", default="/isilon/hadoop/store/user/fsimpson/FWLJMET106XUL_singleLep2018UL_RunIISummer20v2_step1hadds/nominal", help="The path to the step1hadds directory (background samples)")
-parser.add_argument("-s", "--sigdir", default="/isilon/hadoop/store/group/bruxljm/FWLJMET106XUL_singleLep2018UL_RunIISummer20v2_PUupdated_step1hadds/nominal", help="The path to the step1hadds directory (signal samples)")
-parser.add_argument("-y", "--year", default="18")
+parser.add_argument("-i", "--inputdir", default="/isilon/hadoop/store/user/fsimpson/FWLJMET106XUL_singleLep2016APVUL_RunIISummer20v2_step1hadds/nominal", help="The path to the step1hadds directory (background samples)")
+parser.add_argument("-s", "--sigdir", default="/isilon/hadoop/store/group/bruxljm/FWLJMET106XUL_singleLep2016APVUL_RunIISummer20v2_PUupdated_step1hadds/nominal", help="The path to the step1hadds directory (signal samples)")
+parser.add_argument("-y", "--year", default="16APV")
 
 args = parser.parse_args()
 

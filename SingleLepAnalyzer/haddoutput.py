@@ -64,11 +64,11 @@ if shift == 'nominal':
           
 for sample in dirList:
     if sample == 'SingleElectron': continue
-    print inputDir+'/'+sample
+    print(inputDir+'/'+sample)
     rootfiles = [x for x in os.listdir(inputDir+'/'+sample+'/'+shift+'/') if '.root' in x]
-    print '##########'*15
-    print 'HADDING:', sample,len(rootfiles)
-    print '##########'*15
+    print('##########'*15)
+    print('HADDING:', sample,len(rootfiles))
+    print('##########'*15)
     nFilesPerHadd = 999
     if sample=='TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8': nFilesPerHadd = 20
     if sample=='TT_Mtt-700to1000_TuneCP5_PSweights_13TeV-powheg-pythia8': nFilesPerHadd = 20
@@ -77,7 +77,7 @@ for sample in dirList:
         haddcommand = 'hadd -f '+outputDir+'/'+sample+'_hadd.root '
         for file in rootfiles:
             haddcommand+=' '+inputDir+'/'+sample+'/'+shift+'/'+file
-        print haddcommand
+        print(haddcommand)
         os.system(haddcommand)
     else:
         for i in range(int(len(rootfiles)/nFilesPerHadd)+1):
@@ -87,10 +87,10 @@ for sample in dirList:
             if len(rootfiles) < end: end=len(rootfiles)
             for j in range(begin,end):
                 haddcommand+=' '+inputDir+'/'+sample+'/'+shift+'/'+rootfiles[j]
-            print haddcommand
+            print(haddcommand)
             os.system(haddcommand)
 
-print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
+print(("--- %s minutes ---" % (round(time.time() - start_time, 2)/60)))
 
 
 

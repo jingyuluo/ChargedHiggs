@@ -232,16 +232,16 @@ count=0
 for sigTrained in sigTrainedList:
     pfix='templates'
     if not categorize: pfix='kinematics_'+region
-    pfix+='_M'+sigTrained+'_'+date+"_QCDsup_XGBRED_FineBin"#+'_'+time
+    pfix+='_M'+sigTrained+'_'+date+"_QCDsup_XGBRED_FineBin_UL16"#+'_'+time
     outDir = outputDir+pfix
     if not os.path.exists(outDir): os.system('mkdir '+outDir)
     os.chdir(outputDir)
 	#os.system('cp ../analyze.py doHists.py ../utils.py ../weights.py ../samples.py doCondorTemplates.py doCondorTemplates.sh '+outDir+'/')
-    shutil.copy('../analyze.py', outDir+'/')
-    shutil.copy('doHists.py', outDir+'/')
+    shutil.copy('../analyze_UL16.py', outDir+'/')
+    shutil.copy('doHists_UL16.py', outDir+'/')
     shutil.copy('../utils.py', outDir+'/')
-    shutil.copy('../weights.py', outDir+'/')
-    shutil.copy('../samples.py', outDir+'/')
+    shutil.copy('../weights_UL16.py', outDir+'/')
+    shutil.copy('../samples_UL16.py', outDir+'/')
     os.chdir(outDir)
 
     for iplot in iPlotList:
@@ -251,13 +251,13 @@ for sigTrained in sigTrainedList:
             print(("Training: "+sigTrained+", iPlot: "+iplot+", cat: "+catDir))
             if not os.path.exists(outDir+'/'+catDir): os.system('mkdir '+catDir)
             os.chdir(catDir)
-            os.system('cp '+outputDir+'/doCondorTemplates.sh '+outDir+'/'+catDir+'/'+cat[0]+'T'+cat[1]+'W'+cat[2]+'B'+cat[3]+'J'+cat[4]+iplot+'.sh')
+            os.system('cp '+outputDir+'/doCondorTemplates_UL16.sh '+outDir+'/'+catDir+'/'+cat[0]+'T'+cat[1]+'W'+cat[2]+'B'+cat[3]+'J'+cat[4]+iplot+'.sh')
             tmpDir = cat[0]+'T'+cat[1]+'W'+cat[2]+'B'+cat[3]+'J'+cat[4]+iplot
-            shutil.copy('../analyze.py', './')
-            shutil.copy('../doHists.py', './')
+            shutil.copy('../analyze_UL16.py', './')
+            shutil.copy('../doHists_UL16.py', './')
             shutil.copy('../utils.py', './')
-            shutil.copy('../weights.py', './')
-            shutil.copy('../samples.py', '.')						
+            shutil.copy('../weights_UL16.py', './')
+            shutil.copy('../samples_UL16.py', '.')						
             dict={'dir':outputDir,'iPlot':iplot,'region':region,'isCategorized':categorize,
 			      'isEM':cat[0],'nttag':cat[1],'nWtag':cat[2],'nbtag':cat[3],'njets':cat[4],
                   'exeDir':outDir+'/'+catDir,'sigTrained':sigTrained, 'tmpDir':tmpDir}
@@ -267,7 +267,7 @@ for sigTrained in sigTrainedList:
 Executable = %(isEM)sT%(nttag)sW%(nWtag)sB%(nbtag)sJ%(njets)s%(iPlot)s.sh
 Should_Transfer_Files = IF_NEEDED
 WhenToTransferOutput = ON_EXIT
-Transfer_Input_Files = analyze.py,doHists.py,utils.py,weights.py,samples.py
+Transfer_Input_Files = analyze_UL16.py,doHists_UL16.py,utils.py,weights_UL16.py,samples_UL16.py
 request_memory = 13312 
 Output = condor_%(iPlot)s.out
 Error = condor_%(iPlot)s.err

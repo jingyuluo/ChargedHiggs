@@ -2,7 +2,7 @@
 
 from ROOT import TH1D,TH2D,TTree,TFile
 from array import array
-from weights import *
+from weights_UL16 import *
 from utils import *
 from random import randint
 

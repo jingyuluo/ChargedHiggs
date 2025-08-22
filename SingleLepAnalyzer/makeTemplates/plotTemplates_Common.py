@@ -55,7 +55,7 @@ scaleFact2merged = 100
 if plotCombine: tempsig='templates_'+iPlot+'_'+lumiInTemplates+'fb'+isRebinned+'.root'
 tempsig='templates_'+iPlot+'_'+lumiInTemplates+'fb'+isRebinned+'.root'
 if iPlot=='YLD': tempsig='templates_'+iPlot+'_'+sig1+'_'+lumiInTemplates+'fb'+isRebinned+'.root'
-print "tempsig : ",tempsig
+print("tempsig : ",tempsig)
 if splitTTbar: 
 
     bkgTTBarList = ['ttnobb','ttbb'] 
@@ -133,8 +133,8 @@ corrdSys = math.sqrt(lumiSys**2+trigSys**2+lepIdSys**2+lepIsoSys**2) #cheating w
 for tag in tagList:
 	tagStr='nT'+tag[0]+'_nW'+tag[1]+'_nB'+tag[2]+'_nJ'+tag[3]
 	modTag = tagStr[tagStr.find('nT'):tagStr.find('nJ')-3]
-	print tagStr
-        print modTag
+	print(tagStr)
+        print(modTag)
 	modelingSys['data_'+modTag] = 0.
 	for proc in bkgProcList:
 		if proc in ['ttbar','ttbb','tt1b','ttcc','ttjj','tt2b']: 
@@ -205,7 +205,7 @@ tagPosY = 0.52
 
 
 RFile1 = rt.TFile(templateDir+tempsig.replace(M1,M1))
-print RFile1
+print(RFile1)
 
 #RFile2 = rt.TFile(templateDir2+tempsig.replace(M1,M2))
 
@@ -300,24 +300,24 @@ for tag in tagList:
 		histPrefix=iPlot+'_'+lumiInTemplates+'fb_'
 		catStr=postTag+'is'+isEM+'_'+tagStr
 		histPrefix+=catStr
-		print histPrefix
-		print dataName
-		print 
+		print(histPrefix)
+		print(dataName)
+		print() 
 		for proc in bkgProcList: 
 			try: bkghists[proc+catStr] = RFile1.Get(histPrefix+'__'+proc).Clone()
 			except:
-				print "There is no "+proc+"!!!!!!!!"
-				print "Skipping "+proc+"....."
+				print("There is no "+proc+"!!!!!!!!")
+				print("Skipping "+proc+".....")
 				pass
 
-		print histPrefix
-                print "Above this line ^^^^^^^ ====================================="
+		print(histPrefix)
+                print("Above this line ^^^^^^^ =====================================")
                 if blindYLD and iPlot=='YLD': hData = RFile1.Get(histPrefix+'__'+dataName+'_blind').Clone()
 		else: hData = RFile1.Get(histPrefix+'__'+dataName).Clone()
 		
 		if plotCombine:
-			print "histPrefix", histPrefix
-			print "sig1", sig1
+			print("histPrefix", histPrefix)
+			print("sig1", sig1)
 			hsig1 = RFile1.Get(histPrefix+'__'+sig1).Clone(histPrefix+'__sig1')
 			#hsig2 = RFile2.Get(histPrefix+'__'+sig2).Clone(histPrefix+'__sig2')
 
@@ -337,9 +337,9 @@ for tag in tagList:
 		if doAllSys:
 			q2list = []
 			if doQ2sys: q2list=['q2']
-			print systematicList
+			print(systematicList)
 			for syst in systematicList+q2list:
-				print syst
+				print(syst)
 				for ud in [upTag,downTag]:
 					for proc in bkgProcList:
 						try: 
@@ -581,7 +581,7 @@ for tag in tagList:
 		except: pass
                 try: leg.AddEntry(bkghists['tt2b'+catStr],"t#bar{t}+2b","f")
 		except: pass
-                print bkghists['ttnobb'+catStr]
+                print(bkghists['ttnobb'+catStr])
                 try: leg.AddEntry(bkghists['ttnobb'+catStr],"t#bar{t}+!b#bar{b}","f")
                 except: pass
 		try: leg.AddEntry(bkghists['ewk'+catStr],"EWK","f")
@@ -746,7 +746,7 @@ for tag in tagList:
 	else: hDatamerged.Add(RFile1.Get(histPrefixM+'__'+dataName).Clone())
 
  	if plotCombine: 
-                print RFile1
+                print(RFile1)
  		hsig1merged = RFile1.Get(histPrefixE+'__'+sig1).Clone(histPrefixE+'__sig1merged')
 # 		hsig2merged = RFile2.Get(histPrefixE+'__'+sig2).Clone(histPrefixE+'__sig2merged')
  		hsig1merged.Add(RFile1.Get(histPrefixM+'__'+sig1).Clone())
@@ -1013,7 +1013,7 @@ for tag in tagList:
 	except: pass
 	try: legmerged.AddEntry(bkghistsmerged['qcdisL'+tagStr],"QCD","f")
 	except: pass
-        print "===============YESSIR=============="
+        print("===============YESSIR==============")
         try: legmerged.AddEntry(bkghistsmerged['ttnobbisL'+tagStr],"t#bar{t}+!b#bar{b}","f")
         except: pass
 
@@ -1166,6 +1166,6 @@ for tag in tagList:
 RFile1.Close()
 # RFile2.Close()
 
-print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
+print(("--- %s minutes ---" % (round(time.time() - start_time, 2)/60)))
 
 

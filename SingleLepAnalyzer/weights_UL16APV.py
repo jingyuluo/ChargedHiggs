@@ -32,9 +32,9 @@ filtEff_TTJets1000mtt = 0.02474
 filtEff_TTJets700mtt = 0.0921
 filtEff_TTJets0mtt = 0.8832 # 1-filtEff_TTJets700mtt-filtEff_TTJets1000mtt
 filtEff_TTJetsSemiLepNjet9 = 0.0057 # from McM
-nRun_TTJetsHad = 93137016.0 #129706300#129211204.0 # from integral 130262340.0, file TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
-nRun_TTJetsSemiLep = 133661764.0 #6837419540.0 #114058500#129706300#109124472.0 # from integral 110085096.0, file TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
-nRun_TTJets2L2nu = 40819800.0 #66259900#68595608.0 # from integral 69155808.0, file TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
+nRun_TTJetsHad = 96811856.0#93137016.0 #129706300#129211204.0 # from integral 130262340.0, file TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
+nRun_TTJetsSemiLep = 131106830.0#133661764.0 #6837419540.0 #114058500#129706300#109124472.0 # from integral 110085096.0, file TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
+nRun_TTJets2L2nu = 37162390.0#40819800.0 #66259900#68595608.0 # from integral 69155808.0, file TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
 nRun_TTJets700mtt = 38428627.0 # from 39258853, file TT_Mtt-700to1000_TuneCP5_13TeV-powheg-pythia8_hadd.root
 nRun_TTJets1000mtt = 21288395.0 # from integral 22458751.0, file TT_Mtt-1000toInf_TuneCP5_PSweights_13TeV-powheg
 nRun_TTJetsSemiLepNjet9 = 8752072.0 # from integral, file TTToSemiLepton_HT500Njet9_TuneCP5_PSweights_13TeV-powheg-pythia8_Mtt0to700_hadd.root
@@ -63,22 +63,22 @@ nRun['TTJets1000mtt_JER'] = nRun['TTJets1000mtt']
 #nRun['TTJets2L2nu'] = nRun_TTJets2L2nu
 #nRun['TTJetsSemiLep'] = nRun_TTJetsSemiLep
 
-nRun['Ts'] = 3478306.0#19850000#6895750.0 # from integral 6898000.0, file ST_s-channel_top_leptonDecays_13TeV-PSweights_powheg-pythia_hadd.root
+nRun['Ts'] = 3592772.0#3478306.0#19850000#6895750.0 # from integral 6898000.0, file ST_s-channel_top_leptonDecays_13TeV-PSweights_powheg-pythia_hadd.root
 #nRun['Tbs'] = 2952214.0 # from integral 2953000.0, file ST_s-channel_antitop_leptonDecays_13TeV-PSweights_powheg-pythia_hadd.root
-nRun['Tt'] = 52437432.0#46206600#122640200.0 # from integral 109621700.0, file ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
-nRun['Tbt']= 29205918.0#3695100#64818800.0 # from integral 50194500.0, file ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
-nRun['TtW'] = 2299880.0#10041965#7884388.0 # from integral 7945242.0, file ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
-nRun['TbtW'] = 2299866.0#9191369#7686032.0 # from integral 7745276.0, file ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
+nRun['Tt'] = 52437432.0#52437432.0#46206600#122640200.0 # from integral 109621700.0, file ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
+nRun['Tbt']= 29205918.0#29205918.0#3695100#64818800.0 # from integral 50194500.0, file ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
+nRun['TtW'] = 2299880.0#2299880.0#10041965#7884388.0 # from integral 7945242.0, file ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
+nRun['TbtW'] = 2299866.0#2299866.0#9191369#7686032.0 # from integral 7745276.0, file ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_hadd.root
 
 nRun['WJets'] = 6776900. # from 9908534.
 nRun['WJetsMG'] = 87960604#86731806. 
 nRun['WJetsMG100'] = 79356685.
-nRun['WJetsMG200'] = 17164198.0#21192211.0 # from integral 21250517.0, file WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['WJetsMG400'] = 2302057.0#14189363.0 # from integral 14252285.0, file WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['WJetsMG600'] = 1905536.0#21330497.0 # from integral 21455857.0, file WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['WJetsMG800'] = 2350331.0#20272990.0 # from integral 20432728.0, file WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['WJetsMG1200'] = 1754683.0#19950628.0 # from integral 20216830.0, file WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['WJetsMG2500'] = 808649.0#20629585.0 # from integral 21495421.0, file WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG200'] = 17870845.0#17164198.0#21192211.0 # from integral 21250517.0, file WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG400'] = 2396679.0#2302057.0#14189363.0 # from integral 14252285.0, file WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG600'] = 1000719.0#1905536.0#21330497.0 # from integral 21455857.0, file WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG800'] = 2510487.0#2350331.0#20272990.0 # from integral 20432728.0, file WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG1200'] = 2119975.0#1754683.0#19950628.0 # from integral 20216830.0, file WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['WJetsMG2500'] = 808649.0#808649.0#20629585.0 # from integral 21495421.0, file WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
 nRun['WJetsPt100'] = 120124110.*(1.-2.*0.32) #Full =120124110, neg frac 0.32
 nRun['WJetsPt250'] = 12022587.*(1.-2.*0.31555) #Full = 12022587, neg frac 0.31555 
 nRun['WJetsPt400'] = 1939947.*(1.-2.*0.30952) #Full = 1939947, neg frac 0.30952
@@ -87,43 +87,43 @@ nRun['WJetsPt600'] = 1974619.*(1.-2.*0.29876) #Full = 1974619, neg frac 0.29876
 nRun['DY'] = 123584520. # from 182359896, this is the ext1 sample
 nRun['DYMG'] = 202549488#49082157. # from integral 49125561.0, file DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
 nRun['DYMG100'] = 10607207.
-nRun['DYMG200'] = 5862631.0#10699051.0 # from integral 10728447.0, file DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['DYMG400'] = 2716892.0#10174800.0 # from integral 10219524.0, file DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['DYMG600'] = 2617037.0#8691608.0 # from integral 8743640.0, file DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['DYMG800'] = 2411091.0#3089712.0 # from integral 3114980.0, file DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['DYMG1200']= 2189664.0#616906.0 # from integral 625517.0, file DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
-nRun['DYMG2500']= 721404.0 #401334.0 # from integral 419308.0, file DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG200'] = 5862631.0#5862631.0#10699051.0 # from integral 10728447.0, file DYJetsToLL_M-50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG400'] = 2716892.0#2716892.0#10174800.0 # from integral 10219524.0, file DYJetsToLL_M-50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG600'] = 2681650.0#2617037.0#8691608.0 # from integral 8743640.0, file DYJetsToLL_M-50_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG800'] = 2411091.0#2411091.0#3089712.0 # from integral 3114980.0, file DYJetsToLL_M-50_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG1200']= 2189664.0#2189664.0#616906.0 # from integral 625517.0, file DYJetsToLL_M-50_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
+nRun['DYMG2500']= 721404.0#721404.0 #401334.0 # from integral 419308.0, file DYJetsToLL_M-50_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8_hadd.root
 
-nRun['WW'] = 15025000.0#7876200#7765828.0 # from integral 7765828.0, file WW_TuneCP5_13TeV-pythia8_hadd.root
-nRun['WZ'] = 7934000.0#3970000#3928567.0 # from integral 3928630.0, file WZ_TuneCP5_13TeV-pythia8_hadd.root
-nRun['ZZ'] = 1282000.0#1981800#1925931.0 # from integral 1925931.0, file ZZ_TuneCP5_13TeV-pythia8_hadd.root
+nRun['WW'] = 15579000.0#15025000.0#7876200#7765828.0 # from integral 7765828.0, file WW_TuneCP5_13TeV-pythia8_hadd.root
+nRun['WZ'] = 7829000.0#7934000.0#3970000#3928567.0 # from integral 3928630.0, file WZ_TuneCP5_13TeV-pythia8_hadd.root
+nRun['ZZ'] = 1177000.0#1282000.0#1981800#1925931.0 # from integral 1925931.0, file ZZ_TuneCP5_13TeV-pythia8_hadd.root
 
 nRun['QCDht100'] = 77775408#80684349.
-nRun['QCDht200'] = 18273591.0#57721120#65436493.0 # from integral 59074480.0, file QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht300'] = 15226527.0#57191140#60432501.0 # from integral 59569132.0, file QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht500'] = 15775001.0#43589739.0#9188310#56041018.0 # from integral 56207744.0, file QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht700'] = 15808790.0#45812757#46638985.0 # from integral 46840955.0, file QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht1000'] = 4773503.0#15346629#16770762.0 # from integral 16882838.0, file QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht1500'] = 3503675.0#10598209#11508604.0 # from integral 11634434.0, file QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8_hadd.root
-nRun['QCDht2000'] = 1629000.0#5457021#5825566.0 # from integral 5941306.0, file QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht200'] = 18273591.0#18273591.0#57721120#65436493.0 # from integral 59074480.0, file QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht300'] = 15341307.0#15226527.0#57191140#60432501.0 # from integral 59569132.0, file QCD_HT300to500_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht500'] = 15775001.0#15775001.0#43589739.0#9188310#56041018.0 # from integral 56207744.0, file QCD_HT500to700_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht700'] = 15808790.0#15808790.0#45812757#46638985.0 # from integral 46840955.0, file QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht1000'] = 4773503.0#4773503.0#15346629#16770762.0 # from integral 16882838.0, file QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht1500'] = 3503675.0#3503675.0#10598209#11508604.0 # from integral 11634434.0, file QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8_hadd.root
+nRun['QCDht2000'] = 1629000.0#1629000.0#5457021#5825566.0 # from integral 5941306.0, file QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8_hadd.root
 
 nRun['TTW'] = 5216439#9384328. # from integral 9425384.0, file ttWJets_TuneCP5_13TeV_madgraphMLM_pythia8_hadd.root
 nRun['TTZ'] = 14000000#8519074. # from integral 8536618.0, file ttZJets_TuneCP5_13TeV_madgraphMLM_pythia8_hadd.root
 nRun['TTH'] = 9580578. # from integral 9783674.0, file ttH_M125_TuneCP5_13TeV-powheg-pythia8_hadd.root
-nRun['TTWl'] = 1543290.0#5216439#2742430.0 # from integral, file TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8_hadd.root
-nRun['TTWq'] = 148842.0#441560.0 # from integral 811306.0, file TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_hadd.root
-nRun['TTZlM10'] = 2856626.0#14000000# 5239484.0 # from integral, file TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_hadd.root
-nRun['TTZlM1to10'] = 177656.0
-nRun['TTHB'] = 4121294.0
-nRun['TTHnoB'] = 1936276.0
+nRun['TTWl'] = 1543290.0#1543290.0#5216439#2742430.0 # from integral, file TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8_hadd.root
+nRun['TTWq'] = 148842.0#148842.0#441560.0 # from integral 811306.0, file TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_hadd.root
+nRun['TTZlM10'] = 2856626.0#2856626.0#14000000# 5239484.0 # from integral, file TTZToLLNuNu_M-10_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_hadd.root
+nRun['TTZlM1to10'] = 177656.0#177656.0
+nRun['TTHB'] = 4525710.0#4121294.0
+nRun['TTHnoB'] = 1936276.0#1936276.0
 
 nRun['TTTT'] = 6029906.0
-nRun['TTWW'] = 245000.0
-nRun['TTWH'] = 140000.0
-nRun['TTHH'] = 140000.0
-nRun['TTZZ'] = 140000.0
-nRun['TTWZ'] = 140000.0
-nRun['TTZH'] = 140000.0
+nRun['TTWW'] = 278000.0#245000.0
+nRun['TTWH'] = 140000.0#140000.0
+nRun['TTHH'] = 140000.0#140000.0
+nRun['TTZZ'] = 140000.0#140000.0
+nRun['TTWZ'] = 140000.0#140000.0
+nRun['TTZH'] = 140000.0#140000.0
 
 
 
@@ -144,23 +144,23 @@ nRun['TTTW'] = 199699.0 # from integral, file TTTW_TuneCP5_13TeV-madgraph-pythia
 
 ##### Signal samples with positive events weight only #####
 nRun['Hptb180'] = 7008080
-nRun['Hptb200'] = 2838540.0#2805392.0#7090943
-nRun['Hptb220'] = 2837666.0#2860338.0#6755421
-nRun['Hptb250'] = 2455390.0#2817666.0#7148825
-nRun['Hptb300'] = 2690678.0#2739790.0 #390646#7202221
-nRun['Hptb350'] = 2752526.0#2526912.0#7142327
-nRun['Hptb400'] = 2699728.0#2503436.0#7060216.5
-nRun['Hptb500'] = 2457794.0#2524012.0#535876#7047022
-nRun['Hptb600'] = 2669834.0#2447644.0#6183058
-nRun['Hptb700'] = 2647154.0#2666792.0#2447644.0#6183058
-nRun['Hptb800'] = 2494896.0#2371262.0#357844#6913292
-nRun['Hptb1000'] = 267614.0#2328372.0#339468#7014801
-nRun['Hptb1250'] = 1840482.0#2397942.0 
-nRun['Hptb1500'] = 2256558.0#2463017.0#653376#6661822
-nRun['Hptb1750'] = 1166694.0#2263004.0
-nRun['Hptb2000'] = 673674.0#2349254.0#7064547
-nRun['Hptb2500'] = 2144548.0#2330689.0#5653474
-nRun['Hptb3000'] = 2311424.0#2421234.0 #7038568
+nRun['Hptb200'] = 1440280.0#1440280.0 
+nRun['Hptb220'] = 1349716.0#1349716.0 
+nRun['Hptb250'] = 1393878.0#1393878.0 
+nRun['Hptb300'] = 1382336.0#1382336.0 
+nRun['Hptb350'] = 1374154.0#1240174.0 
+nRun['Hptb400'] = 1344902.0#1318932.0 
+nRun['Hptb500'] = 1304226.0#1304226.0 
+nRun['Hptb600'] = 1314394.0#1309064.0 
+nRun['Hptb700'] = 1331804.0#1284034.0 
+nRun['Hptb800'] = 1308124.0#1105164.0 
+nRun['Hptb1000'] = 1292784.0#1292784.0 
+nRun['Hptb1250'] = 1248598.0#1232720.0 
+nRun['Hptb1500'] = 1243418.0#1243418.0 
+nRun['Hptb1750'] = 1244930.0#1244930.0 
+nRun['Hptb2000'] = 1226360.0#1216308.0 
+nRun['Hptb2500'] = 1245202.0#1155218.0 
+nRun['Hptb3000'] = 1234608.0#1234608.0 
 
 
 #energy scale samples (Q^2)
@@ -380,7 +380,7 @@ weight['WJetsMG2500_6'] = weight['WJetsMG2500']
 #weight['TTJets2L2nu2'] = weight['TTJets2L2nu']
 #weight['TTJets2L2nu3'] = weight['TTJets2L2nu']
 
-for smp in weight.keys():
+for smp in list(weight.keys()):
 	if 'TTTo' in smp:
 		for hf in ['_tt2b','_ttbb','_tt1b','_ttcc','_ttjj']: 
 			weight[smp+hf]=weight[smp]

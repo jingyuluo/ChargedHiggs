@@ -243,12 +243,12 @@ def printTable(table,out=sys.stdout):
     for row in table:
         # left col
         if row[0]=='break': row[0]='-'*(sum(col_paddings)+(2*len(col_paddings)))
-        print >> out, format(row[0]).ljust(col_paddings[0] + 1),
+        print(format(row[0]).ljust(col_paddings[0] + 1), end=' ', file=out)
         # rest of the cols
         for i in range(1, len(row)):
             col = format(row[i]).ljust(col_paddings[i] + 2)
-            print >> out, col,
-        print >> out
+            print(col, end=' ', file=out)
+        print(file=out)
 
 ##############################################################################
 
