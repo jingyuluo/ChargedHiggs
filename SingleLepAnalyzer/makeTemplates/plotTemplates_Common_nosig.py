@@ -59,7 +59,8 @@ print("tempsig : ",tempsig)
 if splitTTbar: 
 
     bkgTTBarList = ['ttbb','ttnobb'] 
-    bkgProcList = ['ewk','qcd', 'top']+bkgTTBarList
+    #bkgProcList = ['ewk','qcd', 'top']+bkgTTBarList
+    bkgProcList = ['ewk','qcd','top']+bkgTTBarList
     #bkgProcList = ['ewk','top', 'ttnobb', 'ttbb','qcd']
     #    bkgProcList = ['ttbb','tt2b','tt1b','ttcc','ttjj','top','ewk','qcd']
     #    bkgProcList = ['ttb','ttcc','ttlf','top','ewk','qcd']
@@ -94,7 +95,7 @@ if not doAllSys: doQ2sys = False
 addCRsys = False
 doNormByBinWidth=False
 #set true, to see the actual shape of the distributions when the binning is not uniform, e.g binning with 0.3
-doOneBand = False
+doOneBand = True
 if not doAllSys: doOneBand = True # Don't change this!
 blind = False
 blindYLD = False
@@ -226,7 +227,7 @@ CMS_lumi.extraText = "Preliminary"
 CMS_lumi.lumi_sqrtS = "13 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
 iPos = 11
-if( iPos==0 ): CMS_lumi.relPosX = 0.12
+if( iPos==0 ): CMS_lumi.relPosX = 0.16
 
 H_ref = 800; 
 W_ref = 800; 
@@ -389,12 +390,21 @@ for tag in tagList:
                             else: errorUp += errorMinus**2
                         except: pass
 
+            bwid =  bkgHT.GetBinWidth(ibin)
             totBkgTemp1[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp))
             totBkgTemp1[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn))
+            totBkgTemp1[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp1[catStr].SetPointEXlow(ibin-1, bwid/2)
             totBkgTemp2[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm))
             totBkgTemp2[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm))
+            totBkgTemp2[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp2[catStr].SetPointEXlow(ibin-1, bwid/2)
             totBkgTemp3[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm+errorStatOnly))
             totBkgTemp3[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm+errorStatOnly))
+            totBkgTemp3[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp3[catStr].SetPointEXlow(ibin-1, bwid/2)
+            
+
         
         bkgHTgerr = totBkgTemp3[catStr].Clone()
 #         if scaleFact1==0: scaleFact1=int((bkgHT.GetMaximum()/hsig1.GetMaximum())*0.5)
@@ -450,9 +460,10 @@ for tag in tagList:
         hData.SetLineColor(rt.kBlack)
         if drawYields: hData.SetMarkerSize(4)
 
-        #bkgHTgerr.SetFillStyle(3002)
-        bkgHTgerr.SetFillColorAlpha(rt.kBlack, 0.5)
-        bkgHTgerr.SetLineColor(rt.kBlack)
+        bkgHTgerr.SetFillStyle(3002)
+        #bkgHTgerr.SetFillColorAlpha(rt.kBlack, 0.5)
+        bkgHTgerr.SetLineColor(14)
+        bkgHTgerr.SetFillColor(14)
 
         c1 = rt.TCanvas("c1","c1",50,50,W,H)
         c1.SetFillColor(0)
@@ -534,7 +545,7 @@ for tag in tagList:
             hData.Draw("esamex0") #redraw data so its not hidden
             if drawYields: hData.Draw("SAME TEXT00") 
         uPad.RedrawAxis()
-        bkgHTgerr.Draw("SAME E2")
+        bkgHTgerr.Draw("SAME P2")
         
         chLatex = rt.TLatex()
         chLatex.SetNDC()
@@ -640,8 +651,11 @@ for tag in tagList:
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandTot.SetPointEYhigh(binNo-1,totBkgTemp3[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
                     pullUncBandTot.SetPointEYlow(binNo-1,totBkgTemp3[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandTot.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandTot.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             if not doOneBand: pullUncBandTot.SetFillStyle(3002)
             else: pullUncBandTot.SetFillStyle(3002)
+            #pullUncBandTot.SetFillColorAlpha(rt.kBlack, 0.5)
             pullUncBandTot.SetFillColor(14)
             pullUncBandTot.SetLineColor(14)
             pullUncBandTot.SetMarkerSize(0)
@@ -654,25 +668,29 @@ for tag in tagList:
             for binNo in range(0,hData.GetNbinsX()+2):
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandNorm.SetPointEYhigh(binNo-1,totBkgTemp2[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
-                    pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))           
+                    pullUncBandNorm.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandNorm.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             pullUncBandNorm.SetFillStyle(3002)
             pullUncBandNorm.SetFillColor(2)
             pullUncBandNorm.SetLineColor(2)
             pullUncBandNorm.SetMarkerSize(0)
             rt.gStyle.SetHatchesLineWidth(1)
-            if not doOneBand: pullUncBandNorm.Draw("SAME E2")
+            if not doOneBand: pullUncBandNorm.Draw("SAME P2")
             
             pullUncBandStat=rt.TGraphAsymmErrors(BkgOverBkg.Clone("pulluncStat"))
             for binNo in range(0,hData.GetNbinsX()+2):
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandStat.SetPointEYhigh(binNo-1,totBkgTemp1[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
                     pullUncBandStat.SetPointEYlow(binNo-1,totBkgTemp1[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandStat.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandStat.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             pullUncBandStat.SetFillStyle(3002)
             pullUncBandStat.SetFillColor(3)
             pullUncBandStat.SetLineColor(3)
             pullUncBandStat.SetMarkerSize(0)
             rt.gStyle.SetHatchesLineWidth(1)
-            if not doOneBand: pullUncBandStat.Draw("SAME E2")
+            if not doOneBand: pullUncBandStat.Draw("SAME P2")
 
             pullLegend=rt.TLegend(0.14,0.87,0.85,0.96)
             rt.SetOwnership( pullLegend, 0 )   # 0 = release (not keep), 1 = keep
@@ -824,10 +842,16 @@ for tag in tagList:
                     except: pass
         totBkgTemp1['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp))
         totBkgTemp1['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn))
+        totBkgTemp1['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp1['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
         totBkgTemp2['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm))
         totBkgTemp2['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm))
+        totBkgTemp2['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp2['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
         totBkgTemp3['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm+errorStatOnly))
         totBkgTemp3['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm+errorStatOnly))
+        totBkgTemp3['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp3['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
 
     errorStatOnlyT = 0.
     errorNormT = 0.
@@ -962,7 +986,7 @@ for tag in tagList:
         hDatamerged.Draw("esamex0") #redraw data so its not hidden
         if drawYields: hDatamerged.Draw("SAME TEXT00") 
     uPad.RedrawAxis()
-    bkgHTgerrmerged.Draw("SAME E2")
+    bkgHTgerrmerged.Draw("SAME P2")
 
     chLatexmerged = rt.TLatex()
     chLatexmerged.SetNDC()
@@ -1072,6 +1096,8 @@ for tag in tagList:
             if bkgHTmerged.GetBinContent(binNo)!=0:
                 pullUncBandTotmerged.SetPointEYhigh(binNo-1,totBkgTemp3['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
                 pullUncBandTotmerged.SetPointEYlow(binNo-1, totBkgTemp3['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))            
+                pullUncBandTotmerged.SetPointEXhigh(binNo-1,bkgHTmerged.GetBinWidth(binNo)/2)
+                pullUncBandTotmerged.SetPointEXlow(binNo-1, bkgHTmerged.GetBinWidth(binNo)/2)            
         #if 'NBJets' in iPlot:
         #    pullUncBandTotmerged.SetPointEYhigh(4,0)
         #    pullUncBandTotmerged.SetPointEYlow(4,0)

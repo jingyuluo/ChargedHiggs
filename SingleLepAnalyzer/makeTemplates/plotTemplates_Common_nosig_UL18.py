@@ -389,12 +389,19 @@ for tag in tagList:
                             else: errorUp += errorMinus**2
                         except: pass
 
+            bwid =  bkgHT.GetBinWidth(ibin)
             totBkgTemp1[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp))
             totBkgTemp1[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn))
+            totBkgTemp1[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp1[catStr].SetPointEXlow(ibin-1, bwid/2)
             totBkgTemp2[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm))
             totBkgTemp2[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm))
+            totBkgTemp2[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp2[catStr].SetPointEXlow(ibin-1, bwid/2)
             totBkgTemp3[catStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm+errorStatOnly))
             totBkgTemp3[catStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm+errorStatOnly))
+            totBkgTemp3[catStr].SetPointEXhigh(ibin-1, bwid/2)
+            totBkgTemp3[catStr].SetPointEXlow(ibin-1, bwid/2)
         
         bkgHTgerr = totBkgTemp3[catStr].Clone()
 #         if scaleFact1==0: scaleFact1=int((bkgHT.GetMaximum()/hsig1.GetMaximum())*0.5)
@@ -639,7 +646,9 @@ for tag in tagList:
             for binNo in range(0,hData.GetNbinsX()+3):
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandTot.SetPointEYhigh(binNo-1,totBkgTemp3[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
-                    pullUncBandTot.SetPointEYlow(binNo-1,totBkgTemp3[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandTot.SetPointEYlow(binNo-1,totBkgTemp3[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))           
+                    pullUncBandTot.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandTot.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             if not doOneBand: pullUncBandTot.SetFillStyle(3002)
             else: pullUncBandTot.SetFillStyle(3002)
             pullUncBandTot.SetFillColor(14)
@@ -654,7 +663,9 @@ for tag in tagList:
             for binNo in range(0,hData.GetNbinsX()+2):
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandNorm.SetPointEYhigh(binNo-1,totBkgTemp2[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
-                    pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandNorm.SetPointEYlow(binNo-1,totBkgTemp2[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))           
+                    pullUncBandNorm.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandNorm.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             pullUncBandNorm.SetFillStyle(3002)
             pullUncBandNorm.SetFillColor(2)
             pullUncBandNorm.SetLineColor(2)
@@ -666,7 +677,9 @@ for tag in tagList:
             for binNo in range(0,hData.GetNbinsX()+2):
                 if bkgHT.GetBinContent(binNo)!=0:
                     pullUncBandStat.SetPointEYhigh(binNo-1,totBkgTemp1[catStr].GetErrorYhigh(binNo-1)/bkgHT.GetBinContent(binNo))
-                    pullUncBandStat.SetPointEYlow(binNo-1,totBkgTemp1[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))            
+                    pullUncBandStat.SetPointEYlow(binNo-1,totBkgTemp1[catStr].GetErrorYlow(binNo-1)/bkgHT.GetBinContent(binNo))           
+                    pullUncBandStat.SetPointEXhigh(binNo-1, bkgHT.GetBinWidth(binNo)/2)
+                    pullUncBandStat.SetPointEXlow(binNo-1, bkgHT.GetBinWidth(binNo)/2)
             pullUncBandStat.SetFillStyle(3002)
             pullUncBandStat.SetFillColor(3)
             pullUncBandStat.SetLineColor(3)
@@ -824,10 +837,16 @@ for tag in tagList:
                     except: pass
         totBkgTemp1['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp))
         totBkgTemp1['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn))
+        totBkgTemp1['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp1['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
         totBkgTemp2['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm))
         totBkgTemp2['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm))
+        totBkgTemp2['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp2['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
         totBkgTemp3['isL'+tagStr].SetPointEYhigh(ibin-1,math.sqrt(errorUp+errorNorm+errorStatOnly))
         totBkgTemp3['isL'+tagStr].SetPointEYlow(ibin-1, math.sqrt(errorDn+errorNorm+errorStatOnly))
+        totBkgTemp3['isL'+tagStr].SetPointEXhigh(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
+        totBkgTemp3['isL'+tagStr].SetPointEXlow(ibin-1, bkghistsmerged[proc+'isL'+tagStr].GetBinWidth(ibin)/2)
 
     errorStatOnlyT = 0.
     errorNormT = 0.
@@ -1071,7 +1090,9 @@ for tag in tagList:
         for binNo in range(0,hDatamerged.GetNbinsX()+2):
             if bkgHTmerged.GetBinContent(binNo)!=0:
                 pullUncBandTotmerged.SetPointEYhigh(binNo-1,totBkgTemp3['isL'+tagStr].GetErrorYhigh(binNo-1)/bkgHTmerged.GetBinContent(binNo))
-                pullUncBandTotmerged.SetPointEYlow(binNo-1, totBkgTemp3['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))            
+                pullUncBandTotmerged.SetPointEYlow(binNo-1, totBkgTemp3['isL'+tagStr].GetErrorYlow(binNo-1)/bkgHTmerged.GetBinContent(binNo))           
+                pullUncBandTotmerged.SetPointEXhigh(binNo-1,bkgHTmerged.GetBinWidth(binNo)/2)
+                pullUncBandTotmerged.SetPointEXlow(binNo-1, bkgHTmerged.GetBinWidth(binNo)/2)
         #if 'NBJets' in iPlot:
         #    pullUncBandTotmerged.SetPointEYhigh(4,0)
         #    pullUncBandTotmerged.SetPointEYlow(4,0)
